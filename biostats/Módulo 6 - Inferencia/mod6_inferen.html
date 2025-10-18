@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jose Miguel Leon Puentes">
+
+<title>Módulo 6: Inferencia Estadística – Jose Miguel Leon P.</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-dfb324f25d9b1687192fa8be62ac8f9c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons/css/academicons.min.css">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Jose Miguel Leon P.</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../biography.html"> 
+<span class="menu-text">Biography</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../teaching.html"> 
+<span class="menu-text">Teaching</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../research.html"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../media.html"> 
+<span class="menu-text">Media</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Tabla de Contenido</h2>
+   
+  <ul>
+  <li><a href="#introducción" id="toc-introducción" class="nav-link active" data-scroll-target="#introducción">🔰 Introducción</a></li>
+  <li><a href="#objetivos" id="toc-objetivos" class="nav-link" data-scroll-target="#objetivos">🎯 Objetivos</a></li>
+  <li><a href="#desarrollo" id="toc-desarrollo" class="nav-link" data-scroll-target="#desarrollo">📖 Desarrollo</a>
+  <ul>
+  <li><a href="#estimación-puntual" id="toc-estimación-puntual" class="nav-link" data-scroll-target="#estimación-puntual">Estimación puntual</a></li>
+  <li><a href="#estimación-por-intervalos" id="toc-estimación-por-intervalos" class="nav-link" data-scroll-target="#estimación-por-intervalos">Estimación por intervalos</a></li>
+  <li><a href="#pruebas-de-hipótesis" id="toc-pruebas-de-hipótesis" class="nav-link" data-scroll-target="#pruebas-de-hipótesis">Pruebas de Hipótesis</a></li>
+  <li><a href="#ejemplos" id="toc-ejemplos" class="nav-link" data-scroll-target="#ejemplos">Ejemplos</a></li>
+  </ul></li>
+  </ul>
+<div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="mailto:joleonp@unal.edu.co"><i class="bi bi-mailbox"></i>Contacto</a></li></ul></div><div class="quarto-code-links"><h2>Code Links</h2><ul><li><a href="https://github.com/jmlionc/AppliedBiostats"><i class="bi bi-github"></i>GitHub</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Módulo 6: Inferencia Estadística</h1>
+<p class="subtitle lead">Bioestadística Fundamental y Estadística Fundamental para las Ciencias de la Salud</p>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliations</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Jose Miguel Leon Puentes </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Departamento de Estadística
+          </p>
+        <p class="affiliation">
+            Universidad Nacional de Colombia
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introducción" class="level2">
+<h2 class="anchored" data-anchor-id="introducción">🔰 Introducción</h2>
+<div style="text-align: justify;">
+<p>En la práctica del análisis de datos rara vez se cuenta con información completa de toda una población; en su lugar, trabajamos con muestras que deben servirnos como base para responder preguntas sobre el comportamiento general de dicha población. El proceso de trasladar hallazgos obtenidos a partir de una muestra hacia conclusiones más amplias recibe el nombre de <strong>inferencia estadística</strong>.</p>
+<p>Este módulo introduce al estudiante en los fundamentos de la inferencia estadística aplicada a la bioestadística, partiendo de la noción de muestreo como puente entre la población y la muestra. A continuación, se abordan tres ejes centrales: la <strong>estimación puntual</strong>, que busca obtener un valor representativo para un parámetro poblacional; la <strong>estimación por intervalos</strong>, que permite cuantificar la incertidumbre de la estimación mediante intervalos de confianza; y las <strong>pruebas de hipótesis</strong>, que proporcionan un marco formal para evaluar afirmaciones sobre parámetros poblacionales a partir de la evidencia muestral.</p>
+<p>Además de la formulación teórica, se hará énfasis en la implementación práctica en R, de manera que el estudiante pueda adquirir destrezas tanto en el cálculo como en la interpretación crítica de resultados, fortaleciendo así la capacidad de responder preguntas científicas en el campo de la biostatística de forma rigurosa, contextualizada y ética.</p>
+</div>
+</section>
+<section id="objetivos" class="level2">
+<h2 class="anchored" data-anchor-id="objetivos">🎯 Objetivos</h2>
+<div style="text-align: justify;">
+<p><strong>Objetivos específicos</strong></p>
+<ol type="1">
+<li><p>Comprender el rol del muestreo en la inferencia estadística y su relación con la validez de las conclusiones.</p></li>
+<li><p>Calcular e interpretar estimadores puntuales para parámetros poblacionales, reconociendo sus propiedades y limitaciones.</p></li>
+<li><p>Construir e interpretar intervalos de confianza como medida de precisión y de incertidumbre en la estimación.</p></li>
+<li><p>Formular y aplicar pruebas de hipótesis estadísticas, entendiendo su lógica y los posibles errores involucrados.</p></li>
+<li><p>Implementar en R los principales métodos de estimación puntual, intervalos de confianza y pruebas de hipótesis en ejemplos prácticos de bioestadística.</p></li>
+<li><p>Desarrollar una actitud crítica y responsable frente a los resultados inferenciales, enfatizando la importancia del contexto, los supuestos estadísticos y la ética en la interpretación y comunicación de hallazgos.</p></li>
+</ol>
+</div>
+</section>
+<section id="desarrollo" class="level2">
+<h2 class="anchored" data-anchor-id="desarrollo">📖 Desarrollo</h2>
+<div style="text-align: justify;">
+<p>En <code>R</code> existen diferentes funciones ya implementadas que realizan estimaciones puntuales, intervalos de confianza y pruebas de hipótesis, sin embargo con lo que ya hemos aprendido, vamos a realizar los siguientes ejercicios haciendo las cuentas en el software.</p>
+</div>
+<section id="estimación-puntual" class="level3">
+<h3 class="anchored" data-anchor-id="estimación-puntual">Estimación puntual</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clipboard-630437653.png" class="img-fluid figure-img" width="720"></p>
+<figcaption>El proceso de utilizar una muestra de una población más amplia para obtener una estimación puntual de un parámetro poblacional. Tomado de <em>Data Science: A First Introduction</em>.</figcaption>
+</figure>
+</div>
+<div style="text-align: justify;">
+<p>Recordemos que existen diferentes estimadores puntuales, por un lado tenemos el estimador de máxima verosimilitud <span class="math inline">\(\hat{\theta}_{MLE}\)</span>, y por otro lado tenemos el estimador por el método de momentos <span class="math inline">\(\hat{\theta}_{MM}\)</span>. <br></p>
+<p><strong>Ejercicios</strong></p>
+<ul>
+<li>Considere la siguiente muestra aleatoria proveniente de una distribución normal, calcule los estimadores de máxima verosimilitud para la media <span class="math inline">\(\mu\)</span> y la varianza <span class="math inline">\(\sigma^2\)</span>. Rta:<span class="math inline">\(\mu=9\)</span> y <span class="math inline">\(\sigma=1.5\)</span></li>
+</ul>
+<table class="caption-top table">
+<tbody>
+<tr class="odd">
+<td>8.103897</td>
+<td>6.032269</td>
+<td>10.890451</td>
+<td>10.080311</td>
+<td>8.649592</td>
+</tr>
+<tr class="even">
+<td>9.601323</td>
+<td>8.603231</td>
+<td>7.745418</td>
+<td>9.564388</td>
+<td>8.812499</td>
+</tr>
+<tr class="odd">
+<td>9.569101</td>
+<td>9.855030</td>
+<td>9.235493</td>
+<td>12.510848</td>
+<td>8.903146</td>
+</tr>
+<tr class="even">
+<td>8.936986</td>
+<td>5.761009</td>
+<td>9.073930</td>
+<td>7.620851</td>
+<td>7.177691</td>
+</tr>
+<tr class="odd">
+<td>8.218177</td>
+<td>10.943572</td>
+<td>10.246323</td>
+<td>9.049131</td>
+<td>6.459304</td>
+</tr>
+</tbody>
+</table>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>muestra<span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">8.103897</span> ,<span class="fl">6.032269</span>,<span class="fl">10.890451</span>,<span class="fl">10.080311</span>,<span class="fl">8.649592</span>,<span class="fl">9.601323</span>,<span class="fl">8.603231</span>,<span class="fl">7.745418</span>,<span class="fl">9.564388</span>,<span class="fl">8.812499</span>,<span class="fl">9.569101</span>,<span class="fl">9.855030</span>,<span class="fl">9.235493</span>, <span class="fl">12.510848</span>,<span class="fl">8.903146</span>,<span class="fl">8.936986</span>,<span class="fl">5.761009</span>,<span class="fl">9.073930</span>,<span class="fl">7.620851</span>,<span class="fl">7.177691</span>,<span class="fl">8.218177</span> ,<span class="fl">10.943572</span>, <span class="fl">10.246323</span>,<span class="fl">9.049131</span>,<span class="fl">6.459304</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="estimación-por-intervalos" class="level3">
+<h3 class="anchored" data-anchor-id="estimación-por-intervalos">Estimación por intervalos</h3>
+<div style="text-align: justify;">
+<p>La estimación por intervalos está basada en encontrar una variable pivote que contega en su expresión al parámetro, a la información que proporciona la muestra y que su distribución no dependa del parámetro a estimar. Recordemos las fórmulas de los intervalos de confianza para una sola población.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parámetro</th>
+<th>Variable pivote</th>
+<th>Fórmula del intervalo de confianza</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Media <span class="math inline">\(\mu\)</span> con <span class="math inline">\(\sigma\)</span> conocida</td>
+<td><span class="math inline">\(Z = \frac{\bar{x} - \mu}{\sigma / \sqrt{n}}\sim N(0,1)\)</span></td>
+<td><span class="math inline">\(\bar{x} \pm z_{1 - \alpha/2} \cdot \frac{\sigma}{\sqrt{n}}\)</span></td>
+</tr>
+<tr class="even">
+<td>Media <span class="math inline">\(\mu\)</span> con <span class="math inline">\(\sigma\)</span> desconocida</td>
+<td><span class="math inline">\(T = \frac{\bar{x} - \mu}{s / \sqrt{n}}\sim t_{n-1}\)</span></td>
+<td><span class="math inline">\(\bar{x} \pm t_{n-1, 1 - \alpha/2} \cdot \frac{s}{\sqrt{n}}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Proporción <span class="math inline">\(\hat{p}\)</span></td>
+<td><span class="math inline">\(Z = \frac{\hat{p} - p}{\sqrt{ \frac{\hat{p}(1 - \hat{p})}{n} }}\sim N(0,1)\)</span></td>
+<td><span class="math inline">\(\hat{p} \pm z_{1 - \alpha/2} \cdot \sqrt{ \frac{\hat{p}(1 - \hat{p})}{n} }\)</span></td>
+</tr>
+<tr class="even">
+<td>Varianza <span class="math inline">\(\sigma^2\)</span> con <span class="math inline">\(\mu\)</span> conocida</td>
+<td><span class="math inline">\(\chi^2 = \frac{\sum_{i=1}^{n}(x_i-\mu)^2}{\sigma^2} \sim \chi^2_{n}\)</span></td>
+<td><span class="math inline">\(\left[ \frac{(n - 1)s^2}{\chi^2_{n,1 - \alpha/2}},\ \frac{(n - 1)s^2}{\chi^2_{n,\alpha/2}} \right]\)</span></td>
+</tr>
+<tr class="odd">
+<td>Varianza <span class="math inline">\(\sigma^2\)</span> con <span class="math inline">\(\mu\)</span> desconocida</td>
+<td><span class="math inline">\(\chi^2 = \frac{(n-1)s^2}{\sigma^2}\sim\chi^2_{n-1}\)</span></td>
+<td><span class="math inline">\(\left[ \frac{(n - 1)s^2}{\chi^2_{n-1,1 - \alpha/2}},\ \frac{(n - 1)s^2}{\chi^2_{n-1,\alpha/2}} \right]\)</span></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ejercicio</strong></p>
+<p>Se obtuvo una muestra de los niveles de arsénico encontrados en paquetes de arroz de cierta marca. Se sabe que los niveles de arsenico siguen una distribución normal y según la FDA el límite máximo permitido arsénico en arroz es 0.25 mg/kg. Encuentra un intervalo de confianza del 99% para el nivel medio de arsénico y decide si la marca de arroz debe ser o no retirada del mercado. Adicionalmente encuentra intervalo de confianza al 95% para la variabilidad de los niveles de arsénico en el arroz de la marca.</p>
+<table class="caption-top table">
+<tbody>
+<tr class="odd">
+<td>0.1668462</td>
+<td>0.1834053</td>
+<td>0.1477304</td>
+<td>0.1517635.</td>
+<td>0.1603168</td>
+</tr>
+<tr class="even">
+<td>0.1698843</td>
+<td>0.1516698</td>
+<td>0.2232762</td>
+<td>0.1890869</td>
+<td>0.1747316</td>
+</tr>
+<tr class="odd">
+<td>0.1273578</td>
+<td>0.2135094</td>
+<td>0.1523728</td>
+<td>0.1663394.</td>
+<td>0.1865947</td>
+</tr>
+<tr class="even">
+<td>0.1580923</td>
+<td>0.1299129</td>
+<td>0.1715803</td>
+<td>0.1140778</td>
+<td>0.1999403</td>
+</tr>
+</tbody>
+</table>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>arsenico<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="fl">0.1668462</span>,<span class="fl">0.1834053</span>,<span class="fl">0.1477304</span>,<span class="fl">0.1517635</span>,<span class="fl">0.1603168</span>,<span class="fl">0.1698843</span>,<span class="fl">0.1516698</span>,<span class="fl">0.2232762</span>,<span class="fl">0.1890869</span>,<span class="fl">0.1747316</span>,<span class="fl">0.1273578</span>,<span class="fl">0.215094</span>,<span class="fl">0.1523728</span>,<span class="fl">0.1663394</span>,<span class="fl">0.1865947</span>,<span class="fl">0.1580923</span>,<span class="fl">0.1299129</span>,<span class="fl">0.1715803</span>,<span class="fl">0.1140778</span>,<span class="fl">0.1999403</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(arsenico)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1670037</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(arsenico)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.02783384</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qt</span>(<span class="fl">0.995</span>,<span class="dv">19</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.860935</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(arsenico)<span class="sc">+</span><span class="fu">c</span>(<span class="sc">-</span><span class="fu">qt</span>(<span class="fl">0.995</span>,<span class="dv">19</span>)<span class="sc">*</span><span class="fu">sd</span>(arsenico)<span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">20</span>),<span class="fu">qt</span>(<span class="fl">0.995</span>,<span class="dv">19</span>)<span class="sc">*</span><span class="fu">sd</span>(arsenico)<span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">20</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1491977 0.1848097</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>(<span class="fu">length</span>(arsenico)<span class="sc">-</span><span class="dv">1</span>)<span class="sc">*</span><span class="fu">sd</span>(arsenico)<span class="sc">*</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">/</span><span class="fu">qchisq</span>(<span class="fl">0.975</span>,<span class="dv">19</span>),<span class="dv">1</span><span class="sc">/</span><span class="fu">qchisq</span>(<span class="fl">0.025</span>,<span class="dv">19</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.01609758 0.05937708</code></pre>
+</div>
+</div>
+<p>También podemos construir intervalos de confianza para comparar el comportamiento de dos poblaciones, la siguiente tabla resume las variables pivote a usar según sea el caso. Supón dos muestras aleatorias <span class="math inline">\(X_1,X_2,...,X_n\)</span> y <span class="math inline">\(Y_1,Y_2,...,Y_m\)</span> provenientes de dos distribuciones normales con medias y varianzas <span class="math inline">\(\mu_X\)</span>, <span class="math inline">\(\sigma^2_X\)</span> y <span class="math inline">\(\mu_Y\)</span>, <span class="math inline">\(\sigma^2_Y\)</span>, respectivamennte.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Comparación</th>
+<th>Supuestos</th>
+<th>Variable pivote</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Diferencia de medias</td>
+<td>Muestras pareadas</td>
+<td><span class="math inline">\(T=\frac{\sqrt{n}(\bar{d}-\mu_d)}{S_d}\sim t_{n-1}\)</span> con <span class="math inline">\(d_i=X_i-Y_i\)</span>, <span class="math inline">\(S_d^2=\frac{1}{n-1}\sum_{i=1}^{n}(d_i-\bar{d})^2\)</span> y <span class="math inline">\(\mu_d=\mu_X-\mu_Y\)</span></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Muestras Independientes,<br> varianzas conocidas</td>
+<td><span class="math inline">\(Z=\frac{\bar{X}-\bar{Y}-(\mu_X-\mu_Y)}{\sqrt{\frac{\sigma^2_X}{n}+\frac{\sigma^2_Y}{m}}}\sim N(0,1)\)</span></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Muestras Independientes, <br>varianzas desconocidas e iguales</td>
+<td><span class="math inline">\(T=\frac{\bar{X}-\bar{Y}-(\mu_X-\mu_Y)}{S_p\sqrt{\frac{1}{n}+\frac{1}{m}}}\sim t_{n+m-2}\)</span> con <span class="math inline">\(S_p^2=\frac{(n-1)S_X^2+(m-2)S_Y^2}{n+m-2}\)</span></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Muestras Independientes,<br> varianzas desconocidas y diferentes</td>
+<td><span class="math inline">\(T=\frac{\bar{X}-\bar{Y}-(\mu_X-\mu_Y)}{\sqrt{\frac{S_X^2}{n}+\frac{S_Y^2}{m}}}\sim t_{v}\)</span> con <span class="math inline">\(v\approx \frac{\left(\sqrt{\frac{S_X^2}{n}+\frac{S_Y^2}{m}}\right)^2}{\frac{\left(\frac{S_X^2}{n}\right)^2}{n-1}+\frac{\left(\frac{S_Y^2}{m}\right)^2}{m-1}}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Razón de Varianzas</td>
+<td>Medias conocidas</td>
+<td><span class="math inline">\(F=\frac{\frac{\sum_{i=1}^{n}(Y_i-\mu_Y)^2}{m}}{\frac{\sum_{i=1}^{n}(X_i-\mu_X)^2}{n}}\frac{\sigma^2_X}{\sigma^2_Y}\sim F_{(m,n)}\)</span></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Medias desconocidas</td>
+<td><span class="math inline">\(F=\frac{\frac{\sum_{i=1}^{n}(Y_i- \bar{Y})^2}{m-1}}{\frac{\sum_{i=1}^{n}(X_i-\bar{X})^2}{n-1}}\frac{\sigma^2_X}{\sigma^2_Y}=\frac{S_Y^2}{S_X^2}\frac{\sigma^2_X}{\sigma^2_Y}\sim F_{(m-1,n-1)}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Diferencia <br> de proporciones</td>
+<td></td>
+<td><span class="math inline">\(Z=\frac{\hat{p}_X-\hat{p}_Y -(P_X-P_Y)}{\sqrt{\frac{\hat{p}_X(1-\hat{p}_X)}{n}+\frac{\hat{p}_Y(1-\hat{p}_Y)}{m}}}\sim N(0,1)\)</span></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ejercicio</strong> Se desea testear la eficiencia de un nuevo medicamento para regular la presión arterial con respecto a la fórmula actual, se consideró un grupo de 10 personas con hipertensión, se les suministró el medicamento actual y se registró el tiempo en minutos que tardó en hacer efecto; al siguiente día se les suministró a las mismas 10 personas el medicamento nuevo y se registró el tiempo que tardó en hacer efecto. Construye un intervalo de confianza con nivel de signficancia del 95% para la diferencia de los tiempos medios que tardan los medicamentos en hacer efecto ¿Dirías que el nuevo medicamento es más efectivo?</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Nuevo</td>
+<td>17.639</td>
+<td>19.184</td>
+<td>19.613</td>
+<td>20.662</td>
+<td>25.077</td>
+<td>27.008</td>
+<td>16.371</td>
+<td>12.656</td>
+<td>14.895</td>
+<td>23.791</td>
+</tr>
+<tr class="even">
+<td>Actual</td>
+<td>21.269</td>
+<td>24.146</td>
+<td>29.237</td>
+<td>25.649</td>
+<td>23.448</td>
+<td>26.833</td>
+<td>21.909</td>
+<td>25.005</td>
+<td>25.877</td>
+<td>24.692</td>
+</tr>
+</tbody>
+</table>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>nuevo<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="fl">17.63971</span>,<span class="fl">19.18418</span>,<span class="fl">19.61335</span>,<span class="fl">20.66206</span>,<span class="fl">25.07705</span>,<span class="fl">27.00823</span>,<span class="fl">16.37143</span>,<span class="fl">12.65593</span>,<span class="fl">14.89515</span>,<span class="fl">23.79106</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>actual<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="fl">21.26914</span>,<span class="fl">24.14610</span>,<span class="fl">29.23737</span>,<span class="fl">25.64860</span>,<span class="fl">23.44820</span>,<span class="fl">26.83353</span>,<span class="fl">21.90869</span>,<span class="fl">25.00543</span>,<span class="fl">25.87751</span>,<span class="fl">24.69202</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>dif<span class="ot">&lt;-</span>nuevo<span class="sc">-</span>actual</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(dif)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -5.116844</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(dif)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4.722745</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qt</span>(<span class="fl">0.975</span>,<span class="dv">9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.262157</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(dif)<span class="sc">+</span><span class="fu">c</span>(<span class="sc">-</span><span class="fu">qt</span>(<span class="fl">0.975</span>,<span class="dv">9</span>)<span class="sc">*</span><span class="fu">sd</span>(dif)<span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">10</span>),<span class="fu">qt</span>(<span class="fl">0.975</span>,<span class="dv">9</span>)<span class="sc">*</span><span class="fu">sd</span>(dif)<span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -8.495292 -1.738396</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="pruebas-de-hipótesis" class="level3">
+<h3 class="anchored" data-anchor-id="pruebas-de-hipótesis">Pruebas de Hipótesis</h3>
+<div style="text-align: justify;">
+<p>Las pruebas de hipótesis están estrechamente relacionadas con los intervalos confianza, y podemos usar las mismas variables pivotales para juzgar los sistemas de hipótesis dados pues; un intervalo de confianza proporciona un rango de valores plausibles para un parámetro poblacional, como la media. Por ejemplo, un intervalo de confianza del 95% indica que, si se repitiera el muestreo muchas veces, aproximadamente el 95% de los intervalos construidos incluirían el valor verdadero del parámetro. Por otro lado, una prueba de hipótesis evalúa una afirmación específica sobre un parámetro poblacional, como si la media es igual a un valor dado. La relación entre ambos métodos es que si un valor hipotético (por ejemplo, <span class="math inline">\(\mu=\mu_0\)</span>) no está dentro del intervalo de confianza, entonces se rechaza la hipótesis nula al mismo nivel de significancia.</p>
+<p><strong>Ejercicio</strong></p>
+<p>Las siguientes son dos muestras aleatorias provenientes de dos poblaciones con distribución normal.</p>
+<ul>
+<li>Juzga el sistema de hipótesis sobre la igualdad de varianzas: <span class="math display">\[H_0: \frac{\sigma^2_1}{\sigma^2_2}=1 \quad \text{vs} \quad H_a: \frac{\sigma^2_1}{\sigma^2_2}\neq1\]</span></li>
+<li>Basado en el resultado anterior elige la variable pivote adecuada para juzgar el siguiente sistema de hipótesis sobre la diferencia de medias.</li>
+</ul>
+<p><span class="math display">\[H_0: \mu_1=\mu_2 \quad \text{vs} \quad H_a: \mu_1\neq\mu_2\]</span> <br></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Poblacion</th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>0.3326</td>
+<td>1.5008</td>
+<td>-2.1765</td>
+<td>2.2790</td>
+<td>-1.0189</td>
+<td>1.4064</td>
+<td>-0.1456</td>
+<td>2.2994</td>
+<td>-0.9407</td>
+<td>-0.6975</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>-2.2288</td>
+<td>0.9060</td>
+<td>1.0195</td>
+<td>0.8002</td>
+<td>0.3404</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>1.2545</td>
+<td>1.8423</td>
+<td>1.9791</td>
+<td>4.6087</td>
+<td>0.7123</td>
+<td>1.4672</td>
+<td>-5.7277</td>
+<td>2.6101</td>
+<td>-0.7495</td>
+<td>-1.9610</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>-2.8334</td>
+<td>1.1577</td>
+<td>3.90824</td>
+<td>-1.2104</td>
+<td>-3.3756</td>
+<td>-1.9825</td>
+<td>-0.8446</td>
+<td>3.1946</td>
+<td>2.7747</td>
+<td>-1.0302</td>
+</tr>
+</tbody>
+</table>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>pob1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.3326</span>, <span class="fl">1.5008</span>, <span class="sc">-</span><span class="fl">2.1765</span>, <span class="fl">2.2790</span>, <span class="sc">-</span><span class="fl">1.0189</span>, <span class="fl">1.4064</span>, <span class="sc">-</span><span class="fl">0.1456</span>, <span class="fl">2.2994</span>, <span class="sc">-</span><span class="fl">0.9407</span>, <span class="sc">-</span><span class="fl">0.6975</span>, <span class="sc">-</span><span class="fl">2.2288</span>, <span class="fl">0.9060</span>, <span class="fl">1.0195</span>, <span class="fl">0.8002</span>, <span class="fl">0.3404</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>pob2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">1.2545</span>, <span class="fl">1.8423</span>, <span class="fl">1.9791</span>, <span class="fl">4.6087</span>, <span class="fl">0.7123</span>, <span class="fl">1.4672</span>, <span class="sc">-</span><span class="fl">5.7277</span>, <span class="fl">2.6101</span>, <span class="sc">-</span><span class="fl">0.7495</span>, <span class="sc">-</span><span class="fl">1.9610</span>, <span class="sc">-</span><span class="fl">2.8334</span>, <span class="fl">1.1577</span>, <span class="fl">3.9082</span>, <span class="sc">-</span><span class="fl">1.2104</span>, <span class="sc">-</span><span class="fl">3.3756</span>, <span class="sc">-</span><span class="fl">1.9825</span>, <span class="sc">-</span><span class="fl">0.8446</span>, <span class="fl">3.1946</span>, <span class="fl">2.7747</span>, <span class="sc">-</span><span class="fl">1.0302</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="ejemplos" class="level3">
+<h3 class="anchored" data-anchor-id="ejemplos">Ejemplos</h3>
+<p>Primer punto: En la siguiente tabla se presentan los pesos en gramos, de dos grupos de conejos con diferentes dietas despues de 64 días de aplicadas.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'knitr' was built under R version 4.4.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear los vectores</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>dieta_a <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">800</span>, <span class="dv">850</span>, <span class="dv">900</span>, <span class="dv">870</span>, <span class="dv">890</span>, <span class="dv">960</span>, <span class="dv">970</span>, <span class="dv">950</span>, <span class="dv">880</span>, <span class="dv">900</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>dieta_b <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">700</span>, <span class="dv">780</span>, <span class="dv">700</span>, <span class="dv">900</span>, <span class="dv">800</span>, <span class="dv">780</span>, <span class="dv">850</span>, <span class="dv">890</span>)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Combinar en un data frame</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>tabla <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">Grupo =</span> <span class="fu">c</span>(<span class="st">"Dieta A"</span>, <span class="st">"Dieta B"</span>),</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rbind</span>(</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    dieta_a,</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(dieta_b, <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(dieta_a) <span class="sc">-</span> <span class="fu">length</span>(dieta_b)))  <span class="co"># completar con NA si es más corto</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Asignar nombres a las columnas</span></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(tabla) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Grupo"</span>, <span class="fu">paste0</span>(<span class="st">"V"</span>, <span class="dv">1</span><span class="sc">:</span>(<span class="fu">ncol</span>(tabla)<span class="sc">-</span><span class="dv">1</span>)))</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrar la tabla</span></span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(tabla, <span class="at">caption =</span> <span class="st">"Valores por grupo en formato ancho"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Valores por grupo en formato ancho</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Grupo</th>
+<th style="text-align: right;">V1</th>
+<th style="text-align: right;">V2</th>
+<th style="text-align: right;">V3</th>
+<th style="text-align: right;">V4</th>
+<th style="text-align: right;">V5</th>
+<th style="text-align: right;">V6</th>
+<th style="text-align: right;">V7</th>
+<th style="text-align: right;">V8</th>
+<th style="text-align: right;">V9</th>
+<th style="text-align: right;">V10</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">dieta_a</td>
+<td style="text-align: left;">Dieta A</td>
+<td style="text-align: right;">800</td>
+<td style="text-align: right;">850</td>
+<td style="text-align: right;">900</td>
+<td style="text-align: right;">870</td>
+<td style="text-align: right;">890</td>
+<td style="text-align: right;">960</td>
+<td style="text-align: right;">970</td>
+<td style="text-align: right;">950</td>
+<td style="text-align: right;">880</td>
+<td style="text-align: right;">900</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Dieta B</td>
+<td style="text-align: right;">700</td>
+<td style="text-align: right;">780</td>
+<td style="text-align: right;">700</td>
+<td style="text-align: right;">900</td>
+<td style="text-align: right;">800</td>
+<td style="text-align: right;">780</td>
+<td style="text-align: right;">850</td>
+<td style="text-align: right;">890</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<ol type="a">
+<li><p>Encuentre el estimador puntual para la media y la varianza de los pesos en gramos de los dos grupos de conejos.</p>
+<p>Un estimador puntual para la media <span class="math inline">\(\theta = \mu\)</span> está dado por la siguiente expresión:</p>
+<p><span class="math display">\[
+\bar{X} = \dfrac{1}{n}\sum_{i=1}^nX_i
+\]</span></p>
+<p>Una estimación puntual para la media <span class="math inline">\(\theta = \mu\)</span> está dada por la siguiente expresión:</p>
+<p><span class="math display">\[
+\bar{x} = \dfrac{1}{n}\sum_{i=1}^nx_i
+\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(dieta_a)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 897</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(dieta_b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 800</code></pre>
+</div>
+</div>
+<p>La estimación puntual para la media de los pesos, en gramos, del grupo A de conejos es: 897</p>
+<p>La estimación puntual para la media de los pesos, en gramos, del grupo B de conejos es: 800</p>
+<p>Un estimador puntual para la varianza <span class="math inline">\(\theta = \sigma^2\)</span> está dado por la siguiente expresión:</p>
+<p><span class="math display">\[
+S^2 = \dfrac{1}{n-1}\sum_{i=1}^n(X_i-\bar{X})^2
+\]</span></p>
+<p>Una estimación puntual para la varianza <span class="math inline">\(\theta = \sigma^2\)</span> está dada por la siguiente expresión:</p>
+<p><span class="math display">\[
+s^2 = \dfrac{1}{n-1}\sum_{i=1}^n(x_i-\bar{x})^2
+\]</span></p>
+<p>La estimación puntual para la varianza de los pesos, en gramos al cuadrado, del grupo A de conejos es: 2756.67 g^2</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">var</span>(dieta_a),<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2756.67</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">var</span>(dieta_b),<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5914.29</code></pre>
+</div>
+</div></li>
+<li><p>¿Existe alguna razón para creer, con un nivel de significancia de 0.05, que el peso en gramos después de 64 días de aplicada la dieta A es mayor a 950 gramos? Indique los supuestos. Adicionalmente, calcule el p-valor.</p></li>
+</ol>
+<p>Definimos el siguiente sistema de hipótesis a una cola a la derecha:</p>
+<p><span class="math display">\[
+\begin{align*}
+H_0 &amp;: \mu \leq 950\\
+H_1 &amp;: \mu &gt; 950\\
+\end{align*}
+\]</span></p>
+<p>Asumimos varianza poblacional <span class="math inline">\((\sigma^2)\)</span> desconocida, datos provenientes de una población normal y una muestra pequeña. Por ende, usamos la prueba t de Student.</p>
+<p>Así, el estadístico de prueba T esta dado por la siguiente expresión:</p>
+<p><span class="math display">\[
+t = \dfrac{\bar{x}-\mu_0}{s/\sqrt{n}}
+\]</span></p>
+<p>Note que, en nuestro caso particular, para el grupo que recibio la dieta A, <span class="math inline">\(\bar{x}=897\)</span>, <span class="math inline">\(\mu_0=950\)</span>, <span class="math inline">\(s = \sqrt{2756.67} = 52.5\)</span> y <span class="math inline">\(n=10\)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(dieta_a, <span class="at">mu =</span> <span class="dv">950</span>, <span class="at">alternative =</span> <span class="st">"greater"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One Sample t-test
+
+data:  dieta_a
+t = -3.1922, df = 9, p-value = 0.9945
+alternative hypothesis: true mean is greater than 950
+95 percent confidence interval:
+ 866.5644      Inf
+sample estimates:
+mean of x 
+      897 </code></pre>
+</div>
+</div>
+<p>De aquí que t =-3.1922 y p-value = 0.9945.</p>
+<p>Las reglas de desición estan dadas por:</p>
+<p>Rechazar <span class="math inline">\(H_0\)</span> si <span class="math inline">\(t &gt; t_\alpha\)</span> donde <span class="math inline">\(t_\alpha = t_{0.05,9}\)</span></p>
+<p>El valor de <span class="math inline">\(t_{0.05,9}\approx 1.83\)</span> obtenido a través de:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qt</span>(<span class="fl">0.05</span>,<span class="dv">9</span>,<span class="at">lower.tail =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.833113</code></pre>
+</div>
+</div>
+<p>Recordemos que <span class="math inline">\(P(T&gt;-3.19) = \text{p-value}\)</span>. Note que el <span class="math inline">\(\text{p-value}\)</span> será muy cercano a 1 ya que, por una parte, al estar por debajo de cero, este será mayor a 0.5. Además, este es un valor relativamente “grande”, con lo que por la simetría de la distribución es fácil ver que tendremos un valor alto de área acumulada por debajo de la función de distribución t.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="mod6_inferen_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ol start="3" type="a">
+<li>¿Existe alguna razón para creer, con un nivel de significancia de 0.05, que el peso en gramos después de 64 días de aplicada la dieta B es mayor a 850 gramos? Indique los supuestos. Adicionalmente, calcule el p-valor.</li>
+</ol>
+<p>Definimos el siguiente sistema de hipótesis a una cola a la derecha:</p>
+<p><span class="math display">\[ \begin{align*} H_0 &amp;: \mu \leq 950\\ H_1 &amp;: \mu &gt; 950\\ \end{align*} \]</span></p>
+<p>Asumimos varianza poblacional <span class="math inline">\((\sigma^2)\)</span> desconocida. Por ende, usamos la prueba t de Student.</p>
+<p>Así, el estadístico de prueba T esta dado por la siguiente expresión:</p>
+<p><span class="math display">\[ t = \dfrac{\bar{x}-\mu_0}{s/\sqrt{n}} \]</span></p>
+<p>El grupo al que se le administro la dieta b, cuenta con los siguientes valores: <span class="math inline">\(\bar{x}=800\)</span>, <span class="math inline">\(\mu_0=850\)</span>, <span class="math inline">\(s = \sqrt{5914.29} = 76.9\)</span> y <span class="math inline">\(n=8\)</span>.</p>
+<ol start="4" type="a">
+<li>¿Existe evidencia de que los pesos promedios de ambos grupos de conejos son distintos? Use α = 0.01. Indique los supuestos y pruebe el supuesto de varianzas.</li>
+</ol>
+<p>Definimos el siguiente sistema de hipótesis a una cola a la derecha:</p>
+<p><span class="math display">\[ \begin{align*} H_0 &amp;: \mu_A = \mu_B\\ H_1 &amp;: \mu_A \neq \mu_B\\ \end{align*} \]</span></p>
+<p>Primero realizaremos una prueba para el supuesto de varianzas iguales.</p>
+<p><span class="math display">\[ H_0 : \sigma^2_A = \sigma^2_B \qquad \text{vs} \qquad H_1 : \sigma^2_A \neq \sigma^2_B \]</span></p>
+<p>Para este caso, haremos una prueba de razón de varianzas tambien conocida como una prueba F de Fisher.</p>
+<p><span class="math display">\[ F = \frac{S_1^2}{S_2^2} \]</span></p>
+<p>La regla de decisión está dada por:</p>
+<p><span class="math display">\[
+F &gt; F_{\alpha/2;\, n_1 - 1,\, n_2 - 1}
+\]</span></p>
+<p>Donde <span class="math inline">\(F =0.466\)</span> y <span class="math inline">\(F_{\alpha/2;\, n_1 - 1,\, n_2 - 1}=F_{0.01/2;\,9,\, 7}=8.51\)</span>. Además, <span class="math inline">\(\text{p-value}=0.28\)</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var.test</span>(dieta_a,dieta_b, <span class="at">alternative =</span> <span class="st">"two.sided"</span>, <span class="at">coef.level =</span> <span class="fl">0.99</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    F test to compare two variances
+
+data:  dieta_a and dieta_b
+F = 0.4661, num df = 9, denom df = 7, p-value = 0.2836
+alternative hypothesis: true ratio of variances is not equal to 1
+95 percent confidence interval:
+ 0.09663738 1.95625628
+sample estimates:
+ratio of variances 
+         0.4661031 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qf</span>(<span class="fl">0.01</span><span class="sc">/</span><span class="dv">2</span>,<span class="dv">9</span>,<span class="dv">7</span>,<span class="at">lower.tail =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 8.513823</code></pre>
+</div>
+</div>
+<p>Podemos asumir varianzas iguales y continuar con el análisis sobre los pesos promedios de ambos grupos de conejos.</p>
+<p>Así, el estadístico de prueba T para muestras independientes está dado por la siguiente expresión, note que estamos en un caso de Diferencia de Medias con Varianzas Desconocidas suponiendo igualdad :</p>
+<p><span class="math display">\[ T = \dfrac{(\bar{X}-\bar{Y})-(\mu_X-\mu_Y)}{S_p\sqrt{\frac{1}{n}+\frac{1}{m}}}\sim t_{n+m-2}\]</span></p>
+<p><span class="math display">\[
+S_p = \sqrt{\frac{(n-1)S_X^2+(m-2)S_Y^2}{n+m-2}}
+\]</span></p>
+<p>Note que, en nuestro caso particular, para el grupo que recibio la dieta A, <span class="math inline">\(\bar{x}=897\)</span>, <span class="math inline">\(\mu_0=950\)</span>, <span class="math inline">\(s = \sqrt{2756.67} = 52.5\)</span> y <span class="math inline">\(n=10\)</span>.</p>
+<p><span class="math display">\[ T = \dfrac{(897-800)-(0)}{S_p\sqrt{\frac{1}{10}+\frac{1}{8}}}\sim t_{10+8-2}\]</span> <span class="math display">\[
+S_p = \sqrt{\frac{(10-1)*2756.67+(8-2)*5914.29}{10+8-2}}
+\]</span></p>
+<p><span class="math display">\[
+S_p = \sqrt{\frac{60295.77}{16}} = 61.39
+\]</span></p>
+<p>Obtenemos un valor del estadístico T = 0.75 que comparamos con el valor de una t con 16 grados de libertad al nivel de significacncia del 1% con lo que obtenemos <span class="math inline">\(t_c=2.58\)</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qt</span>(<span class="fl">0.01</span>,<span class="dv">16</span>,<span class="at">lower.tail =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.583487</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(dieta_a, dieta_b, <span class="at">var.equal =</span> <span class="cn">TRUE</span>, <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Two Sample t-test
+
+data:  dieta_a and dieta_b
+t = 3.1789, df = 16, p-value = 0.00583
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+  32.31412 161.68588
+sample estimates:
+mean of x mean of y 
+      897       800 </code></pre>
+</div>
+</div>
+<p><span class="math display">\[
+T = \frac{(\bar{X} - \bar{Y}) - (\mu_X - \mu_Y)}{S_p \sqrt{\frac{1}{n} + \frac{1}{m}}} \sim t_{n+m-2}
+\]</span></p>
+<p><span class="math display">\[
+S_p^2 = \frac{(n - 1) S_X^2 + (m - 1) S_Y^2}{n + m - 2}
+\]</span></p>
+<p>Sustituyendo con nuestros valores:</p>
+<p><span class="math display">\[
+S_p^2 = \frac{(10 - 1)(2756.667) + (8 - 1)(5914.286)}{10 + 8 - 2}
+= \frac{9 \cdot 2756.667 + 7 \cdot 5914.286}{16}
+\]</span></p>
+<p><span class="math display">\[
+S_p^2 = \frac{24810.003 + 41400.002}{16}
+= \frac{66210.005}{16}
+= 4138.125
+\]</span></p>
+<p><span class="math display">\[
+S_p = \sqrt{4138.125} \approx 64.31
+\]</span></p>
+<p>Ahora calculamos el estadístico ( T ):</p>
+<p><span class="math display">\[
+T = \frac{897 - 800}{64.31 \cdot \sqrt{\frac{1}{10} + \frac{1}{8}}}
+= \frac{97}{64.31 \cdot \sqrt{0.225}}
+= \frac{97}{64.31 \cdot 0.4743}
+= \frac{97}{30.49} \approx 3.18
+\]</span></p>
+<p>Obtenemos un valor de la estadística <span class="math display">\[ T = 3.18 \]</span>, que comparamos con el valor crítico de una t con <span class="math display">\[ 16 \]</span> grados de libertad.</p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" style="text-align: justify;">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📚 <strong>Bibliografía</strong>
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li>Timbers, Tiffany; Campbell, Trevor and Lee,&nbsp;Melissa. 2024. Data Science: <em>A First Introduction.</em> CRC Press.<a href="https://datasciencebook.ca/" class="uri">https://datasciencebook.ca/</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div style="text-align: center;">
+<p>Copyright © 2025 Jose M. Leon &amp; Laura E. Pardo - Created with <a href="https://quarto.org">Quarto</a></p>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jose Miguel Leon Puentes">
+
+<title>Módulo 5: Probabilidad – Jose Miguel Leon P.</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-dfb324f25d9b1687192fa8be62ac8f9c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons/css/academicons.min.css">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Jose Miguel Leon P.</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../biography.html"> 
+<span class="menu-text">Biography</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../teaching.html"> 
+<span class="menu-text">Teaching</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../research.html"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../media.html"> 
+<span class="menu-text">Media</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Tabla de Contenido</h2>
+   
+  <ul>
+  <li><a href="#introducción" id="toc-introducción" class="nav-link active" data-scroll-target="#introducción">🔰 Introducción</a></li>
+  <li><a href="#objetivos" id="toc-objetivos" class="nav-link" data-scroll-target="#objetivos">🎯 Objetivos</a></li>
+  <li><a href="#desarrollo" id="toc-desarrollo" class="nav-link" data-scroll-target="#desarrollo">📖 Desarrollo</a>
+  <ul>
+  <li><a href="#métodos-de-conteo" id="toc-métodos-de-conteo" class="nav-link" data-scroll-target="#métodos-de-conteo">Métodos de Conteo</a>
+  <ul class="collapse">
+  <li><a href="#factorial" id="toc-factorial" class="nav-link" data-scroll-target="#factorial">Factorial</a></li>
+  <li><a href="#permutaciones-sin-repetición" id="toc-permutaciones-sin-repetición" class="nav-link" data-scroll-target="#permutaciones-sin-repetición">Permutaciones sin repetición</a></li>
+  <li><a href="#permutaciones-con-repetición" id="toc-permutaciones-con-repetición" class="nav-link" data-scroll-target="#permutaciones-con-repetición">Permutaciones con repetición</a></li>
+  <li><a href="#combinaciones-sin-repetición" id="toc-combinaciones-sin-repetición" class="nav-link" data-scroll-target="#combinaciones-sin-repetición">Combinaciones sin repetición</a></li>
+  <li><a href="#combinaciones-con-repetición-combinaciones-con-reemplazo" id="toc-combinaciones-con-repetición-combinaciones-con-reemplazo" class="nav-link" data-scroll-target="#combinaciones-con-repetición-combinaciones-con-reemplazo">Combinaciones con repetición (combinaciones con reemplazo)</a></li>
+  <li><a href="#coeficiente-multinomial" id="toc-coeficiente-multinomial" class="nav-link" data-scroll-target="#coeficiente-multinomial">Coeficiente Multinomial</a></li>
+  </ul></li>
+  <li><a href="#distribuciones-discretas" id="toc-distribuciones-discretas" class="nav-link" data-scroll-target="#distribuciones-discretas">Distribuciones Discretas</a>
+  <ul class="collapse">
+  <li><a href="#distribución-uniforme" id="toc-distribución-uniforme" class="nav-link" data-scroll-target="#distribución-uniforme">Distribución Uniforme</a></li>
+  <li><a href="#distribución-de-bernoulli" id="toc-distribución-de-bernoulli" class="nav-link" data-scroll-target="#distribución-de-bernoulli">Distribución de Bernoulli</a></li>
+  <li><a href="#distribución-de-binomial" id="toc-distribución-de-binomial" class="nav-link" data-scroll-target="#distribución-de-binomial">Distribución de Binomial</a></li>
+  <li><a href="#distribución-binomial-negativa" id="toc-distribución-binomial-negativa" class="nav-link" data-scroll-target="#distribución-binomial-negativa">Distribución Binomial Negativa</a></li>
+  <li><a href="#distribución-geométrica" id="toc-distribución-geométrica" class="nav-link" data-scroll-target="#distribución-geométrica">Distribución Geométrica</a></li>
+  <li><a href="#distribución-hipergeométrica" id="toc-distribución-hipergeométrica" class="nav-link" data-scroll-target="#distribución-hipergeométrica">Distribución Hipergeométrica</a></li>
+  <li><a href="#distribución-poisson" id="toc-distribución-poisson" class="nav-link" data-scroll-target="#distribución-poisson">Distribución Poisson</a></li>
+  </ul></li>
+  <li><a href="#distribuciones-continuas" id="toc-distribuciones-continuas" class="nav-link" data-scroll-target="#distribuciones-continuas">Distribuciones Continuas</a>
+  <ul class="collapse">
+  <li><a href="#distribución-uniforme-1" id="toc-distribución-uniforme-1" class="nav-link" data-scroll-target="#distribución-uniforme-1">Distribución Uniforme</a></li>
+  <li><a href="#distribución-normal" id="toc-distribución-normal" class="nav-link" data-scroll-target="#distribución-normal">Distribución Normal</a></li>
+  <li><a href="#distribución-gamma" id="toc-distribución-gamma" class="nav-link" data-scroll-target="#distribución-gamma">Distribución Gamma</a></li>
+  <li><a href="#distribución-exponencial" id="toc-distribución-exponencial" class="nav-link" data-scroll-target="#distribución-exponencial">Distribución Exponencial</a></li>
+  <li><a href="#distribución-chi---cuadrado" id="toc-distribución-chi---cuadrado" class="nav-link" data-scroll-target="#distribución-chi---cuadrado">Distribución Chi - Cuadrado</a></li>
+  <li><a href="#distribución-beta" id="toc-distribución-beta" class="nav-link" data-scroll-target="#distribución-beta">Distribución Beta</a></li>
+  </ul></li>
+  <li><a href="#uso-de-r-como-alternativa-a-las-tablas-de-valores-para-las-distribuciones." id="toc-uso-de-r-como-alternativa-a-las-tablas-de-valores-para-las-distribuciones." class="nav-link" data-scroll-target="#uso-de-r-como-alternativa-a-las-tablas-de-valores-para-las-distribuciones.">Uso de <code>R</code> como alternativa a las tablas de valores para las distribuciones.</a></li>
+  </ul></li>
+  </ul>
+<div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="mailto:joleonp@unal.edu.co"><i class="bi bi-mailbox"></i>Contacto</a></li></ul></div><div class="quarto-code-links"><h2>Code Links</h2><ul><li><a href="https://github.com/jmlionc/AppliedBiostats"><i class="bi bi-github"></i>GitHub</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Módulo 5: Probabilidad</h1>
+<p class="subtitle lead">Bioestadística Fundamental y Estadística Fundamental para las Ciencias de la Salud</p>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliations</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Jose Miguel Leon Puentes </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Departamento de Estadística
+          </p>
+        <p class="affiliation">
+            Universidad Nacional de Colombia
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introducción" class="level2">
+<h2 class="anchored" data-anchor-id="introducción">🔰 Introducción</h2>
+<p>En este módulo exploraremos las funciones de masa de probabilidad para variables discretas y las funciones de densidad de probabilidad (pdf) para variables continuas. Comprenderemos cómo estas funciones nos permiten describir la probabilidad de que un evento ocurra en un conjunto de datos biológicos. También, profundizaremos en conceptos clave como el valor esperado y la varianza, que nos ayudan a caracterizar el centro y la dispersión de una distribución.</p>
+<p>Aprenderás a utilizar el poder de R para trabajar con diferentes distribuciones de probabilidad. Cada distribución en R tiene cuatro funciones clave, identificadas por un prefijo:</p>
+<ul>
+<li><p><code>p</code>: para la función de distribución acumulada (cdf) en un valor particular.</p></li>
+<li><p><code>q</code>: para los cuantiles (la función inversa de la cdf) correspondientes a una probabilidad particular.</p></li>
+<li><p><code>d</code>: para la función de densidad (pdf) en un valor particular.</p></li>
+<li><p><code>r</code>: para la generación de valores aleatorios de una distribución particular.</p></li>
+</ul>
+</section>
+<section id="objetivos" class="level2">
+<h2 class="anchored" data-anchor-id="objetivos">🎯 Objetivos</h2>
+<ol type="1">
+<li><p>Distinguir y aplicar las funciones de masa de probabilidad para variables discretas y las funciones de densidad para variables continuas.</p></li>
+<li><p>Calcular el valor esperado y la varianza para caracterizar distribuciones de probabilidad.</p></li>
+<li><p>Implementar en R los métodos de conteo como combinaciones, permutaciones y factoriales.</p></li>
+<li><p>Dominar las cuatro funciones clave (<code>p</code>, <code>q</code>, <code>d</code>, <code>r</code>) para trabajar con las principales distribuciones de probabilidad en R.</p></li>
+<li><p>Resolver problemas prácticos de probabilidad, utilizando R como alternativa a las tablas estadísticas para obtener valores de distribución.</p></li>
+<li><p>Interpretar y generar datos pseudo-aleatorios a partir de distribuciones específicas en R, comprendiendo la importancia de la replicabilidad.</p></li>
+</ol>
+</section>
+<section id="desarrollo" class="level2">
+<h2 class="anchored" data-anchor-id="desarrollo">📖 Desarrollo</h2>
+<p>La probabilidad clásica se basa en el principio de resultados igualmente probables. Si un experimento tiene un espacio muestral finito <span class="math inline">\(S\)</span> con <span class="math inline">\(n\)</span> resultados igualmente probables, y <span class="math inline">\(A\)</span> es un evento de interés dentro de <span class="math inline">\(S\)</span>, la probabilidad clásica se define como: <span class="math display">\[P(A)=\dfrac{n({A})}{n(S)}\]</span> Donde:</p>
+<ul>
+<li><p><span class="math inline">\(P(A)\)</span>: probabilidad del evento</p></li>
+<li><p><span class="math inline">\(n(A)\)</span>: número de resultados favorables al evento</p></li>
+<li><p><span class="math inline">\(n(S)\)</span>: número total de resultados posibles en el espacio muestral <span class="math inline">\(S\)</span>.</p></li>
+</ul>
+<p>En resumen, la probabilidad de un evento se obtiene dividiendo el número de resultados favorables entre el total de resultados igualmente probables.</p>
+<p><strong>Lanzar una Moneda</strong></p>
+<p>Calculemos la probabilidad de obtener Cara (Heads) al lanzar una moneda justa.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>outcomes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Heads"</span>, <span class="st">"Tails"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>total_outcomes <span class="ot">&lt;-</span> <span class="fu">length</span>(outcomes)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>favorable_outcomes <span class="ot">&lt;-</span> <span class="fu">length</span>(outcomes[outcomes <span class="sc">==</span> <span class="st">"Heads"</span>])</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>classical_prob <span class="ot">&lt;-</span> favorable_outcomes <span class="sc">/</span> total_outcomes</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>classical_prob</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5</code></pre>
+</div>
+</div>
+<p>Se define un experimento de lanzar una moneda:</p>
+<ul>
+<li><p><code>outcomes &lt;- c("Heads", "Tails")</code>: crea un vector con los dos posibles resultados: “Cara” y “Cruz”.</p></li>
+<li><p><code>total_outcomes &lt;- length(outcomes)</code>: obtiene el número total de resultados posibles, en este caso 2.</p></li>
+<li><p><code>favorable_outcomes &lt;- length(outcomes[outcomes == "Heads"])</code>: cuenta los resultados favorables, es decir, cuántas veces aparece “Cara” en el vector (1 vez).</p></li>
+<li><p><code>classical_prob &lt;- favorable_outcomes / total_outcomes</code>: calcula la probabilidad clásica dividiendo los resultados favorables entre el total (1/2 = 0.5).</p></li>
+<li><p><code>classical_prob</code>: muestra la probabilidad de obtener “Cara” al lanzar una moneda justa, que es 0.5.</p></li>
+</ul>
+<p><strong>Baraja de Cartas</strong></p>
+<p>Calcular la probabilidad de sacar una espada de una baraja estándar de 52 cartas.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>deck <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Spades"</span>, <span class="st">"Hearts"</span>, <span class="st">"Diamonds"</span>, <span class="st">"Clubs"</span>), <span class="at">each =</span> <span class="dv">13</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>total_cards <span class="ot">&lt;-</span> <span class="fu">length</span>(deck)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>spades <span class="ot">&lt;-</span> <span class="fu">length</span>(deck[deck <span class="sc">==</span> <span class="st">"Spades"</span>])</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>classical_prob_spade <span class="ot">&lt;-</span> spades <span class="sc">/</span> total_cards</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>classical_prob_spade</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.25</code></pre>
+</div>
+</div>
+<p>Este código nos ayuda a calcular la probabilidad de sacar una pica de una baraja normal. Como hay 52 cartas en total y 13 de ellas son picas, la probabilidad de sacar una pica es de 13 sobre 52, lo que se puede simplificar a 1 sobre 4 o 25 %. Por lo tanto, al sacar una carta de una baraja normal, hay un 25 % de probabilidad de que sea pica.</p>
+<p>Como parte del material complementario del módulo se recomienda la lectura de la introducción a la probabilidad desde la parte histórica disponible a través del siguiente link <a href="https://learningstatisticswithr.com/book/probability.html">Chapter 9 Introduction to probability</a> del libro Learning Statistics with R de Danielle Navarro.</p>
+<section id="métodos-de-conteo" class="level3">
+<h3 class="anchored" data-anchor-id="métodos-de-conteo">Métodos de Conteo</h3>
+<section id="factorial" class="level4">
+<h4 class="anchored" data-anchor-id="factorial">Factorial</h4>
+<p><strong>Fórmula</strong></p>
+<p><span class="math display">\[
+n! = n \cdot (n-1) \cdot (n-2) \cdots 2 \cdot 1, \quad n \geq 0
+\]</span></p>
+<p><strong>Propiedad especial</strong> <span class="math display">\[0! = 1\]</span></p>
+<p><strong>Implementación en R</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">factorial</span>(n)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="permutaciones-sin-repetición" class="level4">
+<h4 class="anchored" data-anchor-id="permutaciones-sin-repetición">Permutaciones sin repetición</h4>
+<p><strong>Fórmula</strong></p>
+<p>Número de formas de ordenar <span class="math inline">\(n\)</span> elementos distintos:</p>
+<p><span class="math display">\[P(n) = n!\]</span></p>
+<p>Número de permutaciones de <span class="math inline">\(n\)</span> elementos tomados de <span class="math inline">\(k\)</span>:</p>
+<p><span class="math display">\[P(n,k) = \frac{n!}{(n-k)!}, \quad 0 \leq k \leq n\]</span></p>
+<p><strong>Implementación en R</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Permutaciones de n elementos tomados de k</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>permutations <span class="ot">&lt;-</span> <span class="cf">function</span>(n, k) {</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">factorial</span>(n) <span class="sc">/</span> <span class="fu">factorial</span>(n <span class="sc">-</span> k)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">permutations</span>(<span class="dv">5</span>, <span class="dv">3</span>) <span class="co"># Ejemplo: permutaciones de 5 elementos tomados de 3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 60</code></pre>
+</div>
+</div>
+</section>
+<section id="permutaciones-con-repetición" class="level4">
+<h4 class="anchored" data-anchor-id="permutaciones-con-repetición">Permutaciones con repetición</h4>
+<p><strong>Fórmula</strong></p>
+<p>Si hay <span class="math inline">\(n\)</span> elementos con grupos repetidos de tamaños <span class="math inline">\(n_1, n_2, \dots, n_r\)</span>:</p>
+<p><span class="math display">\[P = \frac{n!}{n_1! \, n_2! \cdots n_r!}\]</span></p>
+<p><strong>Implementación en R</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Permutaciones con repetición</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>permutations_with_repetition <span class="ot">&lt;-</span> <span class="cf">function</span>(counts) {</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">factorial</span>(<span class="fu">sum</span>(counts)) <span class="sc">/</span> <span class="fu">prod</span>(<span class="fu">factorial</span>(counts))</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Ejemplo: letras de la palabra "MAMA"</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="fu">permutations_with_repetition</span>(<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 12</code></pre>
+</div>
+</div>
+</section>
+<section id="combinaciones-sin-repetición" class="level4">
+<h4 class="anchored" data-anchor-id="combinaciones-sin-repetición">Combinaciones sin repetición</h4>
+<p><strong>Fórmula</strong></p>
+<p>Número de formas de elegir <span class="math inline">\(k\)</span> elementos de un conjunto de <span class="math inline">\(n\)</span>:</p>
+<p><span class="math display">\[C(n,k) = \binom{n}{k} = \frac{n!}{k!(n-k)!}, \quad 0 \leq k \leq n \]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">choose</span>(n, k)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Ejemplo: número de formas de elegir 3 items de 5 items</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">choose</span>(<span class="dv">5</span>, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Generar Combinaciones</strong></p>
+<p>Suponga que desea generar todas las combinaciones de <span class="math inline">\(n\)</span> elementos (items) tomando <span class="math inline">\(k\)</span> cada vez.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>items <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">combn</span>(items, k)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,]    2    2    2    3    3    4
+[2,]    3    4    5    4    5    5</code></pre>
+</div>
+</div>
+<p>Otro ejemplo sería generar todas las combinaciones de los números 1 al 5 tomando de a tres:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">combn</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+[1,]    1    1    1    1    1    1    2    2    2     3
+[2,]    2    2    2    3    3    4    3    3    4     4
+[3,]    3    4    5    4    5    5    4    5    5     5</code></pre>
+</div>
+</div>
+<p>Esta función combn() no se restringe a números. Tambien podemos generar combinaciones de cadenas de caracteres:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">combn</span>(<span class="fu">c</span>(<span class="st">"T1"</span>, <span class="st">"T2"</span>, <span class="st">"T3"</span>, <span class="st">"T4"</span>), <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2] [,3] [,4]
+[1,] "T1" "T1" "T1" "T2"
+[2,] "T2" "T2" "T3" "T3"
+[3,] "T3" "T4" "T4" "T4"</code></pre>
+</div>
+</div>
+</section>
+<section id="combinaciones-con-repetición-combinaciones-con-reemplazo" class="level4">
+<h4 class="anchored" data-anchor-id="combinaciones-con-repetición-combinaciones-con-reemplazo">Combinaciones con repetición (combinaciones con reemplazo)</h4>
+<p><strong>Fórmula</strong></p>
+<p>Número de formas de elegir <span class="math inline">\(k\)</span> elementos de un conjunto de <span class="math inline">\(n\)</span> con repetición:</p>
+<p><span class="math display">\[
+C_r(n,k) = \binom{n+k-1}{k}
+\]</span></p>
+<p><strong>Implementación en R</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>combinations_with_repetition <span class="ot">&lt;-</span> <span class="cf">function</span>(n, k) {</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">choose</span>(n <span class="sc">+</span> k <span class="sc">-</span> <span class="dv">1</span>, k)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="fu">combinations_with_repetition</span>(<span class="dv">3</span>, <span class="dv">2</span>) <span class="co"># Ejemplo: elegir 2 de 3 con repetición</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6</code></pre>
+</div>
+</div>
+</section>
+<section id="coeficiente-multinomial" class="level4">
+<h4 class="anchored" data-anchor-id="coeficiente-multinomial">Coeficiente Multinomial</h4>
+<p><strong>Fórmula</strong></p>
+<p>Para particionar <span class="math inline">\(n\)</span> elementos en <span class="math inline">\(k\)</span> grupos de tamaños <span class="math inline">\(n_1, n_2, \dots, n_k\)</span>:</p>
+<p><span class="math display">\[\binom{n}{n_1, n_2, \dots, n_k} = \frac{n!}{n_1! \, n_2! \cdots n_k!}, \quad \sum_{i=1}^k n_i = n\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>multinomial_coefficient <span class="ot">&lt;-</span> <span class="cf">function</span>(counts) {</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">factorial</span>(<span class="fu">sum</span>(counts)) <span class="sc">/</span> <span class="fu">prod</span>(<span class="fu">factorial</span>(counts))</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Ejemplo: particionar 5 en grupos de tamaños 2,2,1</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="fu">multinomial_coefficient</span>(<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 30</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="distribuciones-discretas" class="level3">
+<h3 class="anchored" data-anchor-id="distribuciones-discretas">Distribuciones Discretas</h3>
+<section id="distribución-uniforme" class="level4">
+<h4 class="anchored" data-anchor-id="distribución-uniforme">Distribución Uniforme</h4>
+<p><strong>Función de Masa de Probabilidad</strong></p>
+<p><span class="math display">\[P(X = x) = \frac{1}{b-a+1}, \quad x = a, a+1, \dots, b\]</span></p>
+<p><strong>Valor Esperado</strong></p>
+<p><span class="math display">\[
+E[X] = \frac{a+b}{2}
+\]</span></p>
+<p><strong>Varianza</strong></p>
+<p><span class="math display">\[
+Var(X) = \frac{(b-a+1)^2 - 1}{12}
+\]</span></p>
+<p><strong>Implementación en R</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Probabilidad</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dunif</span>(x, <span class="at">min =</span> a, <span class="at">max =</span> b)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Función de distribución</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="fu">punif</span>(q, <span class="at">min =</span> a, <span class="at">max =</span> b)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Cuantiles</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="fu">qunif</span>(p, <span class="at">min =</span> a, <span class="at">max =</span> b)</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Generación</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="fu">runif</span>(n, <span class="at">min =</span> a, <span class="at">max =</span> b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="distribución-de-bernoulli" class="level4">
+<h4 class="anchored" data-anchor-id="distribución-de-bernoulli">Distribución de Bernoulli</h4>
+<p><strong>Función de Masa de Probabilidad</strong> <span class="math display">\[
+P(X = x) = p^x (1-p)^{1-x}, \quad x \in \{0,1\}
+\]</span> <strong>Valor Esperado</strong> <span class="math display">\[
+E[X] = p
+\]</span> <strong>Varianza</strong> <span class="math display">\[
+Var(X) = p(1-p)
+\]</span> <strong>Implementación en R</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Probabilidad</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dbinom</span>(x, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">prob =</span> p)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Función de distribución</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="fu">pbinom</span>(q, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">prob =</span> p)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Cuantiles</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="fu">qbinom</span>(p, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">prob =</span> p)</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Generación</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="fu">rbinom</span>(n, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">prob =</span> p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="distribución-de-binomial" class="level4">
+<h4 class="anchored" data-anchor-id="distribución-de-binomial">Distribución de Binomial</h4>
+<p><strong>Función de Masa de Probabilidad</strong></p>
+<p><span class="math display">\[
+P(X = x) = \binom{n}{x} p^x (1-p)^{n-x}, \quad x = 0,1,\dots,n
+\]</span></p>
+<p><strong>Valor Esperado</strong></p>
+<p><span class="math display">\[
+E[X] = np
+\]</span></p>
+<p><strong>Varianza</strong></p>
+<p><span class="math display">\[
+Var(X) = np(1-p)
+\]</span></p>
+<p><strong>Implementación en R</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dbinom</span>(x, <span class="at">size =</span> n, <span class="at">prob =</span> p)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pbinom</span>(q, <span class="at">size =</span> n, <span class="at">prob =</span> p)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qbinom</span>(p, <span class="at">size =</span> n, <span class="at">prob =</span> p)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rbinom</span>(n, <span class="at">size =</span> n, <span class="at">prob =</span> p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="distribución-binomial-negativa" class="level4">
+<h4 class="anchored" data-anchor-id="distribución-binomial-negativa">Distribución Binomial Negativa</h4>
+<p><strong>Función de Masa de Probabilidad</strong></p>
+<p><span class="math display">\[
+P(X = x) = \binom{x+r-1}{x} (1-p)^x p^r, \quad x = 0,1,2,\dots
+\]</span></p>
+<p><strong>Valor Esperado</strong></p>
+<p><span class="math display">\[
+E[X] = r \frac{1-p}{p}
+\]</span></p>
+<p><strong>Varianza</strong></p>
+<p><span class="math display">\[
+Var(X) = r \frac{1-p}{p^2}
+\]</span></p>
+<p><strong>Implementación en R</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dnbinom</span>(x, <span class="at">size =</span> r, <span class="at">prob =</span> p)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pnbinom</span>(q, <span class="at">size =</span> r, <span class="at">prob =</span> p)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qnbinom</span>(p, <span class="at">size =</span> r, <span class="at">prob =</span> p)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rnbinom</span>(n, <span class="at">size =</span> r, <span class="at">prob =</span> p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="distribución-geométrica" class="level4">
+<h4 class="anchored" data-anchor-id="distribución-geométrica">Distribución Geométrica</h4>
+<p><strong>Función de Masa de Probabilidad</strong></p>
+<p><span class="math display">\[
+P(X = x) = (1-p)^{x-1}p, \quad x = 1,2,3,\dots
+\]</span></p>
+<p><strong>Valor Esperado</strong></p>
+<p><span class="math display">\[
+E[X] = \frac{1}{p}
+\]</span></p>
+<p><strong>Varianza</strong></p>
+<p><span class="math display">\[
+Var(X) = \frac{1-p}{p^2}
+\]</span></p>
+<p><strong>Implementación en R</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dgeom</span>(x, <span class="at">prob =</span> p)      <span class="co"># Nota: en R cuenta "fracasos antes del primer éxito"</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pgeom</span>(q, <span class="at">prob =</span> p)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qgeom</span>(p, <span class="at">prob =</span> p)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rgeom</span>(n, <span class="at">prob =</span> p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="distribución-hipergeométrica" class="level4">
+<h4 class="anchored" data-anchor-id="distribución-hipergeométrica">Distribución Hipergeométrica</h4>
+<p><strong>Función de Masa de Probabilidad</strong></p>
+<p><span class="math display">\[
+P(X = x) = \frac{\binom{K}{x} \binom{N-K}{n-x}}{\binom{N}{n}}, \quad x = 0,1,\dots,n
+\]</span></p>
+<p><strong>Valor Esperado</strong></p>
+<p><span class="math display">\[
+E[X] = n \frac{K}{N}
+\]</span></p>
+<p><strong>Varianza</strong></p>
+<p><span class="math display">\[
+Var(X) = n \frac{K}{N}\left(1-\frac{K}{N}\right)\frac{N-n}{N-1}
+\]</span></p>
+<p><strong>Implementación en R</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dhyper</span>(x, <span class="at">m =</span> K, <span class="at">n =</span> N<span class="sc">-</span>K, <span class="at">k =</span> n)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">phyper</span>(q, <span class="at">m =</span> K, <span class="at">n =</span> N<span class="sc">-</span>K, <span class="at">k =</span> n)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qhyper</span>(p, <span class="at">m =</span> K, <span class="at">n =</span> N<span class="sc">-</span>K, <span class="at">k =</span> n)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rhyper</span>(nn, <span class="at">m =</span> K, <span class="at">n =</span> N<span class="sc">-</span>K, <span class="at">k =</span> n)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="distribución-poisson" class="level4">
+<h4 class="anchored" data-anchor-id="distribución-poisson">Distribución Poisson</h4>
+<p><strong>Función de Masa de Probabilidad</strong></p>
+<p><span class="math display">\[
+P(X = x) = \frac{\lambda^x e^{-\lambda}}{x!}, \quad x = 0,1,2,\dots
+\]</span></p>
+<p><strong>Valor Esperado</strong></p>
+<p><span class="math display">\[
+E[X] = \lambda
+\]</span></p>
+<p><strong>Varianza</strong></p>
+<p><span class="math display">\[
+Var(X) = \lambda
+\]</span></p>
+<p><strong>Implementación en R</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dpois</span>(x, <span class="at">lambda =</span> lmb)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ppois</span>(q, <span class="at">lambda =</span> lmb)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qpois</span>(p, <span class="at">lambda =</span> lmb)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rpois</span>(n, <span class="at">lambda =</span> lmb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Aproximaciones
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="math inline">\(Hg(N,M,n)\longrightarrow Bin(n,p)\)</span></p>
+<p>Sea <span class="math inline">\(0&lt;p&lt;1\)</span>. Si <span class="math inline">\(N\)</span>, <span class="math inline">\(M\longrightarrow\infty\)</span> , de tal forma que <span class="math inline">\(\frac{M}{N} \longrightarrow p\)</span>. El Tamaño de la población <span class="math inline">\(N\)</span> es “grande” en comparación con el tamaño de la muestra <span class="math inline">\(n\)</span>, es decir, <span class="math inline">\(\frac{n}{N}\longrightarrow 0\)</span></p>
+<p><span class="math inline">\(Bin(n,p) \longrightarrow Poi(\lambda)\)</span> si <span class="math inline">\(0&lt;p&lt;1\)</span> y <span class="math inline">\(n\cdot p \longrightarrow \lambda\)</span> cuando <span class="math inline">\(n \longrightarrow \infty\)</span> . Se tiene un <span class="math inline">\(n\)</span> muy “grande” comparado con un <span class="math inline">\(p\)</span> muy “pequeño”</p>
+</div>
+</div>
+</section>
+</section>
+<section id="distribuciones-continuas" class="level3">
+<h3 class="anchored" data-anchor-id="distribuciones-continuas">Distribuciones Continuas</h3>
+<section id="distribución-uniforme-1" class="level4">
+<h4 class="anchored" data-anchor-id="distribución-uniforme-1">Distribución Uniforme</h4>
+<p><strong>Función de Densidad de Probabilidad</strong></p>
+<p><span class="math display">\[
+f(x) = \begin{cases} \frac{1}{b-a}, &amp; a \leq x \leq b \\ 0, &amp; \text{en otro caso} \end{cases}
+\]</span></p>
+<p><strong>Valor Esperado</strong></p>
+<p><span class="math display">\[
+E[X] = \frac{a+b}{2}
+\]</span></p>
+<p><strong>Varianza</strong></p>
+<p><span class="math display">\[
+Var(X) = \frac{(b-a)^2}{12}
+\]</span></p>
+<p><strong>Implementación en R</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Densidad</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dunif</span>(x, <span class="at">min =</span> a, <span class="at">max =</span> b)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Función de distribución acumulada</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="fu">punif</span>(q, <span class="at">min =</span> a, <span class="at">max =</span> b)</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Cuantiles</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="fu">qunif</span>(p, <span class="at">min =</span> a, <span class="at">max =</span> b)</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Generación de valores</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="fu">runif</span>(n, <span class="at">min =</span> a, <span class="at">max =</span> b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="distribución-normal" class="level4">
+<h4 class="anchored" data-anchor-id="distribución-normal">Distribución Normal</h4>
+<p><strong>Función de Densidad de Probabilidad</strong></p>
+<p><span class="math display">\[
+f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left( -\frac{(x-\mu)^2}{2\sigma^2} \right), \quad -\infty &lt; x &lt; \infty
+\]</span></p>
+<p><strong>Valor Esperado</strong></p>
+<p><span class="math display">\[
+E[X] = \mu
+\]</span></p>
+<p><strong>Varianza</strong></p>
+<p><span class="math display">\[
+Var(X) = \sigma^2
+\]</span></p>
+<p><strong>Implementación en R</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dnorm</span>(x, <span class="at">mean =</span> mu, <span class="at">sd =</span> sigma)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(q, <span class="at">mean =</span> mu, <span class="at">sd =</span> sigma)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>(p, <span class="at">mean =</span> mu, <span class="at">sd =</span> sigma)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rnorm</span>(n, <span class="at">mean =</span> mu, <span class="at">sd =</span> sigma)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="distribución-gamma" class="level4">
+<h4 class="anchored" data-anchor-id="distribución-gamma">Distribución Gamma</h4>
+<p><strong>Función de Densidad de Probabilidad</strong></p>
+<p><span class="math display">\[
+f(x) = \frac{\beta^\alpha}{\Gamma(\alpha)} x^{\alpha - 1} e^{-\beta x}, \quad x &gt; 0
+\]</span></p>
+<p><strong>Valor Esperado</strong></p>
+<p><span class="math display">\[
+E[X] = \frac{\alpha}{\beta}
+\]</span></p>
+<p><strong>Varianza</strong></p>
+<p><span class="math display">\[
+Var(X) = \frac{\alpha}{\beta^2}
+\]</span></p>
+<p><strong>Implementación en R</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dgamma</span>(x, <span class="at">shape =</span> alpha, <span class="at">rate =</span> beta)   <span class="co"># también: scale = 1/beta</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pgamma</span>(q, <span class="at">shape =</span> alpha, <span class="at">rate =</span> beta)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qgamma</span>(p, <span class="at">shape =</span> alpha, <span class="at">rate =</span> beta)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rgamma</span>(n, <span class="at">shape =</span> alpha, <span class="at">rate =</span> beta)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="distribución-exponencial" class="level4">
+<h4 class="anchored" data-anchor-id="distribución-exponencial">Distribución Exponencial</h4>
+<p><strong>Función de Densidad de Probabilidad</strong></p>
+<p><span class="math display">\[
+f(x) = \lambda e^{-\lambda x}, \quad x \geq 0
+\]</span></p>
+<p><strong>Valor Esperado</strong></p>
+<p><span class="math display">\[
+E[X] = \frac{1}{\lambda}
+\]</span></p>
+<p><strong>Varianza</strong></p>
+<p><span class="math display">\[
+Var(X) = \frac{1}{\lambda^2}
+\]</span></p>
+<p><strong>Implementación en R</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dexp</span>(x, <span class="at">rate =</span> lambda)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pexp</span>(q, <span class="at">rate =</span> lambda)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qexp</span>(p, <span class="at">rate =</span> lambda)</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rexp</span>(n, <span class="at">rate =</span> lambda)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="distribución-chi---cuadrado" class="level4">
+<h4 class="anchored" data-anchor-id="distribución-chi---cuadrado">Distribución Chi - Cuadrado</h4>
+<p><strong>Función de Densidad de Probabilidad</strong></p>
+<p><span class="math display">\[
+f(x) = \frac{1}{2^{k/2}\Gamma(k/2)} x^{k/2 - 1} e^{-x/2}, \quad x \geq 0
+\]</span></p>
+<p><strong>Valor Esperado</strong></p>
+<p><span class="math display">\[
+E[X] = k
+\]</span></p>
+<p><strong>Varianza</strong></p>
+<p><span class="math display">\[
+Var(X) = 2k
+\]</span></p>
+<p><strong>Implementación en R</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dchisq</span>(x, <span class="at">df =</span> k)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pchisq</span>(q, <span class="at">df =</span> k)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qchisq</span>(p, <span class="at">df =</span> k)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rchisq</span>(n, <span class="at">df =</span> k)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="distribución-beta" class="level4">
+<h4 class="anchored" data-anchor-id="distribución-beta">Distribución Beta</h4>
+<p><strong>Función de Densidad de Probabilidad</strong></p>
+<p><span class="math display">\[
+f(x) = \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)} x^{\alpha - 1} (1-x)^{\beta - 1}, \quad 0 &lt; x &lt; 1
+\]</span></p>
+<p><strong>Valor Esperado</strong></p>
+<p><span class="math display">\[
+E[X] = \frac{\alpha}{\alpha + \beta}
+\]</span></p>
+<p><strong>Varianza</strong></p>
+<p><span class="math display">\[
+Var(X) = \frac{\alpha \beta}{(\alpha + \beta)^2 (\alpha + \beta + 1)}
+\]</span></p>
+<p><strong>Implementación en R</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dbeta</span>(x, <span class="at">shape1 =</span> alpha, <span class="at">shape2 =</span> beta)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pbeta</span>(q, <span class="at">shape1 =</span> alpha, <span class="at">shape2 =</span> beta)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qbeta</span>(p, <span class="at">shape1 =</span> alpha, <span class="at">shape2 =</span> beta)</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rbeta</span>(n, <span class="at">shape1 =</span> alpha, <span class="at">shape2 =</span> beta)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Distribution</th>
+<th>Functions (CDF <code>p*</code>, Quantile <code>q*</code>, Density <code>d*</code>, Random <code>r*</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Bernoulli</strong></td>
+<td><code>pbinom</code>, <code>qbinom</code>, <code>dbinom</code>, <code>rbinom</code> (con size = 1)</td>
+</tr>
+<tr class="even">
+<td><strong>Binomial</strong></td>
+<td><code>pbinom</code>, <code>qbinom</code>, <code>dbinom</code>, <code>rbinom</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Negative Binomial</strong></td>
+<td><code>pnbinom</code>, <code>qnbinom</code>, <code>dnbinom</code>, <code>rnbinom</code></td>
+</tr>
+<tr class="even">
+<td><strong>Geometric</strong></td>
+<td><code>pgeom</code>, <code>qgeom</code>, <code>dgeom</code>, <code>rgeom</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Hypergeometric</strong></td>
+<td><code>phyper</code>, <code>qhyper</code>, <code>dhyper</code>, <code>rhyper</code></td>
+</tr>
+<tr class="even">
+<td><strong>Poisson</strong></td>
+<td><code>ppois</code>, <code>qpois</code>, <code>dpois</code>, <code>rpois</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Uniform (discrete)</strong></td>
+<td>No función directa, usar <code>sample()</code> o <code>runif()</code> con redondeo</td>
+</tr>
+<tr class="even">
+<td><strong>Uniform (continuous)</strong></td>
+<td><code>punif</code>, <code>qunif</code>, <code>dunif</code>, <code>runif</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Normal</strong></td>
+<td><code>pnorm</code>, <code>qnorm</code>, <code>dnorm</code>, <code>rnorm</code></td>
+</tr>
+<tr class="even">
+<td><strong>Log Normal</strong></td>
+<td><code>plnorm</code>, <code>qlnorm</code>, <code>dlnorm</code>, <code>rlnorm</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Cauchy</strong></td>
+<td><code>pcauchy</code>, <code>qcauchy</code>, <code>dcauchy</code>, <code>rcauchy</code></td>
+</tr>
+<tr class="even">
+<td><strong>Exponential</strong></td>
+<td><code>pexp</code>, <code>qexp</code>, <code>dexp</code>, <code>rexp</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Gamma</strong></td>
+<td><code>pgamma</code>, <code>qgamma</code>, <code>dgamma</code>, <code>rgamma</code></td>
+</tr>
+<tr class="even">
+<td><strong>Chi-Square</strong></td>
+<td><code>pchisq</code>, <code>qchisq</code>, <code>dchisq</code>, <code>rchisq</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Beta</strong></td>
+<td><code>pbeta</code>, <code>qbeta</code>, <code>dbeta</code>, <code>rbeta</code></td>
+</tr>
+<tr class="even">
+<td><strong>Weibull</strong></td>
+<td><code>pweibull</code>, <code>qweibull</code>, <code>dweibull</code>, <code>rweibull</code></td>
+</tr>
+<tr class="odd">
+<td><strong>F</strong></td>
+<td><code>pf</code>, <code>qf</code>, <code>df</code>, <code>rf</code></td>
+</tr>
+<tr class="even">
+<td><strong>Student t</strong></td>
+<td><code>pt</code>, <code>qt</code>, <code>dt</code>, <code>rt</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Studentized Range</strong></td>
+<td><code>ptukey</code>, <code>qtukey</code>, <code>dtukey</code>, <code>rtukey</code></td>
+</tr>
+<tr class="even">
+<td><strong>Logistic</strong></td>
+<td><code>plogis</code>, <code>qlogis</code>, <code>dlogis</code>, <code>rlogis</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Wilcoxon Rank Sum Statistic</strong></td>
+<td><code>pwilcox</code>, <code>qwilcox</code>, <code>dwilcox</code>, <code>rwilcox</code></td>
+</tr>
+<tr class="even">
+<td><strong>Wilcoxon Signed Rank Statistic</strong></td>
+<td><code>psignrank</code>, <code>qsignrank</code>, <code>dsignrank</code>, <code>rsignrank</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="uso-de-r-como-alternativa-a-las-tablas-de-valores-para-las-distribuciones." class="level3">
+<h3 class="anchored" data-anchor-id="uso-de-r-como-alternativa-a-las-tablas-de-valores-para-las-distribuciones.">Uso de <code>R</code> como alternativa a las tablas de valores para las distribuciones.</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="areatotheleft.png" class="img-fluid figure-img" width="512"></p>
+<figcaption>Representación del área acumulada a la izquierda de la puntuación Z.</figcaption>
+</figure>
+</div>
+<p>La función <code>pnorm()</code> - Probabilidad Acumulada - Calcula la probabilidad acumulada hasta un valor <code>q</code> (<em>z</em>), por defecto corresponde al área a la izquierda de <code>q</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="at">q =</span> <span class="fl">1.96</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9750021</code></pre>
+</div>
+</div>
+<p>Devuelve ≈ <strong>0.975</strong>, que corresponde a la probabilidad de que una variable normal estándar sea menor o igual que 1.96.<br>
+<br>
+A este resultado es al que llegaríamos buscando en la típica tabla de los anexos de los libros de probabilidad. Usted puede comprobar el resultado observando la primera columna de la primera tabla dirigiéndose hasta el valor <strong>1.9</strong> y luego desplazándose de manera horizontal hasta hacer una intersección con el valor <strong>.06</strong> de la primera fila.</p>
+
+<style>
+    .pdf-style {
+      width: 100%; /* El 100% del ancho del contenedor */
+      height: 80vh; /* El 80% de la altura de la ventana (viewport) */
+      border: 1px solid #ddd;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+  </style>
+
+
+<embed src="standardnormaltable.pdf" type="application/pdf" class="pdf-style">
+
+<p><strong>Uso de <code>lower.tail</code></strong></p>
+<ul>
+<li><code>lower.tail = TRUE</code> (valor por defecto): área a la <strong>izquierda</strong> de <code>q</code>.</li>
+</ul>
+<!-- -->
+<ul>
+<li><code>lower.tail = FALSE</code>: área a la <strong>derecha</strong> de <code>q</code>.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="at">q =</span> <span class="fl">1.96</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.0249979</code></pre>
+</div>
+</div>
+<p>Devuelve ≈ <strong>0.025</strong>, que es el área a la derecha de 1.96. Que también podemos ver como 1 - 0.975.</p>
+<p><strong>Valor crítico (cuantil) - <code>qnorm()</code></strong></p>
+<p>Hace el proceso inverso: dado un <strong>nivel de probabilidad acumulada <code>p</code></strong>, devuelve el valor de <code>q</code> correspondiente en la distribución.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="at">p =</span> <span class="fl">0.975</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.959964</code></pre>
+</div>
+</div>
+<p>Devuelve ≈ <strong>1.96</strong>, el valor crítico de la normal estándar para un nivel de confianza del 95%.</p>
+<p><strong>Ejemplo:</strong></p>
+<p>Supongamos que la estatura de los hombres en una población se distribuye ~ Normal(μ = 170, σ = 6).</p>
+<ol type="1">
+<li>¿Cuál es la probabilidad de que un hombre mida menos de 175 cm?</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="at">q =</span> <span class="dv">175</span>, <span class="at">mean =</span> <span class="dv">170</span>, <span class="at">sd =</span> <span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.7976716</code></pre>
+</div>
+</div>
+<p>Es decir, <strong>79.8%</strong>.</p>
+<ol start="2" type="1">
+<li>¿Cuál es la probabilidad de que mida más de 175 cm?</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="at">q =</span> <span class="dv">175</span>, <span class="at">mean =</span> <span class="dv">170</span>, <span class="at">sd =</span> <span class="dv">6</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.2023284</code></pre>
+</div>
+</div>
+<p>Es decir, <strong>20.2%</strong>.</p>
+<ol start="3" type="1">
+<li>¿Qué estatura corresponde al percentil 90?</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="at">p =</span> <span class="fl">0.90</span>, <span class="at">mean =</span> <span class="dv">170</span>, <span class="at">sd =</span> <span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 177.6893</code></pre>
+</div>
+</div>
+<p>Un hombre debe medir al menos <strong>177.7 cm</strong> para estar en el 10% más alto de la población.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Anotaciones
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Ten en cuenta que al hacer uso de las funciones para la generación de valores aleatorios de una distribución particular, realmente se producen valores pseudo-aleatorios. ¿¡Por qué, cuál es la diferencia!?</li>
+<li>El uso de la semilla garantizará la replicabilidad de los resultados obtenidos al generar esos datos a través de estas funciones.</li>
+</ol>
+</div>
+</div>
+<div style="text-align: center;">
+<p>Copyright © 2025 Jose Miguel Leon - Created with <a href="https://quarto.org">Quarto</a></p>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

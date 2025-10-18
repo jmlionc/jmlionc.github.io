@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jose Miguel Leon Puentes">
+
+<title>Módulo 7: Métodos de Regresión – Jose Miguel Leon P.</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-dfb324f25d9b1687192fa8be62ac8f9c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons/css/academicons.min.css">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Jose Miguel Leon P.</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../biography.html"> 
+<span class="menu-text">Biography</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../teaching.html"> 
+<span class="menu-text">Teaching</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../research.html"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../media.html"> 
+<span class="menu-text">Media</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Tabla de Contenido</h2>
+   
+  <ul>
+  <li><a href="#introducción" id="toc-introducción" class="nav-link active" data-scroll-target="#introducción">🔰 Introducción</a></li>
+  <li><a href="#objetivos" id="toc-objetivos" class="nav-link" data-scroll-target="#objetivos">🎯 Objetivos</a></li>
+  <li><a href="#contenido" id="toc-contenido" class="nav-link" data-scroll-target="#contenido">🧰 Contenido</a></li>
+  <li><a href="#desarrollo" id="toc-desarrollo" class="nav-link" data-scroll-target="#desarrollo">📖 Desarrollo</a>
+  <ul>
+  <li><a href="#modelo-lineal" id="toc-modelo-lineal" class="nav-link" data-scroll-target="#modelo-lineal">Modelo Lineal</a>
+  <ul class="collapse">
+  <li><a href="#formulación-y-supuestos" id="toc-formulación-y-supuestos" class="nav-link" data-scroll-target="#formulación-y-supuestos">1. Formulación y supuestos</a></li>
+  <li><a href="#comentarios-sobre-la-interpretación-de-las-salidas-de-r" id="toc-comentarios-sobre-la-interpretación-de-las-salidas-de-r" class="nav-link" data-scroll-target="#comentarios-sobre-la-interpretación-de-las-salidas-de-r">2. Comentarios sobre la interpretación de las salidas de R</a></li>
+  <li><a href="#ejemplo-1-races---glmtoolbox" id="toc-ejemplo-1-races---glmtoolbox" class="nav-link" data-scroll-target="#ejemplo-1-races---glmtoolbox">3. Ejemplo 1: <em>races - glmtoolbox</em></a></li>
+  <li><a href="#ejemplo-2-whiteside---mass" id="toc-ejemplo-2-whiteside---mass" class="nav-link" data-scroll-target="#ejemplo-2-whiteside---mass">4. Ejemplo 2: <em>whiteside - MASS</em></a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+<div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="mailto:joleonp@unal.edu.co"><i class="bi bi-mailbox"></i>Contacto</a></li></ul></div><div class="quarto-code-links"><h2>Code Links</h2><ul><li><a href="https://github.com/jmlionc/AppliedBiostats"><i class="bi bi-github"></i>GitHub</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Módulo 7: Métodos de Regresión</h1>
+<p class="subtitle lead">Bioestadística Fundamental y Estadística Fundamental para las Ciencias de la Salud</p>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliations</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Jose Miguel Leon Puentes </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Departamento de Estadística
+          </p>
+        <p class="affiliation">
+            Universidad Nacional de Colombia
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introducción" class="level2">
+<h2 class="anchored" data-anchor-id="introducción">🔰 Introducción</h2>
+<div style="text-align: justify;">
+<p>El análisis de regresión es una herramienta fundamental en bioestadística para estudiar la relación entre una variable respuesta y una o más variables explicativas. En este módulo nos enfocaremos en el modelo lineal simple o normal, uno de los métodos más utilizados para describir y predecir relaciones lineales entre variables cuantitativas.</p>
+<p>A lo largo del módulo, se abordará la formulación teórica del modelo, los supuestos que lo sustentan, y los métodos necesarios para su ajuste e interpretación en el entorno de programación <code>R</code>. Además, se explorarán herramientas diagnósticas que permiten evaluar la validez del modelo, identificar observaciones atípicas o influyentes, y proponer posibles transformaciones cuando los supuestos no se cumplen.</p>
+<p>El enfoque de este módulo estará orientado a darle las herramientas necesarias para que pueda realizar una implementación del modelo con datos reales, un análisis de la salida generada por R e interpretar adecuadamente los resultados en contextos aplicados de la bioestadística.</p>
+</div>
+</section>
+<section id="objetivos" class="level2">
+<h2 class="anchored" data-anchor-id="objetivos">🎯 Objetivos</h2>
+<ol type="1">
+<li><p>Formular e interpretar el modelo lineal simple bajo el enfoque clásico y sus supuestos fundamentales.</p></li>
+<li><p>Ajustar el modelo lineal simple utilizando funciones del entorno R.</p></li>
+<li><p>Seleccionar variables explicativas relevantes para el modelo.</p></li>
+<li><p>Analizar los residuos y coeficientes del modelo para evaluar su ajuste.</p></li>
+<li><p>Interpretar los parámetros estimados y la calidad global del modelo.</p></li>
+<li><p>Aplicar técnicas diagnósticas para detectar problemas como heterocedasticidad, colinealidad, influencia y puntos de apalancamiento, proponiendo soluciones mediante transformaciones cuando sea necesario.</p></li>
+</ol>
+</section>
+<section id="contenido" class="level2">
+<h2 class="anchored" data-anchor-id="contenido">🧰 Contenido</h2>
+<ol type="1">
+<li><p>Selección de variables</p></li>
+<li><p>Ajuste del modelo</p></li>
+<li><p>Información de los residuos</p></li>
+<li><p>Información sobre los coeficientes</p></li>
+<li><p>Información sobre el modelo</p></li>
+<li><p>Interpretación de los resultados</p></li>
+<li><p>Métodos diagnósticos<br>
+7.1. Análisis residual<br>
+7.2. Análisis de sensibilidad o influencia<br>
+7.3. Puntos de apalancamiento<br>
+7.4. Heterocedasticidad<br>
+7.5. Colinealidad<br>
+7.6 Transformaciones</p></li>
+</ol>
+</section>
+<section id="desarrollo" class="level2">
+<h2 class="anchored" data-anchor-id="desarrollo">📖 Desarrollo</h2>
+<section id="modelo-lineal" class="level3">
+<h3 class="anchored" data-anchor-id="modelo-lineal">Modelo Lineal</h3>
+<section id="formulación-y-supuestos" class="level4">
+<h4 class="anchored" data-anchor-id="formulación-y-supuestos">1. Formulación y supuestos</h4>
+<p>En un <strong>modelo de regresión lineal simple</strong> se estudia la relación entre una variable dependiente <span class="math inline">\(Y\)</span> y una sola variable explicativa <span class="math inline">\(X\)</span>:</p>
+<p><span class="math display">\[Y_i=\beta_0+\beta_1X_i+\varepsilon_i \quad i=1,2,\dots, n\]</span></p>
+<p>donde:</p>
+<ul>
+<li><p><span class="math inline">\(Y_i:\)</span> variable respuesta para la observación <span class="math inline">\(i\)</span>.</p></li>
+<li><p><span class="math inline">\(X_i:\)</span> variable explicativa para la observación <span class="math inline">\(i\)</span>.</p></li>
+<li><p><span class="math inline">\(\beta_0:\)</span> intercepto o término constante.</p></li>
+<li><p><span class="math inline">\(\beta_1:\)</span> pendiente, mide el cambio esperado en <span class="math inline">\(Y\)</span> por un cambio unitario en <span class="math inline">\(X\)</span>.</p></li>
+<li><p><span class="math inline">\(\varepsilon_i:\)</span> término de error aleatorio.</p></li>
+</ul>
+<p>En un <strong>modelo de regresión lineal múltiple</strong> se estudia la relación entre una variable dependiente <span class="math inline">\(Y\)</span> y una varias variables explicativas <span class="math inline">\((X_1, X_2, \dots, X_p)\)</span> :</p>
+<p><span class="math display">\[Y_i=\beta_0+\beta_1X_{i1}+\beta_2X_{i2}+\cdots+\beta_pX_{ip}+\varepsilon_i \quad i=1,2,\dots, n\]</span> Cuya forma matricial está dada por:</p>
+<p><span class="math display">\[\mathbf{Y} = \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon}\]</span> donde:</p>
+<ul>
+<li><p><span class="math inline">\(\mathbf{Y}\)</span> es un vector <span class="math inline">\(n\times1\)</span> de la variable dependiente.</p></li>
+<li><p><span class="math inline">\(\mathbf{Y}\)</span> es la matriz de diseño <span class="math inline">\((n\times(p+1))\)</span>, que incluye una columna de 1’s para el intercepto.</p></li>
+<li><p><span class="math inline">\(\boldsymbol{\beta}\)</span> es el vector de parámetros <span class="math inline">\((p+1)\times1\)</span></p></li>
+<li><p><span class="math inline">\(\boldsymbol{\varepsilon}\)</span> es el vector de errores aleatorios</p></li>
+</ul>
+<p>Algunos de los supuestos básicos de la regresión lineal son los siguientes:</p>
+<ol type="1">
+<li><p>Linealidad: la relación entre <span class="math inline">\(X\)</span> y <span class="math inline">\(Y\)</span> es lineal.</p></li>
+<li><p>Independencia: los errores son independientes entre sí.</p></li>
+<li><p>Homoscedasticidad: la varianza de los errores es constante.</p></li>
+<li><p>No multicolinealidad (solo en modelos múltiples).</p></li>
+<li><p>Normalidad de los errores (opcional, según el objetivo).</p></li>
+</ol>
+<p>Sobre este último supuesto, no es necesario para estimar los coeficientes <span class="math inline">\((\hat{\beta}_0,\hat{\beta}_1)\)</span> ya que gracias al teorema de Gauss–Markov, bajo los tres primeros supuestos los estimadores son insesgados y de varianza mínima (BLUE). Sin embargo, sí es necesario para la inferencia estadística: pruebas de significancia y construcción de intervalos de confianza.</p>
+<p>Si nos limitamos a estimar los coeficientes, aún podremos:</p>
+<ul>
+<li><p>Predecir valores de <span class="math inline">\(Y\)</span> para nuevos <span class="math inline">\(X\)</span> aún sin saber si la pendiente es “significativamente distinta de cero”.</p></li>
+<li><p>Describir la relación observada, el coeficiente pendiente indica cuánto cambia <span class="math inline">\(Y\)</span> en promedio cuando <span class="math inline">\(X\)</span> cambia una unidad, en la muestra observada, sin necesidad de inferir a la población.</p></li>
+<li><p>Revisar el ajuste global del modelo (R², residuos, etc.)</p></li>
+</ul>
+<p>Luego, si el propósito es predecir o describir, basta con estimar coeficientes, pero si se desea generalizar a la población o validar hipótesis, requerimos inferencia, por efecto, normalidad o tamaño de muestra “grande” para que de manera asintótica esta sea respaldada por el teorema central del límite.</p>
+</section>
+<section id="comentarios-sobre-la-interpretación-de-las-salidas-de-r" class="level4">
+<h4 class="anchored" data-anchor-id="comentarios-sobre-la-interpretación-de-las-salidas-de-r">2. Comentarios sobre la interpretación de las salidas de R</h4>
+<ul>
+<li><p>Evaluar el efecto del termino interacción en el modelo, es esencialmente, examinar si el efecto de una variable en el resultado depende de los valores de otra variable.</p></li>
+<li><p>El resultado de un modelo de regresión en <code>R</code> al hacer uso de la rutina <code>summary(modelo)</code> consiste en 4 partes:</p>
+<ul>
+<li><p><strong>Formula del modelo ajustado</strong></p></li>
+<li><p><strong>Estadística descriptiva de los residuos<br>
+</strong>Este resumen estadístico de los residuos, representa las diferencias entre las predicciones del modelo y las observaciones reales. Los residuos muestran que tan bien no se ajusta el modelo. La media de los residuos siempre es cero. Si los residuos se distribuyen con distribución normal, la mediana se espera que sea cero o un valor muy cercano a este, el primer y tercer cuartil sean simétricos al igual que el mínimo y el máximo.</p></li>
+<li><p><strong>Información sobre coeficientes<br>
+</strong>Esta sección muestra 4 apartados que se detallan a continuación:</p>
+<ul>
+<li><p>Coeficientes estimados (<em>“<code>ESTIMATE</code>”</em>): contiene los valores de cada variable explicatoria que representan el efecto de esa variable sobre la variable dependiente.</p></li>
+<li><p>Errores estándar (“<code>Std. Error</code>”): es el valor que mide que tan precisa es la estimación de cada coeficiente. Valores altos indican que la predicción es menos precisa.</p></li>
+<li><p>Valores t (“<code>t-values</code>”): valor estadístico para probar que el coeficiente no es cero. Un valor positivo o negativo indica que el coeficiente no es cero. Entre más grande el valor, se indica que el coeficiente es mas fiable. <span class="math inline">\(t=estimate/std. error\)</span></p></li>
+<li><p>Valores p (“<code>p-values</code>”): indican la probabilidad de obtener un resultado tan extremo como el observado (o más), suponiendo que la hipótesis nula es verdadera. En el caso de un coeficiente de regresión, la hipótesis nula plantea que dicho coeficiente es igual a cero (es decir, que la variable no tiene efecto).</p>
+<p>Si el <span class="math inline">\(valor-p &lt; 0.05\)</span>, existe evidencia estadísticamente significativa al nivel del 5% para rechazar la hipótesis nula y concluir que el coeficiente es distinto de cero.</p></li>
+</ul></li>
+<li><p><strong>Información sobre el modelo</strong></p></li>
+</ul></li>
+<li><p>La interpretación de los coeficientes se suele dar como sigue: Un incremento de una unidad en la variable distancia, causa un incremento de 4.96 unidades.</p></li>
+<li><p>El intercepto representa el valor predicho de la variable dependiente cuando las otras variables son cero.</p></li>
+<li><p>La linealidad del modelo está dada por los coeficientes (los <span class="math inline">\(\beta\)</span>’s) mas no hay restricciones de la naturaleza de las covariables respecto a esta característica.</p></li>
+<li><p>El sistema de hipótesis para los coeficientes es el siguiente:</p>
+<p><span class="math display">\[H_0:\beta_j=\beta_j° \quad \text{vs} \quad H_1:\beta_j\neq\beta_j°\]</span></p>
+<p>la regla de decisión para el anterior sistema de hipótesis es:</p>
+<p>Rechazar H_0 con un nivel de significancia de <span class="math inline">\(100(\alpha)\%\)</span> si <span class="math inline">\(p-value &lt; \alpha\)</span></p>
+<p>De aquí, el error tipo 1 consiste en rechazar <span class="math inline">\(H_0\)</span> cuando ella es verdadera y el error tipo 2 consiste en no rechazar <span class="math inline">\(H_0\)</span> cuando es falsa.</p></li>
+<li><p>Existen varias rutinas disponibles en <code>R</code> para seleccionar variables significativas. algunas de estas son:</p>
+<p><strong>Best Subset Selection</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(leaps)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>fit_a <span class="ot">&lt;-</span> <span class="fu">regsubsets</span>(Y <span class="sc">~</span> ., <span class="at">data =</span> datos, <span class="at">nvmax =</span> <span class="dv">10</span>)  <span class="co"># hasta 10 predictores</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_a)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Selección paso a paso (Stepwise Selection)</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glmtoolbox)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(Auto, <span class="at">package =</span> <span class="st">"ISLR"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>fit_b <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> horsepower <span class="sc">+</span> weight <span class="sc">+</span>origin, <span class="at">data =</span> Auto)  </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">stepCriterion</span>(fit_b, <span class="at">direction=</span><span class="st">"forward"</span>, <span class="at">criterion=</span><span class="st">"bic"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+</ul>
+</section>
+<section id="ejemplo-1-races---glmtoolbox" class="level4">
+<h4 class="anchored" data-anchor-id="ejemplo-1-races---glmtoolbox">3. Ejemplo 1: <em>races - glmtoolbox</em></h4>
+<p>Estos datos, disponibles en el objeto “races” de la biblioteca “glmtoolbox”, consisten en el tiempo récord, la distancia y la subida acumulada de 35 carreras en cuesta en Escocia. El objetivo del análisis estadístico de estos datos es explicar las diferencias entre el tiempo récord de las carreras (rtime), en minutos, utilizando sus diferencias en distancia (distance), en millas, y subida acumulada (cclimb), en miles de pies.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glmtoolbox) </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(races)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol type="1">
+<li>Ajuste a los datos un modelo lineal normal en el que el tiempo récord de las carreras sea la variable de respuesta, y la distancia y la subida acumulada sean las variables explicativas.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(rtime <span class="sc">~</span> distance <span class="sc">+</span> cclimb, <span class="at">data =</span> races)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="2" type="1">
+<li>Evalúe al nivel de signiﬁcancia del 5% si el efecto de la distancia sobre el tiempo récord esperado de la carrera depende de la escalada acumulada.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(rtime <span class="sc">~</span> distance <span class="sc">+</span> cclimb <span class="sc">+</span> distance<span class="sc">:</span>cclimb, <span class="at">data =</span> races)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = rtime ~ distance + cclimb + distance:cclimb, data = races)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-23.197  -2.797   0.628   2.243  18.963 
+
+Coefficients:
+                Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      -0.7672     3.9058  -0.196  0.84556    
+distance          4.9623     0.4742  10.464 1.07e-11 ***
+cclimb            3.7133     2.3647   1.570  0.12650    
+distance:cclimb   0.6598     0.1743   3.786  0.00066 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 7.338 on 31 degrees of freedom
+Multiple R-squared:  0.9807,    Adjusted R-squared:  0.9788 
+F-statistic: 524.1 on 3 and 31 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(fit,fit2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Model 1: rtime ~ distance + cclimb
+Model 2: rtime ~ distance + cclimb + distance:cclimb
+  Res.Df    RSS Df Sum of Sq      F    Pr(&gt;F)    
+1     32 2441.3                                  
+2     31 1669.4  1    771.89 14.334 0.0006597 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<ol start="3" type="1">
+<li>Interprete las estimaciones de los parámetros, excepto el término de intercepción.</li>
+</ol>
+<p>Interpretación de la estimación de distacia: Por cada milla recorrida se incrementan 4.96 minutos en el tiempo record manteniendo constante la subida acumulada en la carrera. Altamente significante para un nivel del 5%.</p>
+<p>Interpretación de la estimacion de subida acumulada: Por cada mil pies que se suban hay un incremento de 3.71 minutos en el tiempo tiempo record manteniendo constante la distancia que se recorre en la carrera. Sin embargo el p-valor no es significante para un nivel del 5%.</p>
+<p>Interpretación de la estimacion de la interacción entre distancia y subida acumulada: Por cada unidad incrementada en la interacción entre distancia y subida acumulada, el cambio esperado en el tiempo record será aproximadamente de 0.66 unidades, manteniendo las otras variables constantes.</p>
+<ol start="4" type="1">
+<li>Estime el tiempo récord esperado, en minutos, de una carrera cuya distancia y ascenso acumulado son 7.5 millas y 1800 pies, respectivamente. Calcule esta estimación “manualmente” y utilizando la función predict()</li>
+</ol>
+<p>Manualmente:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fit<span class="sc">$</span>coefficients</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(Intercept)    distance      cclimb 
+ -13.108551    6.350955   11.780133 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>distance <span class="ot">&lt;-</span> <span class="fl">7.5</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>cclimb <span class="ot">&lt;-</span> <span class="fl">1.8</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>rtime <span class="ot">=</span> <span class="sc">-</span><span class="fl">13.108551</span> <span class="sc">+</span> <span class="fl">6.350955</span><span class="sc">*</span>distance <span class="sc">+</span> <span class="fl">11.780133</span><span class="sc">*</span>cclimb</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>rtime</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 55.72785</code></pre>
+</div>
+</div>
+<p>Usando la función predict()</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>new_distance <span class="ot">&lt;-</span> <span class="fl">7.5</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>new_cclimb <span class="ot">&lt;-</span> <span class="fl">1.8</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">distance=</span>new_distance, <span class="at">cclimb=</span>new_cclimb))</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       1 
+55.72785 </code></pre>
+</div>
+</div>
+</section>
+<section id="ejemplo-2-whiteside---mass" class="level4">
+<h4 class="anchored" data-anchor-id="ejemplo-2-whiteside---mass">4. Ejemplo 2: <em>whiteside - MASS</em></h4>
+<p>Estos datos, disponibles en el objeto whiteside de la biblioteca MASS, se recopilaron para evaluar el efecto del aislamiento en el consumo de gas. El consumo semanal de gas (Gas), en miles de pies cúbicos, y la temperatura exterior media (Temp), en grados centígrados, se registraron durante 26 semanas antes (Insul=“Antes”) y durante 30 semanas después (Insul=“Después”) de que se instalara un aislamiento de la pared hueca de una casa.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"whiteside"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol type="1">
+<li><p>Ajuste a los datos un modelo lineal normal en el que el consumo de gas sea la variable de respuesta, y la temperatura exterior media y la presencia/ausencia de aislamiento de la pared de la cavidad sean las variables explicativas.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>fit3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Gas <span class="sc">~</span> Temp <span class="sc">+</span> Insul, <span class="at">data =</span> whiteside)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><span class="math display">\[
+Gas = 6.55133 − 0.33670(Temp) − 1.56520
+\]</span></p></li>
+<li><p>Evalúe al nivel de signiﬁcancia del 5% si el efecto de la temperatura exterior media sobre el consumo de gas esperado depende de la presencia/ausencia de aislamiento en la pared.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>fit4 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Gas <span class="sc">~</span> Temp<span class="sc">*</span>Insul, <span class="at">data =</span> whiteside)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Gas ~ Temp * Insul, data = whiteside)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.97802 -0.18011  0.03757  0.20930  0.63803 
+
+Coefficients:
+                Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      6.85383    0.13596  50.409  &lt; 2e-16 ***
+Temp            -0.39324    0.02249 -17.487  &lt; 2e-16 ***
+InsulAfter      -2.12998    0.18009 -11.827 2.32e-16 ***
+Temp:InsulAfter  0.11530    0.03211   3.591 0.000731 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.323 on 52 degrees of freedom
+Multiple R-squared:  0.9277,    Adjusted R-squared:  0.9235 
+F-statistic: 222.3 on 3 and 52 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(fit4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Response: Gas
+           Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+Temp        1 35.019  35.019 335.655 &lt; 2.2e-16 ***
+Insul       1 33.224  33.224 318.451 &lt; 2.2e-16 ***
+Temp:Insul  1  1.345   1.345  12.893 0.0007307 ***
+Residuals  52  5.425   0.104                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>Al nivel de significancia del 5%, existe evidencia estadísticamente significativa (0.00073 &lt; 0.05) de que el impacto de un incremento en la temperatura exterior media sobre el consumo de gas depende de la presencia/ausencia de aislamiento en la pared. El consumo de gas esperado disminuye tras la instalación del aislamiento, pero la velocidad a la que ocurre esta disminución se acentúa a medida que la temperatura aumenta.</p></li>
+<li><p>Interprete las estimaciones de los parámetros excepto el término de intercepción.</p>
+<p>Interpretación de la estimación de la temperatura: Por cada grado centrígrado que se incrementa la temperatura exterior, se disminuyen 0.39324 miles de pies cúbicos en el consumo semanal de gas. Altamente significante para un nivel del 5%.<br>
+</p>
+<p>Interpretación de la estimacion de la instalación del aislamiento (después): Tras la instalacion del aislamiento de la pared hueca de la casa, se disminuyen 2.12998 miles de pies cúbico en el consumo de gas semanal esperado, controlando por temperatura. Altamente significante para un nivel del 5%.<br>
+</p>
+<p>Interpretación de la interacción entre estimacion de la temperatura e instalación del aislamiento (después): La velocidad a la que disminuye el consumo de gas semanal es diferente con la ausencia o presencia de aislameinto en la pared de la casa. El cambio esperado en el consumo de gas semanal esperado sera de 0.1153 unidades posterior a la instalación del aislamiento e incrementando la temperatura una unidad.</p></li>
+<li><p>Estime el consumo de gas esperado, en miles de pies cúbicos, en una semana en la que la temperatura exterior media sea de 5 grados centígrados y el aislamiento de la pared esté presente. Calcule esta estimación “manualmente” y utilizando la función predict(). ##### 2.1 Selección de variables</p>
+<p>4.1 <u>Estimación manual</u> :</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>fit3<span class="sc">$</span>coefficients</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(Intercept)        Temp  InsulAfter 
+   6.551329   -0.336697   -1.565205 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>Temp <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>InsulAfter <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>Gas <span class="ot">=</span> <span class="fl">6.551329</span> <span class="sc">+</span> <span class="sc">-</span><span class="fl">0.336697</span><span class="sc">*</span>Temp <span class="sc">-</span> <span class="fl">1.565205</span><span class="sc">*</span>InsulAfter</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>Gas</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.302639</code></pre>
+</div>
+</div>
+<p>4.2 <u>Estimación con función <code>predict()</code></u> :</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>new_Temp <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit3, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">Temp =</span> new_Temp, <span class="at">Insul =</span> <span class="st">"After"</span>))</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       1 
+3.302639 </code></pre>
+</div>
+</div>
+<p>En una semana, donde la temperatura promedio exterior es de 5°C y el aislamiento en la pared hueca de la casa ya se encuentra instalado, el consumo de gas estimado será de 3.3026 miles de pies cúbicos.</p></li>
+</ol>
+<div style="text-align: center;">
+<p>Copyright © 2025 Jose Miguel Leon - Created with <a href="https://quarto.org">Quarto</a></p>
+</div>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

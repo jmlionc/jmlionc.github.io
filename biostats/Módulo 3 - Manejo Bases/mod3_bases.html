@@ -1,0 +1,2087 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jose Miguel Leon Puentes">
+
+<title>Módulo 3: Manipulación de Bases de Datos – Jose Miguel Leon P.</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-dfb324f25d9b1687192fa8be62ac8f9c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons/css/academicons.min.css">
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Jose Miguel Leon P.</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../biography.html"> 
+<span class="menu-text">Biography</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../teaching.html"> 
+<span class="menu-text">Teaching</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../research.html"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../media.html"> 
+<span class="menu-text">Media</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Tabla de Contenido</h2>
+   
+  <ul>
+  <li><a href="#introducción" id="toc-introducción" class="nav-link active" data-scroll-target="#introducción">🔰 Introducción</a></li>
+  <li><a href="#objetivos" id="toc-objetivos" class="nav-link" data-scroll-target="#objetivos">🎯 Objetivos</a></li>
+  <li><a href="#desarrollo" id="toc-desarrollo" class="nav-link" data-scroll-target="#desarrollo">📖 Desarrollo</a>
+  <ul class="collapse">
+  <li><a href="#creación-de-bases-de-datos" id="toc-creación-de-bases-de-datos" class="nav-link" data-scroll-target="#creación-de-bases-de-datos">🏗️ Creación de Bases de Datos</a></li>
+  <li><a href="#acceso-a-bases-de-datos" id="toc-acceso-a-bases-de-datos" class="nav-link" data-scroll-target="#acceso-a-bases-de-datos">🗝️ Acceso a Bases de Datos</a></li>
+  <li><a href="#carga-de-bases-de-datos-guardadas-en-el-equipo" id="toc-carga-de-bases-de-datos-guardadas-en-el-equipo" class="nav-link" data-scroll-target="#carga-de-bases-de-datos-guardadas-en-el-equipo">🗃️ Carga de Bases de Datos guardadas en el equipo</a></li>
+  <li><a href="#extraer-datos-de-paquetes" id="toc-extraer-datos-de-paquetes" class="nav-link" data-scroll-target="#extraer-datos-de-paquetes">⛏️ Extraer Datos de Paquetes</a></li>
+  <li><a href="#funciones-y-operaciones" id="toc-funciones-y-operaciones" class="nav-link" data-scroll-target="#funciones-y-operaciones">🧭 Funciones y Operaciones</a></li>
+  </ul></li>
+  <li><a href="#caso-de-estudio" id="toc-caso-de-estudio" class="nav-link" data-scroll-target="#caso-de-estudio">🚀 Caso de Estudio</a></li>
+  <li><a href="#tarea-y-repaso" id="toc-tarea-y-repaso" class="nav-link" data-scroll-target="#tarea-y-repaso">🗂️ Tarea y Repaso</a></li>
+  </ul>
+<div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="mailto:joleonp@unal.edu.co"><i class="bi bi-mailbox"></i>Contacto</a></li></ul></div><div class="quarto-code-links"><h2>Code Links</h2><ul><li><a href="https://github.com/jmlionc/AppliedBiostats"><i class="bi bi-github"></i>GitHub</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Módulo 3: Manipulación de Bases de Datos</h1>
+<p class="subtitle lead">Bioestadística Fundamental y Estadística Fundamental para las Ciencias de la Salud</p>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliations</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Jose Miguel Leon Puentes </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Departamento de Estadística
+          </p>
+        <p class="affiliation">
+            Universidad Nacional de Colombia
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introducción" class="level2">
+<h2 class="anchored" data-anchor-id="introducción">🔰 Introducción</h2>
+<div style="text-align: justify;">
+<p>Veíamos en el módulo anterior algunas de las diferentes estructuras de datos disponibles en <code>R</code> para almacenar información, como lo son vectores, listas, matrices, data frames y tibbles. A continuación, se realiza una breve explicación de los diferentes métodos y herramientas indispensables a la hora de trabajar con bases de datos en cualquier formato. El propósito de las siguientes secciones es permitirle conocer diferentes formas de realizar consultas y de comunicarse con los datos, encontrar y resumir información que posteriormente le permitirá realizar análisis y procedimientos estadísticos más profundos. Este módulo es introductorio y junto al primer modulo constituyen la base de la autonomía en el lenguaje <code>R</code>.</p>
+</div>
+</section>
+<section id="objetivos" class="level2">
+<h2 class="anchored" data-anchor-id="objetivos">🎯 Objetivos</h2>
+<ul>
+<li>Recordar las estructuras de datos disponibles en el software</li>
+<li>Entender como crear una base de datos dentro o fuera de la aplicación</li>
+<li>Descubrir las diferentes formas de acceder a bases de datos</li>
+<li>Ver las funciones requeridas para importar bases al programa</li>
+<li>Mostrar opciones para manipulación de bases de datos</li>
+<li>Proveer de elementos para la limpieza de bases de datos</li>
+<li>Introducción al concepto de imputación</li>
+<li>Garantizar la autonomía en el manejo de cualquier base de datos.</li>
+</ul>
+</section>
+<section id="desarrollo" class="level2">
+<h2 class="anchored" data-anchor-id="desarrollo">📖 Desarrollo</h2>
+<section id="creación-de-bases-de-datos" class="level3">
+<h3 class="anchored" data-anchor-id="creación-de-bases-de-datos">🏗️ Creación de Bases de Datos</h3>
+<div style="text-align: justify;">
+<p>Debemos tener en cuenta que siempre que se desee almacenar información en formato arreglo, por lo general denotaremos las columnas como aquellos atributos o variables de interés, mientras que las filas en nuestro marco de datos serán los valores para los determinados individuos u objetos a analizar. Las celdas de este arreglo se conocen como las observaciones registradas.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="bases1.png" class="img-fluid figure-img"></p>
+<figcaption>Tomado de: R-Data Frames GeeksforGeeks</figcaption>
+</figure>
+</div>
+<p>Una de las maneras mas sencillas para crear una tabla de este estilo en R es de la siguiente manera, creamos un data frame que iremos llenando por columnas o filas, para ello necesitaremos crear internamente o externamente listas, para este caso crearemos la base por columnas y las listas al interior del data frame:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>baseball_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">id =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">6</span>,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">name =</span> <span class="fu">c</span>(<span class="st">"Avery Bradley"</span>, <span class="st">"John Holland"</span>, <span class="st">"Jonas Jerebko"</span>, <span class="st">"Jordan Mickey"</span>, </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Terry Rozier"</span>, <span class="st">"Jared Sullinger"</span>, <span class="st">"Evan Turner"</span>),</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">team =</span> <span class="fu">rep</span>(<span class="st">"Boston Celtics"</span>, <span class="dv">7</span>),</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">number =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">30</span>, <span class="dv">8</span>, <span class="cn">NA</span>, <span class="dv">12</span>, <span class="dv">7</span>, <span class="dv">11</span>),</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">position =</span> <span class="fu">c</span>(<span class="st">"PG"</span>, <span class="st">"SG"</span>, <span class="st">"PF"</span>, <span class="st">"PF"</span>, <span class="st">"PG"</span>, <span class="st">"C"</span>, <span class="st">"SG"</span>),</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">age =</span> <span class="fu">c</span>(<span class="dv">25</span>, <span class="dv">27</span>, <span class="dv">29</span>, <span class="dv">21</span>, <span class="dv">22</span>, <span class="cn">NA</span>, <span class="dv">27</span>))</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>baseball_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  id            name           team number position age
+1  0   Avery Bradley Boston Celtics      0       PG  25
+2  1    John Holland Boston Celtics     30       SG  27
+3  2   Jonas Jerebko Boston Celtics      8       PF  29
+4  3   Jordan Mickey Boston Celtics     NA       PF  21
+5  4    Terry Rozier Boston Celtics     12       PG  22
+6  5 Jared Sullinger Boston Celtics      7        C  NA
+7  6     Evan Turner Boston Celtics     11       SG  27</code></pre>
+</div>
+</div>
+<p>Otra opción es crear la base de datos e ir llenando por filas, en esta ocasión haremos uso del paquete tibble y la función tribble que nos permite generar un data frame en formato tibble fila por fila.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tribble</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>id, <span class="sc">~</span>name,            <span class="sc">~</span>team,            <span class="sc">~</span>number, <span class="sc">~</span>position, <span class="sc">~</span>age,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="dv">0</span>,   <span class="st">"Avery Bradley"</span>,   <span class="st">"Boston Celtics"</span>, <span class="dv">0</span>,      <span class="st">"PG"</span>,      <span class="dv">25</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span>,   <span class="st">"John Holland"</span>,    <span class="st">"Boston Celtics"</span>, <span class="dv">30</span>,     <span class="st">"SG"</span>,      <span class="dv">27</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2</span>,   <span class="st">"Jonas Jerebko"</span>,   <span class="st">"Boston Celtics"</span>, <span class="dv">8</span>,      <span class="st">"PF"</span>,      <span class="dv">29</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="dv">3</span>,   <span class="st">"Jordan Mickey"</span>,   <span class="st">"Boston Celtics"</span>, <span class="cn">NA</span>,     <span class="st">"PF"</span>,      <span class="dv">21</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="dv">4</span>,   <span class="st">"Terry Rozier"</span>,    <span class="st">"Boston Celtics"</span>, <span class="dv">12</span>,     <span class="st">"PG"</span>,      <span class="dv">22</span>,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="dv">5</span>,   <span class="st">"Jared Sullinger"</span>, <span class="st">"Boston Celtics"</span>, <span class="dv">7</span>,      <span class="st">"C"</span>,       <span class="cn">NA</span>,</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="dv">6</span>,   <span class="st">"Evan Turner"</span>,     <span class="st">"Boston Celtics"</span>, <span class="dv">11</span>,     <span class="st">"SG"</span>,      <span class="dv">27</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 7 × 6
+     id name            team           number position   age
+  &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;           &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;
+1     0 Avery Bradley   Boston Celtics      0 PG          25
+2     1 John Holland    Boston Celtics     30 SG          27
+3     2 Jonas Jerebko   Boston Celtics      8 PF          29
+4     3 Jordan Mickey   Boston Celtics     NA PF          21
+5     4 Terry Rozier    Boston Celtics     12 PG          22
+6     5 Jared Sullinger Boston Celtics      7 C           NA
+7     6 Evan Turner     Boston Celtics     11 SG          27</code></pre>
+</div>
+</div>
+<p>La siguiente base simula un conjunto de 10 parcelas experimentales de quinoa en zonas altoandinas, para ilustrar cómo se integran datos de distintas fuentes (biología, clima, suelo y producción) en un contexto bioestadístico.</p>
+<div id="tbl-microbioma" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-microbioma-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Base de datos preliminar - Microbioma y rendimiento agrícola
+</figcaption>
+<div aria-describedby="tbl-microbioma-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">230125</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>parcelas <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"P"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>variedad_quinoa <span class="ot">&lt;-</span> <span class="fu">sample</span>(</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"Blanca Real"</span>, <span class="st">"Negra Collana"</span>, <span class="st">"Roja Pasankalla"</span>),</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">size =</span> <span class="dv">10</span>, <span class="at">replace =</span> <span class="cn">TRUE</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>microbioma_richness <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">120</span><span class="sc">:</span><span class="dv">250</span>, <span class="at">size =</span> <span class="dv">10</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>precipitacion_mm <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">50</span><span class="sc">:</span><span class="dv">200</span>, <span class="at">size =</span> <span class="dv">10</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>temp_media_c <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">runif</span>(<span class="dv">10</span>, <span class="at">min =</span> <span class="dv">8</span>, <span class="at">max =</span> <span class="dv">18</span>), <span class="dv">1</span>)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>materia_organica_pct <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">runif</span>(<span class="dv">10</span>, <span class="at">min =</span> <span class="fl">1.5</span>, <span class="at">max =</span> <span class="fl">5.0</span>), <span class="dv">2</span>)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>rendimiento_kg_ha <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">runif</span>(<span class="dv">10</span>, <span class="at">min =</span> <span class="dv">1500</span>, <span class="at">max =</span> <span class="dv">3500</span>), <span class="dv">1</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>df_microbioma <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">Parcela =</span> parcelas,</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">Variedad_Quinoa =</span> variedad_quinoa,</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">Microbioma_Richness =</span> microbioma_richness,</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">Precipitacion_mm =</span> precipitacion_mm,</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">Temp_Media_C =</span> temp_media_c,</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">Materia_Organica_pct =</span> materia_organica_pct,</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">Rendimiento_kg_ha =</span> rendimiento_kg_ha</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>df_microbioma</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Parcela Variedad_Quinoa Microbioma_Richness Precipitacion_mm Temp_Media_C
+1       P1     Blanca Real                 150               62          9.2
+2       P2 Roja Pasankalla                 196              193          8.1
+3       P3     Blanca Real                 221               56         16.4
+4       P4     Blanca Real                 230               86         12.2
+5       P5     Blanca Real                 144              153         13.4
+6       P6 Roja Pasankalla                 158               87         10.3
+7       P7 Roja Pasankalla                 202              163         16.0
+8       P8 Roja Pasankalla                 137               84         13.0
+9       P9 Roja Pasankalla                 174              172         16.9
+10     P10 Roja Pasankalla                 236              111          8.3
+   Materia_Organica_pct Rendimiento_kg_ha
+1                  1.82            1526.5
+2                  4.62            3137.0
+3                  4.37            2790.2
+4                  2.91            2692.7
+5                  2.63            2741.2
+6                  4.10            2229.1
+7                  1.97            2918.1
+8                  4.93            3369.9
+9                  2.67            3038.6
+10                 1.74            2389.7</code></pre>
+</div>
+</div>
+</figure>
+</div>
+<div class="cell">
+<div id="tbl-variables-microbioma" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-variables-microbioma-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2: Descripción de variables - Base Microbioma y Rendimiento Agrícola
+</figcaption>
+<div aria-describedby="tbl-variables-microbioma-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 14%">
+<col style="width: 68%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Variable</th>
+<th style="text-align: left;">Tipo de dato</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Parcela</td>
+<td style="text-align: left;">Categórica nominal</td>
+<td style="text-align: left;">Identificador único de la parcela experimental (P1 a P10).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Variedad_Quinoa</td>
+<td style="text-align: left;">Categórica nominal</td>
+<td style="text-align: left;">Variedad cultivada: Blanca Real, Negra Collana o Roja Pasankalla.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Microbioma_Richness</td>
+<td style="text-align: left;">Numérica entera</td>
+<td style="text-align: left;">Riqueza de especies microbianas en el suelo (OTUs) obtenidas por secuenciación de ADN.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Precipitacion_mm</td>
+<td style="text-align: left;">Numérica entera</td>
+<td style="text-align: left;">Precipitación acumulada mensual en milímetros durante la etapa de crecimiento principal.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Temp_Media_C</td>
+<td style="text-align: left;">Numérica continua</td>
+<td style="text-align: left;">Temperatura media (°C) en la parcela durante la temporada de cultivo.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Materia_Organica_pct</td>
+<td style="text-align: left;">Numérica continua</td>
+<td style="text-align: left;">Porcentaje de materia orgánica del suelo determinado mediante análisis de laboratorio.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rendimiento_kg_ha</td>
+<td style="text-align: left;">Numérica continua</td>
+<td style="text-align: left;">Producción estimada de quinoa en kilogramos por hectárea.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>Sin embargo, más allá de crear una base de datos o un registro de información desde cero, se suele trabajar con bases de datos ya consolidadas. A continuación veremos como acceder a estos registros.</p>
+</div>
+</section>
+<section id="acceso-a-bases-de-datos" class="level3">
+<h3 class="anchored" data-anchor-id="acceso-a-bases-de-datos">🗝️ Acceso a Bases de Datos</h3>
+<div style="text-align: justify;">
+<p>Existen muchas opciones de cargar un archivo en el que se encuentren los datos. Desde este programa tenemos la posibilidad de descargar directamente de internet, agregar una base de datos que se encuentre en nuestro computador, o incluso utilizar una de las bases de datos que trae incluidas R o acceder a alguna por medio de librerías.</p>
+</div>
+</section>
+<section id="carga-de-bases-de-datos-guardadas-en-el-equipo" class="level3">
+<h3 class="anchored" data-anchor-id="carga-de-bases-de-datos-guardadas-en-el-equipo">🗃️ Carga de Bases de Datos guardadas en el equipo</h3>
+<p>La siguiente tabla muestra el tipo de archivo, la función por medio de la cual podemos acceder a su información:</p>
+<div class="cell">
+<div id="tbl-funciones-importacion" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-funciones-importacion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;3: Funciones para importar diferentes tipos de archivos en R
+</figcaption>
+<div aria-describedby="tbl-funciones-importacion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Tipo de archivo</th>
+<th style="text-align: left;">Función en R</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">.txt</td>
+<td style="text-align: left;">read.table() o readr::read_table()</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">.csv</td>
+<td style="text-align: left;">read.csv() o readr::read_csv()</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">.csv (punto y coma)</td>
+<td style="text-align: left;">read.csv2() o readr::read_csv2()</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">.xlsx / .xls</td>
+<td style="text-align: left;">readxl::read_excel()</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">.dta</td>
+<td style="text-align: left;">haven::read_dta()</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">.sav</td>
+<td style="text-align: left;">haven::read_sav()</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">.xpt</td>
+<td style="text-align: left;">haven::read_xpt</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">.json</td>
+<td style="text-align: left;">jsonlite::fromJSON()</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">.rds</td>
+<td style="text-align: left;">readRDS()</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">.RData</td>
+<td style="text-align: left;">load()</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Para usar correctamente estas funciones, se debe tener en cuenta la carpeta en la cual está el archivo que deseamos cargar en el programa.</p>
+<p>Una vez contemos con la dirección del directorio de este archivo, podremos incuirla al interior de los corchetes de la función.</p>
+<p>Como ejemplo suponga que la ubicación del archivo es <code>D:\Usuario\Descargas\HighEstimate_AgPestUsebyCropGroup92to19.txt</code></p>
+<p>Luego para abrir este documento necesitaríamos usar la función de base <code>read.table()</code> del siguiente modo:</p>
+<pre><code>library(readr)
+df_prueba &lt;- read_table("D:/Usuario/Descargas/HighEstimate_AgPestUsebyCropGroup92to19.txt")</code></pre>
+<p>Note que es indispensable cambiar la disposición de los símbolos <code>\</code> por su dirección opuesta, es decir, <code>/</code> .</p>
+</div>
+</div>
+<div style="text-align: justify;">
+<p>Otra opción preferida por muchos usuarios para cargar algún archivo es mediante la fuente de editor (source editor). Podrá hacerlo para archivos cuyo tamaño no supero los 5 MB. Esta operación le permitirá tanto visualizar como importar el archivo de manera automática con opción de personalización. Luego, facilita el proceso, sobre todo en escenarios en los que se desconoce el formato en que se encuentran separados los datos ya sea, coma, punto y coma, o espacio.</p>
+</div>
+</section>
+<section id="extraer-datos-de-paquetes" class="level3">
+<h3 class="anchored" data-anchor-id="extraer-datos-de-paquetes">⛏️ Extraer Datos de Paquetes</h3>
+<div style="text-align: justify;">
+<p>Los paquetes de R contiene datasets (base de datos) que se emplean normalmente para mostrar como funciona el paquete. Otros paquetes son bases de datos, como por ejemplo, el paquete <em>gapminder</em>. El paquete <em>gapminder</em> tiene datos para todos los países de población, pobreza y esperanza de vida entre otras variables.</p>
+<p>Un listado exhaustivo de paquetes que son exclusivamente bases de datos se puede encontrar en el siguiente enlace: <a href="https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/00Index.html">The R Datasets Package</a>. Otros paquetes nos brindan una interfaz para descargar datos de entidades como el Banco Mundial a través del paquete <em>WDI</em> (40 databases hosted by the World Bank, including the World Development Indicators (‘WDI’), International Debt Statistics, Doing Business, Human Capital Index, and Sub-national Poverty indicators).</p>
+<p>El comando <code>data()</code> nos permite ver el listado de las bases de datos disponibles. Sin embargo podemos acceder a los datos de un solo paquete de la siguiente manera:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gapminder)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'gapminder' was built under R version 4.4.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="at">package =</span> <span class="st">'gapminder'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>con lo cual obtendremos la siguiente salida:</p>
+<div class="cell">
+<div id="tbl-gapminder" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-gapminder-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;4: Objetos incluidos en el paquete Gapminder
+</figcaption>
+<div aria-describedby="tbl-gapminder-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Nombre</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">continent_colors</td>
+<td style="text-align: left;">Gapminder color schemes</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">country_codes</td>
+<td style="text-align: left;">Country codes</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">country_colors</td>
+<td style="text-align: left;">Gapminder color schemes</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">gapminder</td>
+<td style="text-align: left;">Gapminder data</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">gapminder_unfiltered</td>
+<td style="text-align: left;">Gapminder data, unfiltered</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>Posteriormente podremos cargar la base de datos, por medio de la misma función:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"gapminder"</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">force</span>(gapminder)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1,704 × 6
+   country     continent  year lifeExp      pop gdpPercap
+   &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+ 1 Afghanistan Asia       1952    28.8  8425333      779.
+ 2 Afghanistan Asia       1957    30.3  9240934      821.
+ 3 Afghanistan Asia       1962    32.0 10267083      853.
+ 4 Afghanistan Asia       1967    34.0 11537966      836.
+ 5 Afghanistan Asia       1972    36.1 13079460      740.
+ 6 Afghanistan Asia       1977    38.4 14880372      786.
+ 7 Afghanistan Asia       1982    39.9 12881816      978.
+ 8 Afghanistan Asia       1987    40.8 13867957      852.
+ 9 Afghanistan Asia       1992    41.7 16317921      649.
+10 Afghanistan Asia       1997    41.8 22227415      635.
+# ℹ 1,694 more rows</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="funciones-y-operaciones" class="level3">
+<h3 class="anchored" data-anchor-id="funciones-y-operaciones">🧭 Funciones y Operaciones</h3>
+<div style="text-align: justify;">
+<p>En esta sección del modulo se le darán a conocer algunas de las funciones que resultan más útiles e indispensables a la hora de trabajar con bases de datos, desde el momento en que cargamos los datos en el programa y deseamos conocer el estado de dicha información. Veremos funciones para un primer acercamiento, una especie de <em>summary</em> o <em>glimpse.</em> Posteriormente, se desea proveer al estudiante del concepto de datos faltantes y su correspondiente manejo, introduciendo brevemente el concepto de imputación. Finalmente, se mostrarán situaciones que requieran del uso de funciones para determinados requerimientos en el procesamiento y/o manejo de la información.</p>
+</div>
+<section id="qué-hacer-cuando-ya-he-cargado-la-base-de-datos" class="level4">
+<h4 class="anchored" data-anchor-id="qué-hacer-cuando-ya-he-cargado-la-base-de-datos">¿Qué hacer cuando ya he cargado la base de datos?</h4>
+<div style="text-align: justify;">
+<p>Lo primero que debemos hacer una vez hayamos cargado nuestra base de datos es asegurarnos que la información se encuentre correctamente subida y disponible para su tratamiento. Es por ello que, una de las primeras instrucciones sugeridas es visualizar en el programa la base de datos que se ha cargado. Hay dos formas muy fáciles de hacerlo, la primera es por medio de la función de base <code>View()</code> o haciendo click en la icono de cuadricula que aparece en la parte derecha del nombre del objeto en la sección Data del Panel Enviroment.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(df_microbioma)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>También nos gustaría conocer información como los tipos de estructuras de datos que hemos cargado y las características de ellos. Esto lo podemos hacer mediante las siguientes funciones <code>str()</code> de base y <code>glimpse()</code> de la librería <code>dplyr</code>. Existe otra alternativa por medio del paquete <code>skimr</code> y de la función <code>skim()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df_microbioma)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   10 obs. of  7 variables:
+ $ Parcela             : chr  "P1" "P2" "P3" "P4" ...
+ $ Variedad_Quinoa     : chr  "Blanca Real" "Roja Pasankalla" "Blanca Real" "Blanca Real" ...
+ $ Microbioma_Richness : int  150 196 221 230 144 158 202 137 174 236
+ $ Precipitacion_mm    : int  62 193 56 86 153 87 163 84 172 111
+ $ Temp_Media_C        : num  9.2 8.1 16.4 12.2 13.4 10.3 16 13 16.9 8.3
+ $ Materia_Organica_pct: num  1.82 4.62 4.37 2.91 2.63 4.1 1.97 4.93 2.67 1.74
+ $ Rendimiento_kg_ha   : num  1526 3137 2790 2693 2741 ...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(df_microbioma)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 10
+Columns: 7
+$ Parcela              &lt;chr&gt; "P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8", "…
+$ Variedad_Quinoa      &lt;chr&gt; "Blanca Real", "Roja Pasankalla", "Blanca Real", …
+$ Microbioma_Richness  &lt;int&gt; 150, 196, 221, 230, 144, 158, 202, 137, 174, 236
+$ Precipitacion_mm     &lt;int&gt; 62, 193, 56, 86, 153, 87, 163, 84, 172, 111
+$ Temp_Media_C         &lt;dbl&gt; 9.2, 8.1, 16.4, 12.2, 13.4, 10.3, 16.0, 13.0, 16.…
+$ Materia_Organica_pct &lt;dbl&gt; 1.82, 4.62, 4.37, 2.91, 2.63, 4.10, 1.97, 4.93, 2…
+$ Rendimiento_kg_ha    &lt;dbl&gt; 1526.5, 3137.0, 2790.2, 2692.7, 2741.2, 2229.1, 2…</code></pre>
+</div>
+</div>
+<p>Ambas nos dan prácticamente la misma información, la especificación del número de filas u observaciones, número de columnas o variables, un listado de las variables, el tipo de datos de cada una de las variables y sus valores. Sin embargo, la función de base especifica un elemento adicional y es la clase del objeto. Tenga en cuenta que esta información también puede ser consultada de manera especifica de la siguiente manera:</p>
+</div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Función</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>dim()</code></td>
+<td>Da la dimensión del objeto, número de filas y de columnas.</td>
+</tr>
+<tr class="even">
+<td><code>length()</code> o <code>ncol()</code></td>
+<td>Da el número de columnas del objeto.</td>
+</tr>
+<tr class="odd">
+<td><code>nrow()</code></td>
+<td>Da el número de filas del objeto</td>
+</tr>
+<tr class="even">
+<td><code>names()</code> o <code>colnames()</code></td>
+<td>Da los nombres de las columnas</td>
+</tr>
+</tbody>
+</table>
+<div style="text-align: justify;">
+<p>Además de conocer brevemente cómo está compuesta la base, otras características que podemos obtener de los datos con la función de base <code>summary()</code> es, para las variables que reciben entradas numéricas, se resumirá la información de los cuantiles por variable así como la media de los datos. Esto se explicará más a fondo en el siguiente módulo de estadística descriptiva exploratoria.</p>
+<p>En caso de querer cambiar los nombres que reciben nuestras variables, esto lo podemos hacer por medio de la misma función de base colnames() de la siguiente manera:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(df_microbioma)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Parcela"              "Variedad_Quinoa"      "Microbioma_Richness" 
+[4] "Precipitacion_mm"     "Temp_Media_C"         "Materia_Organica_pct"
+[7] "Rendimiento_kg_ha"   </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(df_microbioma) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ID"</span>, <span class="st">"Variedad"</span>, <span class="st">"Riqueza"</span>, <span class="st">"Precipitación"</span>, <span class="st">"Temperatura"</span>, <span class="st">"Materia_Orgánica"</span>, <span class="st">"Rendimiento"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>El paquete <code>stringr</code> proporciona un conjunto coherente y consistente de funciones para trabajar y manipular cadenas (vectores de caracteres). Tiene como objetivo simplificar las operaciones comunes con cadenas, haciéndolas más intuitivas y fáciles de usar</p>
+<ul>
+<li><p><strong>Operaciones comunes con cadenas:</strong></p>
+<p>Proporciona funciones para una amplia gama de tareas, entre las que se incluyen:</p>
+<ul>
+<li><p><strong>Detección:</strong> <code>str_detect()</code>, <code>str_starts()</code>, <code>str_ends()</code></p></li>
+<li><p><strong>Extracción:</strong> <code>str_sub()</code>, <code>str_extract()</code>, <code>str_match()</code></p></li>
+<li><p><strong>Sustitución:</strong> <code>str_replace()</code>, <code>str_replace_all()</code></p></li>
+<li><p><strong>Manipulación:</strong> <code>str_to_lower()</code>, <code>str_to_upper()</code>, <code>str_trim()</code>, <code>str_pad()</code>, <code>str_squish()</code></p></li>
+<li><p><strong>División y unión:</strong> <code>str_split()</code>, <code>str_c()</code></p></li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(diccionario_limpio) <span class="ot">&lt;-</span> <span class="fu">str_trim</span>(<span class="fu">colnames</span>(diccionario_limpio))</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(diccionario_limpio) <span class="ot">&lt;-</span> <span class="fu">str_replace_all</span>(<span class="fu">colnames</span>(diccionario_limpio), <span class="st">"</span><span class="sc">\\</span><span class="st">s+"</span>, <span class="st">"_"</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(diccionario_limpio) <span class="ot">&lt;-</span> <span class="fu">tolower</span>(<span class="fu">colnames</span>(diccionario_limpio))</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>diccionario_limpio <span class="ot">&lt;-</span> diccionario_limpio <span class="sc">%&gt;%</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">variable =</span> <span class="fu">tolower</span>(<span class="fu">str_trim</span>(variable)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>La función <code>rename()</code> se utiliza para cambiar de nombre a las columnas, por ejemplo:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(palmerpenguins)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'palmerpenguins' was built under R version 4.4.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="at">package =</span> <span class="st">'palmerpenguins'</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>penguins <span class="ot">&lt;-</span> penguins</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">isla =</span> island)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 344 × 8
+   species isla      bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7               181        3750
+ 2 Adelie  Torgersen           39.5          17.4               186        3800
+ 3 Adelie  Torgersen           40.3          18                 195        3250
+ 4 Adelie  Torgersen           NA            NA                  NA          NA
+ 5 Adelie  Torgersen           36.7          19.3               193        3450
+ 6 Adelie  Torgersen           39.3          20.6               190        3650
+ 7 Adelie  Torgersen           38.9          17.8               181        3625
+ 8 Adelie  Torgersen           39.2          19.6               195        4675
+ 9 Adelie  Torgersen           34.1          18.1               193        3475
+10 Adelie  Torgersen           42            20.2               190        4250
+# ℹ 334 more rows
+# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
+</div>
+</div>
+<p>Además de modificar el nombre de nuestras columnas, podremos agregarle atributos a nuestra base de datos para volverla más clara añadiéndole una breve descripción a cada variable que deseemos.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(df_microbioma<span class="sc">$</span>ID, <span class="st">"label"</span>) <span class="ot">&lt;-</span> <span class="st">"Identificador único de la parcela experimental"</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(df_microbioma<span class="sc">$</span>Variedad, <span class="st">"label"</span>) <span class="ot">&lt;-</span> <span class="st">"Variedad cultivada: Blanca Real, Negra Collana o Roja Pasankalla"</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(df_microbioma<span class="sc">$</span>Riqueza, <span class="st">"label"</span>) <span class="ot">&lt;-</span> <span class="st">"Riqueza de especies microbianas en el suelo (OTUs) obtenidas por secuenciación de ADN"</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(df_microbioma<span class="sc">$</span>Precipitación, <span class="st">"label"</span>) <span class="ot">&lt;-</span> <span class="st">"Precipitación acumulada mensual en milímetros durante la etapa de crecimiento principal"</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(df_microbioma<span class="sc">$</span>Temperatura, <span class="st">"label"</span>) <span class="ot">&lt;-</span> <span class="st">"Temperatura media (°C) en la parcela durante la temporada de cultivo"</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(df_microbioma<span class="sc">$</span>Materia_Orgánica, <span class="st">"label"</span>) <span class="ot">&lt;-</span> <span class="st">"Porcentaje de materia orgánica del suelo determinado mediante análisis de laboratorio"</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(df_microbioma<span class="sc">$</span>Rendimiento, <span class="st">"label"</span>) <span class="ot">&lt;-</span> <span class="st">"Producción estimada de quinoa en kilogramos por hectárea"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>data2020<span class="sc">$</span>p6210 <span class="ot">&lt;-</span> <span class="fu">factor</span>(data2020<span class="sc">$</span>p6210, <span class="at">levels =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="at">ordered =</span> <span class="cn">TRUE</span>)  <span class="co"># Educación (ordinal)</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>data2020<span class="sc">$</span>p6100 <span class="ot">&lt;-</span> <span class="fu">factor</span>(data2020<span class="sc">$</span>p6100, <span class="at">levels =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">ordered =</span> <span class="cn">FALSE</span>)  <span class="co"># Régimen de salud (nominal)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="verificación-y-manejo-de-datos-faltantes-nas" class="level4">
+<h4 class="anchored" data-anchor-id="verificación-y-manejo-de-datos-faltantes-nas">Verificación y manejo de datos faltantes (NA’s)</h4>
+<div style="text-align: justify;">
+<p>La función <code>summary</code> nos proporciona también la cantidad de NA´s por variable en caso de haberlas. Sin embargo existen otras alternativas para revisar datos faltantes en bases. Una opción es haciendo uso del comando <code>table(is.na(df))</code> el cual contabiliza el total de datos NA los cuales serán mostrados como TRUE y el total de valores con algún valor como entrada que se denominarán FALSE. Otra opción si se cuenta con una base de datos muy grande es revisar solo las variables de interés para ello especificamos en el comando <code>table(is.na(df$varible))</code>. Vea el siguiente ejemplo:<br>
+</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(baseball_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       id          name               team               number     
+ Min.   :0.0   Length:7           Length:7           Min.   : 0.00  
+ 1st Qu.:1.5   Class :character   Class :character   1st Qu.: 7.25  
+ Median :3.0   Mode  :character   Mode  :character   Median : 9.50  
+ Mean   :3.0                                         Mean   :11.33  
+ 3rd Qu.:4.5                                         3rd Qu.:11.75  
+ Max.   :6.0                                         Max.   :30.00  
+                                                     NA's   :1      
+   position              age       
+ Length:7           Min.   :21.00  
+ Class :character   1st Qu.:22.75  
+ Mode  :character   Median :26.00  
+                    Mean   :25.17  
+                    3rd Qu.:27.00  
+                    Max.   :29.00  
+                    NA's   :1      </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(<span class="fu">is.na</span>(baseball_df))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+FALSE  TRUE 
+   40     2 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(<span class="fu">is.na</span>(baseball_df<span class="sc">$</span>number))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+FALSE  TRUE 
+    6     1 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(<span class="fu">is.na</span>(baseball_df<span class="sc">$</span>age))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+FALSE  TRUE 
+    6     1 </code></pre>
+</div>
+</div>
+<p>En caso de querer identificar variables con valores perdidos</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(df)[<span class="fu">colSums</span>(<span class="fu">is.na</span>(df)) <span class="sc">&gt;</span> <span class="dv">0</span>] <span class="co"># ¿Qué variables tienen al menos un NA?</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(df)) <span class="sc">%&gt;%</span> .[. <span class="sc">&gt;</span> <span class="dv">0</span>] <span class="co"># Las que tienen NA's, ¿Cuántas tienen?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Una función que nos permite ver la proporción de datos faltantes en nuestra base de datos es:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>proporcion_faltantes <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  df <span class="sc">%&gt;%</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(.)) <span class="sc">/</span> <span class="fu">n</span>())) <span class="sc">%&gt;%</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">"variable"</span>, <span class="at">values_to =</span> <span class="st">"proporcion_faltantes"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">porcentaje_faltantes =</span> proporcion_faltantes <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(porcentaje_faltantes))</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">proporcion_faltantes</span>(database_ex))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 80%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Función</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>drop_na()</td>
+<td>elimina filas con valores perdidos.</td>
+</tr>
+<tr class="even">
+<td>replace_na()</td>
+<td>reemplaza valores faltantes por un valor definido.</td>
+</tr>
+<tr class="odd">
+<td>fill()</td>
+<td>propaga valores conocidos hacia adelante o hacia atrás.</td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplos de uso de las anteriores funciones:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>df_cleaned <span class="ot">&lt;-</span> <span class="fu">drop_na</span>(df_microbioma)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>df_replaced <span class="ot">&lt;-</span> df_microbioma <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Riqueza =</span> <span class="fu">replace_na</span>(Riqueza, <span class="dv">0</span>))</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>df_filled <span class="ot">&lt;-</span> df_microbioma <span class="sc">%&gt;%</span> <span class="fu">fill</span>(Variedad, <span class="at">.direction =</span> <span class="st">"down"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Ahora suponga que dado un listado de variables que contienen NA’s desea eliminar aquellos elementos.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Variables con NA's </span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>variables_a_revisar <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"estu_cod_depto_presentacion"</span>,   <span class="st">"punt_ingles"</span>,</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"estu_cod_mcpio_presentacion"</span>,   <span class="st">"estu_cod_reside_depto"</span>,        </span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"estu_cod_reside_mcpio"</span>,         <span class="st">"estu_dedicacioninternet"</span>,      </span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"estu_dedicacionlecturadiaria"</span>,  <span class="st">"estu_depto_presentacion"</span>,      </span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"estu_depto_reside"</span>,             <span class="st">"estu_generacione"</span>,             </span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"estu_genero"</span>,                   <span class="st">"estu_horassemanatrabaja"</span>,      </span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"estu_inse_individual"</span>,          <span class="st">"estu_mcpio_presentacion"</span>,      </span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"estu_mcpio_reside"</span>,             <span class="st">"estu_nse_establecimiento"</span>,     </span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"estu_nse_individual"</span>,           <span class="st">"estu_repite"</span>,                  </span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"estu_tieneetnia"</span>,               <span class="st">"estu_tiporemuneracion"</span>)</span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Filtrar quitando NA en esas columnas</span></span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a>datos_saber11 <span class="ot">&lt;-</span> datos_saber11 <span class="sc">%&gt;%</span></span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">if_all</span>(<span class="fu">all_of</span>(variables_a_revisar), <span class="sc">~</span> <span class="sc">!</span><span class="fu">is.na</span>(.)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Eliminar filas con valores perdidos en variables clave</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(variable1), <span class="sc">!</span><span class="fu">is.na</span>(variable2))</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Reemplazar NA en ciertas columnas por 0 (si aplica)</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">"tiempo_"</span>), <span class="sc">~</span><span class="fu">replace_na</span>(.x, <span class="dv">0</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="limpieza-de-la-base-de-datos" class="level4">
+<h4 class="anchored" data-anchor-id="limpieza-de-la-base-de-datos">Limpieza de la base de datos</h4>
+<div style="text-align: justify;">
+<p>El paquete <code>janitor</code> es útil para es estandarizar nombres de variables:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'janitor' was built under R version 4.4.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Adjuntando el paquete: 'janitor'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    chisq.test, fisher.test</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(df_microbioma)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "ID"               "Variedad"         "Riqueza"          "Precipitación"   
+[5] "Temperatura"      "Materia_Orgánica" "Rendimiento"     </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>df_microbioma <span class="ot">&lt;-</span> <span class="fu">clean_names</span>(df_microbioma)</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(df_microbioma)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "id"               "variedad"         "riqueza"          "precipitacion"   
+[5] "temperatura"      "materia_organica" "rendimiento"     </code></pre>
+</div>
+</div>
+<p>En caso de trabajar con datos en formato de fechas y/o horas, un paquete que facilita este manejo, simplificando el análisis y las operaciones es <code>lubridate</code></p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"lubridate"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'lubridate' was built under R version 4.4.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Adjuntando el paquete: 'lubridate'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    date, intersect, setdiff, union</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Sat Oct 18 18:56:37 2025"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">now</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2025-10-18 18:56:37 -05"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ymd</span>(<span class="st">"20190317"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2019-03-17"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mdy</span>(<span class="st">"03-17-2019"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2019-03-17"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dmy</span>(<span class="st">"17/03/2019"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2019-03-17"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ymd</span>(<span class="st">"20190317"</span>) <span class="sc">+</span> <span class="fu">years</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2020-03-17" "2021-03-17" "2022-03-17"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ymd</span>(<span class="st">"20190317"</span>) <span class="sc">+</span> <span class="fu">months</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2019-03-17" "2019-04-17" "2019-05-17" "2019-06-17" "2019-07-17"
+[6] "2019-08-17" "2019-09-17"</code></pre>
+</div>
+</div>
+</section>
+<section id="operaciones-entre-bases-de-datos" class="level4">
+<h4 class="anchored" data-anchor-id="operaciones-entre-bases-de-datos">Operaciones entre bases de datos</h4>
+<div style="text-align: justify;">
+<p>Algunas funciones útiles que son comunes para combinar distintas fuentes de información, son:</p>
+</div>
+<section id="unir-bases" class="level5">
+<h5 class="anchored" data-anchor-id="unir-bases"><strong>Unir bases</strong></h5>
+<div style="text-align: justify;">
+<p>Cuando tenemos dos bases de datos con una columna en común (llamada <strong>clave</strong> o <em>key</em>), podemos combinarlas de distintas formas según la información que deseemos conservar.</p>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="join.png" class="img-fluid figure-img"></p>
+<figcaption>Tomada de: Ciencia de Datos para Ciencias Naturales</figcaption>
+</figure>
+</div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Función</th>
+<th>Descripción</th>
+<th>Esquema de conservación</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong><code>left_join()</code></strong></td>
+<td>Mantiene <strong>todas las filas</strong> de la base de la izquierda. Si no hay coincidencia en la derecha, completa con <code>NA</code>.</td>
+<td>“Conservo todo lo de la izquierda, complemento con lo de la derecha si existe.”</td>
+</tr>
+<tr class="even">
+<td><strong><code>right_join()</code></strong></td>
+<td>Mantiene <strong>todas las filas</strong> de la base de la derecha. Si no hay coincidencia en la izquierda, completa con <code>NA</code>.</td>
+<td>“Conservo todo lo de la derecha, complemento con lo de la izquierda si existe.”</td>
+</tr>
+<tr class="odd">
+<td><strong><code>inner_join()</code></strong></td>
+<td>Mantiene <strong>solo las filas coincidentes</strong> en ambas bases (la intersección).</td>
+<td>“Me quedo únicamente con lo que coincide en ambas bases.”</td>
+</tr>
+<tr class="even">
+<td><strong><code>full_join()</code></strong></td>
+<td>Mantiene <strong>todas las filas de ambas bases</strong>. Si alguna no tiene coincidencia, completa con <code>NA</code>.</td>
+<td>“Me quedo con todo, tanto de la izquierda como de la derecha.”</td>
+</tr>
+</tbody>
+</table>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dos bases pequeñas de ejemplo</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>df1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">ID =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>), <span class="at">Var1 =</span> <span class="fu">c</span>(<span class="st">"A"</span>,<span class="st">"B"</span>,<span class="st">"C"</span>))</span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">ID =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>), <span class="at">Var2 =</span> <span class="fu">c</span>(<span class="st">"X"</span>,<span class="st">"Y"</span>,<span class="st">"Z"</span>))</span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>df3 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">ID =</span> <span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>), <span class="at">Var1 =</span> <span class="fu">c</span>(<span class="st">"B"</span>,<span class="st">"A"</span>,<span class="st">"A"</span>))</span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a><span class="fu">left_join</span>(df1, df2, <span class="at">by =</span> <span class="st">"ID"</span>)   <span class="co"># conserva todos los ID de df1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  ID Var1 Var2
+1  1    A &lt;NA&gt;
+2  2    B    X
+3  3    C    Y</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">right_join</span>(df1, df2, <span class="at">by =</span> <span class="st">"ID"</span>)  <span class="co"># conserva todos los ID de df2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  ID Var1 Var2
+1  2    B    X
+2  3    C    Y
+3  4 &lt;NA&gt;    Z</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">inner_join</span>(df1, df2, <span class="at">by =</span> <span class="st">"ID"</span>)  <span class="co"># conserva solo los ID que coinciden (2 y 3)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  ID Var1 Var2
+1  2    B    X
+2  3    C    Y</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">full_join</span>(df1, df2, <span class="at">by =</span> <span class="st">"ID"</span>)   <span class="co"># conserva todos los ID de ambos (1,2,3,4)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  ID Var1 Var2
+1  1    A &lt;NA&gt;
+2  2    B    X
+3  3    C    Y
+4  4 &lt;NA&gt;    Z</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bind_rows</span>(df1, df3)   <span class="co"># Apilar filas</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  ID Var1
+1  1    A
+2  2    B
+3  3    C
+4  5    B
+5  6    A
+6  7    A</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(df1, df3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  ID Var1
+1  1    A
+2  2    B
+3  3    C
+4  5    B
+5  6    A
+6  7    A</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bind_cols</span>(df1, df2)   <span class="co"># Combinar columnas</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>New names:
+• `ID` -&gt; `ID...1`
+• `ID` -&gt; `ID...3`</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  ID...1 Var1 ID...3 Var2
+1      1    A      2    X
+2      2    B      3    Y
+3      3    C      4    Z</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(df1,df2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  ID Var1 ID Var2
+1  1    A  2    X
+2  2    B  3    Y
+3  3    C  4    Z</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="manipulación-de-data-frames" class="level4">
+<h4 class="anchored" data-anchor-id="manipulación-de-data-frames">Manipulación de Data Frames</h4>
+<section id="ordenar" class="level5">
+<h5 class="anchored" data-anchor-id="ordenar"><strong>Ordenar</strong></h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">arrange</span>(df, Variedad)                 <span class="co"># Orden ascendente</span></span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">arrange</span>(df, <span class="fu">desc</span>(Rendimiento))        <span class="co"># Orden descendente</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Para escoger los individuos que presentaron los cinco valores más altos de una variables se podría hacer los siguiente:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span>  </span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(bill_length_mm)) <span class="sc">%&gt;%</span> </span>
+<span id="cb85-3"><a href="#cb85-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">top_n</span>(<span class="at">n=</span><span class="dv">5</span>, <span class="at">wt=</span>bill_length_mm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 8
+  species   island bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+  &lt;fct&gt;     &lt;fct&gt;           &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+1 Gentoo    Biscoe           59.6          17                 230        6050
+2 Chinstrap Dream            58            17.8               181        3700
+3 Gentoo    Biscoe           55.9          17                 228        5600
+4 Chinstrap Dream            55.8          19.8               207        4000
+5 Gentoo    Biscoe           55.1          16                 230        5850
+# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
+</div>
+</div>
+<p>Se puede cambiar la localización de las columnas con la función <code>relocate()</code> y los parámetros <em><code>.before</code></em> y <em><code>.after</code></em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span>  <span class="fu">relocate</span>(year, <span class="at">.after =</span> species)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 344 × 8
+   species  year island    bill_length_mm bill_depth_mm flipper_length_mm
+   &lt;fct&gt;   &lt;int&gt; &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;
+ 1 Adelie   2007 Torgersen           39.1          18.7               181
+ 2 Adelie   2007 Torgersen           39.5          17.4               186
+ 3 Adelie   2007 Torgersen           40.3          18                 195
+ 4 Adelie   2007 Torgersen           NA            NA                  NA
+ 5 Adelie   2007 Torgersen           36.7          19.3               193
+ 6 Adelie   2007 Torgersen           39.3          20.6               190
+ 7 Adelie   2007 Torgersen           38.9          17.8               181
+ 8 Adelie   2007 Torgersen           39.2          19.6               195
+ 9 Adelie   2007 Torgersen           34.1          18.1               193
+10 Adelie   2007 Torgersen           42            20.2               190
+# ℹ 334 more rows
+# ℹ 2 more variables: body_mass_g &lt;int&gt;, sex &lt;fct&gt;</code></pre>
+</div>
+</div>
+<div style="text-align: justify;">
+<p>Los datos a lo ancho tienen una columna para cada variable y una fila para cada observación. Los datos a menudo se ingresan y almacenan de esta manera. Los datos ordenados a lo largo, por otro lado, tienen una columna que indica el tipo de variable contenida en esa fila y luego, en una columna separada, el valor de esa variable.</p>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="pivot_longer.png" class="img-fluid figure-img"></p>
+<figcaption>Tomada de: R for Excel Users Julie Lowndes &amp; Allison Horst</figcaption>
+</figure>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"airquality"</span>)</span>
+<span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(airquality)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Ozone Solar.R Wind Temp Month Day
+1    41     190  7.4   67     5   1
+2    36     118  8.0   72     5   2
+3    12     149 12.6   74     5   3
+4    18     313 11.5   62     5   4
+5    NA      NA 14.3   56     5   5
+6    28      NA 14.9   66     5   6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a>largo <span class="ot">&lt;-</span> airquality <span class="sc">%&gt;%</span></span>
+<span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">c</span>(Ozone, Solar.R, Wind, Temp), </span>
+<span id="cb91-3"><a href="#cb91-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">names_to =</span> <span class="st">"variable"</span>, <span class="at">values_to =</span> <span class="st">"value"</span>)</span>
+<span id="cb91-4"><a href="#cb91-4" aria-hidden="true" tabindex="-1"></a>largo</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 612 × 4
+   Month   Day variable value
+   &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;dbl&gt;
+ 1     5     1 Ozone     41  
+ 2     5     1 Solar.R  190  
+ 3     5     1 Wind       7.4
+ 4     5     1 Temp      67  
+ 5     5     2 Ozone     36  
+ 6     5     2 Solar.R  118  
+ 7     5     2 Wind       8  
+ 8     5     2 Temp      72  
+ 9     5     3 Ozone     12  
+10     5     3 Solar.R  149  
+# ℹ 602 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a>ancho <span class="ot">&lt;-</span> largo <span class="sc">%&gt;%</span></span>
+<span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> <span class="st">"variable"</span>, </span>
+<span id="cb93-3"><a href="#cb93-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> <span class="st">"value"</span>)</span>
+<span id="cb93-4"><a href="#cb93-4" aria-hidden="true" tabindex="-1"></a>ancho</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 153 × 6
+   Month   Day Ozone Solar.R  Wind  Temp
+   &lt;int&gt; &lt;int&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     5     1    41     190   7.4    67
+ 2     5     2    36     118   8      72
+ 3     5     3    12     149  12.6    74
+ 4     5     4    18     313  11.5    62
+ 5     5     5    NA      NA  14.3    56
+ 6     5     6    28      NA  14.9    66
+ 7     5     7    23     299   8.6    65
+ 8     5     8    19      99  13.8    59
+ 9     5     9     8      19  20.1    61
+10     5    10    NA     194   8.6    69
+# ℹ 143 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="transformar" class="level5">
+<h5 class="anchored" data-anchor-id="transformar"><strong>Transformar</strong></h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="fu">transform</span>(airquality, <span class="at">Ozone =</span> <span class="sc">-</span>Ozone)</span>
+<span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a><span class="fu">transform</span>(airquality, <span class="at">new =</span> <span class="sc">-</span>Ozone, <span class="at">Temp =</span> (Temp<span class="dv">-32</span>)<span class="sc">/</span><span class="fl">1.8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="selección-de-variables-y-creación-de-subconjuntos" class="level5">
+<h5 class="anchored" data-anchor-id="selección-de-variables-y-creación-de-subconjuntos"><strong>Selección de variables y creación de subconjuntos</strong></h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">subset</span>(airquality, Temp <span class="sc">&gt;</span> <span class="dv">80</span>, <span class="at">select =</span> <span class="fu">c</span>(Ozone, Temp))</span>
+<span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a><span class="fu">subset</span>(airquality, Day <span class="sc">==</span> <span class="dv">1</span>, <span class="at">select =</span> <span class="sc">-</span>Temp)</span>
+<span id="cb96-3"><a href="#cb96-3" aria-hidden="true" tabindex="-1"></a><span class="fu">subset</span>(airquality, <span class="at">select =</span> Ozone<span class="sc">:</span>Wind)</span>
+<span id="cb96-4"><a href="#cb96-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb96-5"><a href="#cb96-5" aria-hidden="true" tabindex="-1"></a><span class="fu">with</span>(airquality, <span class="fu">subset</span>(Ozone, Temp <span class="sc">&gt;</span> <span class="dv">80</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span></span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"b"</span>), LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]))</span>
+<span id="cb97-3"><a href="#cb97-3" aria-hidden="true" tabindex="-1"></a>li <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">pi =</span> pi, <span class="at">e =</span> <span class="fu">exp</span>(<span class="dv">1</span>))</span>
+<span id="cb97-4"><a href="#cb97-4" aria-hidden="true" tabindex="-1"></a>x[<span class="dv">10</span>]                 <span class="co"># the tenth element of x</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 10</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> x[<span class="sc">-</span><span class="dv">1</span>]            <span class="co"># delete the 1st element of x</span></span>
+<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a>m[<span class="dv">1</span>,]                 <span class="co"># the first row of matrix m</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>A B C 
+1 3 5 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a>m[<span class="dv">1</span>, , drop <span class="ot">=</span> <span class="cn">FALSE</span>]  <span class="co"># is a 1-row matrix</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  A B C
+a 1 3 5</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a>m[,<span class="dv">1</span>]                 <span class="co"># the fisrt column of matrix m</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>a b 
+1 2 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb105"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a>m[,<span class="fu">c</span>(<span class="cn">TRUE</span>,<span class="cn">FALSE</span>,<span class="cn">TRUE</span>)]<span class="co"># logical indexing</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  A C
+a 1 5
+b 2 6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a>m[<span class="fu">cbind</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">1</span>),<span class="dv">3</span><span class="sc">:</span><span class="dv">1</span>)]<span class="co"># matrix numeric index</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5 4 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb109"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a>ci <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"a"</span>), <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"C"</span>, <span class="st">"B"</span>))</span>
+<span id="cb109-2"><a href="#cb109-2" aria-hidden="true" tabindex="-1"></a>m[ci]                 <span class="co"># matrix character index</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 6 3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb111"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> m[,<span class="sc">-</span><span class="dv">1</span>]           <span class="co"># delete the first column of m</span></span>
+<span id="cb111-2"><a href="#cb111-2" aria-hidden="true" tabindex="-1"></a>li[[<span class="dv">1</span>]]               <span class="co"># the first element of list li</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.141593</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb113"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="at">a =</span> <span class="dv">4</span>, <span class="dv">5</span>)</span>
+<span id="cb113-2"><a href="#cb113-2" aria-hidden="true" tabindex="-1"></a>y[<span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>)]            <span class="co"># a list containing elements 3 and 4 of y</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$a
+[1] 4
+
+[[2]]
+[1] 5</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a>y<span class="sc">$</span>a                   <span class="co"># the element of y named a</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb117"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a>mitad1 <span class="ot">&lt;-</span> penguins[<span class="dv">1</span><span class="sc">:</span><span class="dv">172</span>, ] <span class="co"># partición de la primera mitad</span></span>
+<span id="cb117-2"><a href="#cb117-2" aria-hidden="true" tabindex="-1"></a>mitad2 <span class="ot">&lt;-</span> penguins[<span class="dv">173</span><span class="sc">:</span><span class="dv">344</span>, ] <span class="co"># partición de la segunda mitad</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Una alternativa a la función de base es con las rutinas de <code>dplyr</code> de las siguiente manera:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb118"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb118-1"><a href="#cb118-1" aria-hidden="true" tabindex="-1"></a>df_sub <span class="ot">&lt;-</span> <span class="fu">select</span>(df, ID, Variedad, Rendimiento)</span>
+<span id="cb118-2"><a href="#cb118-2" aria-hidden="true" tabindex="-1"></a>df_filtrado <span class="ot">&lt;-</span> <span class="fu">filter</span>(df, Rendimiento <span class="sc">&gt;</span> <span class="dv">2000</span>, Variedad <span class="sc">==</span> <span class="st">"Blanca Real"</span>)</span>
+<span id="cb118-3"><a href="#cb118-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">filter</span>(df, <span class="sc">!</span><span class="fu">is.na</span>(variable))</span>
+<span id="cb118-4"><a href="#cb118-4" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">filter</span>(df, variable <span class="sc">!=</span> <span class="st">"valor"</span>)</span>
+<span id="cb118-5"><a href="#cb118-5" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> <span class="fu">filter</span>(bill_length_mm <span class="sc">&gt;=</span> <span class="dv">50</span>)</span>
+<span id="cb118-6"><a href="#cb118-6" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> <span class="fu">filter</span>(bill_length_mm <span class="sc">&gt;=</span> <span class="dv">50</span> <span class="sc">&amp;</span> island <span class="sc">==</span> <span class="st">"Dream"</span>)</span>
+<span id="cb118-7"><a href="#cb118-7" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> <span class="fu">filter</span>(island <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Torgersen"</span>,<span class="st">"Dream"</span>)) <span class="co"># permite seleccionar diferentes items dentro de una columna </span></span>
+<span id="cb118-8"><a href="#cb118-8" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="fu">near</span>(<span class="at">x =</span> body_mass_g, <span class="at">y =</span> <span class="dv">3500</span>, <span class="at">tol =</span> <span class="dv">500</span>)) <span class="co"># permite escoger dentro de un rango de valores numéricos cercanos, estableciendo un valor de tolerancia</span></span>
+<span id="cb118-9"><a href="#cb118-9" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="fu">between</span>(bill_length_mm, <span class="at">left =</span> <span class="dv">43</span>, <span class="at">right =</span> <span class="dv">46</span>)) <span class="co"># permite escoger un rango de valores numéricos dentro de un límite específico</span></span>
+<span id="cb118-10"><a href="#cb118-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb118-11"><a href="#cb118-11" aria-hidden="true" tabindex="-1"></a><span class="fu">slice</span>(df, <span class="dv">10</span><span class="sc">:</span><span class="dv">15</span>) <span class="co"># selecciona filas por posición</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="operaciones-entre-columnas-mutate" class="level5">
+<h5 class="anchored" data-anchor-id="operaciones-entre-columnas-mutate"><strong>Operaciones entre columnas (Mutate)</strong></h5>
+<p>Permite crear nuevas variables y realizar operaciones matemáticas entre ellas</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb119"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb119-1"><a href="#cb119-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">mass_kg =</span> body_mass_g <span class="sc">/</span> <span class="dv">1000</span>, <span class="at">.before=</span>bill_length_mm)</span>
+<span id="cb119-2"><a href="#cb119-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Rendimiento_ajustado =</span> Rendimiento <span class="sc">/</span> Precipitación)</span>
+<span id="cb119-3"><a href="#cb119-3" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>suma <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(df[, <span class="fu">c</span>(<span class="st">"Riqueza"</span>, <span class="st">"Materia_Orgánica"</span>)], <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div style="text-align: justify;">
+<p>Se utiliza la función <code>transmute()</code> cuando se quiere generar y mostrar solamente la columna resultante de una operación matemática entre variables</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb120"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb120-1"><a href="#cb120-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> </span>
+<span id="cb120-2"><a href="#cb120-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(<span class="at">bill_ratio =</span> bill_length_mm<span class="sc">/</span>bill_depth_mm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Además, con la inclusión del parámetro <code>if_else</code> se pueden definir categorías arbitrarias de clasificación dentro de variables numéricas. Esta función literalmente se leería como “si cumple con la siguiente característica lo clasifica como tal cosa, sino, como tal otra cosa”.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb121"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb121-1"><a href="#cb121-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> </span>
+<span id="cb121-2"><a href="#cb121-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb121-3"><a href="#cb121-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">size =</span> <span class="fu">if_else</span>(body_mass_g<span class="sc">&gt;</span><span class="dv">4000</span>,<span class="st">"BIG"</span>,<span class="st">"SMALL"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb121-4"><a href="#cb121-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(size)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>La función <code>case_when</code> permite crear nuevas variables a partir de condiciones múltiples, similar a una sentencia <code>if_else</code> anidada o a la instrucción <code>CASE WHEN</code> en SQL.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb122"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb122-1"><a href="#cb122-1" aria-hidden="true" tabindex="-1"></a>pacientes <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">ID =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">IMC =</span> <span class="fu">c</span>(<span class="dv">18</span>, <span class="dv">22</span>, <span class="dv">27</span>, <span class="dv">31</span>, <span class="dv">35</span>))</span>
+<span id="cb122-2"><a href="#cb122-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb122-3"><a href="#cb122-3" aria-hidden="true" tabindex="-1"></a>pacientes <span class="ot">&lt;-</span> pacientes <span class="sc">%&gt;%</span></span>
+<span id="cb122-4"><a href="#cb122-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">clasificacion =</span> <span class="fu">case_when</span>(</span>
+<span id="cb122-5"><a href="#cb122-5" aria-hidden="true" tabindex="-1"></a>    IMC <span class="sc">&lt;</span> <span class="fl">18.5</span> <span class="sc">~</span> <span class="st">"Bajo peso"</span>,</span>
+<span id="cb122-6"><a href="#cb122-6" aria-hidden="true" tabindex="-1"></a>    IMC <span class="sc">&gt;=</span> <span class="fl">18.5</span> <span class="sc">&amp;</span> IMC <span class="sc">&lt;</span> <span class="dv">25</span> <span class="sc">~</span> <span class="st">"Normal"</span>,</span>
+<span id="cb122-7"><a href="#cb122-7" aria-hidden="true" tabindex="-1"></a>    IMC <span class="sc">&gt;=</span> <span class="dv">25</span> <span class="sc">&amp;</span> IMC <span class="sc">&lt;</span> <span class="dv">30</span> <span class="sc">~</span> <span class="st">"Sobrepeso"</span>,</span>
+<span id="cb122-8"><a href="#cb122-8" aria-hidden="true" tabindex="-1"></a>    IMC <span class="sc">&gt;=</span> <span class="dv">30</span> <span class="sc">~</span> <span class="st">"Obesidad"</span></span>
+<span id="cb122-9"><a href="#cb122-9" aria-hidden="true" tabindex="-1"></a>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="agrupamiento" class="level5">
+<h5 class="anchored" data-anchor-id="agrupamiento"><strong>Agrupamiento</strong></h5>
+<div style="text-align: justify;">
+<p>Permite agrupar diferentes variables categóricas, a partir de las cuales se pueden realizar diferentes operaciones de cálculo:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb123"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb123-1"><a href="#cb123-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(Variedad) <span class="sc">%&gt;%</span></span>
+<span id="cb123-2"><a href="#cb123-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">summarise</span>(<span class="at">media_rend =</span> <span class="fu">mean</span>(Rendimiento, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb123-3"><a href="#cb123-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">sd_rend =</span> <span class="fu">sd</span>(Rendimiento, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb123-4"><a href="#cb123-4" aria-hidden="true" tabindex="-1"></a>       <span class="fu">arrange</span>(<span class="fu">desc</span>(media_rend))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Se pueden realizar agrupaciones y cálculos para diferentes variables:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb124"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb124-1"><a href="#cb124-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> </span>
+<span id="cb124-2"><a href="#cb124-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species) <span class="sc">%&gt;%</span> </span>
+<span id="cb124-3"><a href="#cb124-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb124-4"><a href="#cb124-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(</span>
+<span id="cb124-5"><a href="#cb124-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">.cols =</span> <span class="fu">c</span>(<span class="fu">where</span>(is.numeric),<span class="sc">-</span>year),</span>
+<span id="cb124-6"><a href="#cb124-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">.fns =</span> <span class="sc">~</span><span class="fu">mean</span>(., <span class="at">na.rm =</span> <span class="cn">TRUE</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 5
+  species   bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+  &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;dbl&gt;       &lt;dbl&gt;
+1 Adelie              38.8          18.3              190.       3701.
+2 Chinstrap           48.8          18.4              196.       3733.
+3 Gentoo              47.5          15.0              217.       5076.</code></pre>
+</div>
+</div>
+<p>Se pueden realizar agrupaciones con dos o más variables categóricas:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb126"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb126-1"><a href="#cb126-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> </span>
+<span id="cb126-2"><a href="#cb126-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species,island) <span class="sc">%&gt;%</span> </span>
+<span id="cb126-3"><a href="#cb126-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">avg_flipper =</span> <span class="fu">mean</span>(flipper_length_mm,<span class="at">na.rm=</span><span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb126-4"><a href="#cb126-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(avg_flipper))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'species'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+# Groups:   species [3]
+  species   island    avg_flipper
+  &lt;fct&gt;     &lt;fct&gt;           &lt;dbl&gt;
+1 Gentoo    Biscoe           217.
+2 Chinstrap Dream            196.
+3 Adelie    Torgersen        191.
+4 Adelie    Dream            190.
+5 Adelie    Biscoe           189.</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="contar-frecuencias" class="level5">
+<h5 class="anchored" data-anchor-id="contar-frecuencias"><strong>Contar frecuencias</strong></h5>
+<div style="text-align: justify;">
+<p>Una forma rápida de realizar conteos para una sola variable es:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb129"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb129-1"><a href="#cb129-1" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(penguins, year)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Para contar elementos dentro de las variables agrupadas:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb130"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb130-1"><a href="#cb130-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> </span>
+<span id="cb130-2"><a href="#cb130-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species,island) <span class="sc">%&gt;%</span> </span>
+<span id="cb130-3"><a href="#cb130-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'species'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+# Groups:   species [3]
+  species   island    `n()`
+  &lt;fct&gt;     &lt;fct&gt;     &lt;int&gt;
+1 Adelie    Biscoe       44
+2 Adelie    Dream        56
+3 Adelie    Torgersen    52
+4 Chinstrap Dream        68
+5 Gentoo    Biscoe      124</code></pre>
+</div>
+</div>
+<p>La función <code>distinct()</code> se utiliza para ver los factores dentro de una columna</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb133"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb133-1"><a href="#cb133-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> <span class="fu">distinct</span>(year)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>La función <code>n_distinct()</code> se utiliza para contar el número de factores diferentes dentro de una columna. La función <code>pull()</code> para escoger la columna a analizar.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb134"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb134-1"><a href="#cb134-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> <span class="fu">pull</span>(year) <span class="sc">%&gt;%</span> <span class="fu">n_distinct</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="eliminar-columnas-o-filas" class="level5">
+<h5 class="anchored" data-anchor-id="eliminar-columnas-o-filas"><strong>Eliminar columnas o filas</strong></h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb135"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb135-1"><a href="#cb135-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">select</span>(df, <span class="sc">-</span>Temperatura)   <span class="co"># Eliminar columna</span></span>
+<span id="cb135-2"><a href="#cb135-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">filter</span>(df, Rendimiento <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="co"># Mantener filas con rendimiento positivo</span></span>
+<span id="cb135-3"><a href="#cb135-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">slice</span>(<span class="sc">-</span><span class="dv">1087</span>, <span class="sc">-</span><span class="dv">1088</span>) <span class="co"># Se eliminan las filas #1087 y #1088 </span></span>
+<span id="cb135-4"><a href="#cb135-4" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">contains</span>(<span class="st">"bill"</span>)) <span class="co"># selecciona columnas que contienen "bill"</span></span>
+<span id="cb135-5"><a href="#cb135-5" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"kg"</span>))  <span class="co"># selecciona columnas que empiezan con "kg"</span></span>
+<span id="cb135-6"><a href="#cb135-6" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">ends_with</span>(<span class="st">"mm"</span>))  <span class="co"># selecciona columnas que terminan con "mm"</span></span>
+<span id="cb135-7"><a href="#cb135-7" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> <span class="fu">select</span>(year,species,body_mass_g,species) <span class="co"># Selección y asignación de nuevo orden</span></span>
+<span id="cb135-8"><a href="#cb135-8" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">where</span>(is.factor), body_mass_g) <span class="co"># Distinguiendo por atributos de columnas</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div style="text-align: justify;">
+<p>Si no existe una función apropiada, se puede utilizar la función <code>do()</code>, en el siguiente ejemplo se desarrolla la construcción de modelos lineales:</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb136"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb136-1"><a href="#cb136-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span> </span>
+<span id="cb136-2"><a href="#cb136-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species) <span class="sc">%&gt;%</span> </span>
+<span id="cb136-3"><a href="#cb136-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">do</span>(<span class="at">mod =</span> <span class="fu">lm</span>(body_mass_g <span class="sc">~</span> bill_length_mm, <span class="at">data =</span> .)) <span class="sc">%&gt;%</span> </span>
+<span id="cb136-4"><a href="#cb136-4" aria-hidden="true" tabindex="-1"></a>       <span class="fu">summarise</span>(<span class="at">rsq =</span> <span class="fu">summary</span>(mod)<span class="sc">$</span>r.squared)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="operador-pipe" class="level5">
+<h5 class="anchored" data-anchor-id="operador-pipe"><strong>Operador pipe</strong></h5>
+<div style="text-align: justify;">
+<p>El operador “tubería” <strong>(<code>%&gt;%</code>)</strong> facilita encadenar operaciones de forma legible, una versión más actualizada de este operador es <strong><code>|&gt;</code></strong>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb137"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb137-1"><a href="#cb137-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb137-2"><a href="#cb137-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Rendimiento <span class="sc">&gt;</span> <span class="dv">1000</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb137-3"><a href="#cb137-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Variedad) <span class="sc">%&gt;%</span></span>
+<span id="cb137-4"><a href="#cb137-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>En palabras, el anterior código lo que nos permite es: a partir de una base de datos, se filtran los individuos que tengan un rendimiento mayor a 1000, para luego agruparlas por el tipo de variedad y contar cuantas parcelas de cada variedad hay cuyo rendimiento sea mayor a 1000. Esta serie de pasos en la solicitud que se realiza se facilita con el operador pipe el cual nos va conectando las solicitudes a partir de otras de manera sucesiva.</p>
+</div>
+</section>
+<section id="conjunto-de-herramientas-de-la-rutina-purrr" class="level5">
+<h5 class="anchored" data-anchor-id="conjunto-de-herramientas-de-la-rutina-purrr"><strong>Conjunto de herramientas de la rutina <code>purrr</code></strong></h5>
+<div style="text-align: justify;">
+<p>En el contexto de la programación funcional de R, la familia de funciones <code>map()</code> permiten reemplazar muchos “for loops” con código que es más breve y más fácil de leer.</p>
+<p>Otras funciones más específicas de la familia <code>map()</code> son las siguientes:</p>
+<ul>
+<li><p><code>map()</code> - genera una lista</p></li>
+<li><p><code>map_lgl()</code> - genera vector lógico</p></li>
+<li><p><code>map_int()</code> - genera vector de enteros</p></li>
+<li><p><code>map_dbl()</code> - genera vector de doubles</p></li>
+<li><p><code>map_chr()</code> - genera vector de caracteres</p></li>
+<li><p><code>map_dfr()</code> - genera un data frame</p></li>
+<li><p><code>map2()</code> - iteración sobre dos conjuntos de datos</p></li>
+<li><p><code>pmap()</code> - itera sobre una lista de argumentos</p></li>
+</ul>
+<p>El uso genérico de la familia de funciones <code>map()</code>es el siguiente:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb138"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb138-1"><a href="#cb138-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map</span>(.x, .f, ...)</span>
+<span id="cb138-2"><a href="#cb138-2" aria-hidden="true" tabindex="-1"></a><span class="fu">map</span>(INPUT, FUNCTION_TO_APPLY, OPTIONAL_OTHER_STUFF)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Por ejemplo, suponga que desea calcular la mediana de cada columna de manera iterativa. Con esta libraría se omite la necesidad de requerir loops de funciones. Así,</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb139"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb139-1"><a href="#cb139-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
+<span id="cb139-2"><a href="#cb139-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(iris)</span>
+<span id="cb139-3"><a href="#cb139-3" aria-hidden="true" tabindex="-1"></a>iris2<span class="ot">=</span> <span class="fu">select</span>(iris,<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>)</span>
+<span id="cb139-4"><a href="#cb139-4" aria-hidden="true" tabindex="-1"></a><span class="fu">map_dbl</span>(iris2, median)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
+        5.80         3.00         4.35         1.30 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb141"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb141-1"><a href="#cb141-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"airquality"</span>)</span>
+<span id="cb141-2"><a href="#cb141-2" aria-hidden="true" tabindex="-1"></a><span class="fu">map_dbl</span>(airquality, mean, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="co"># devuelve directamente un vector numérico.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Ozone    Solar.R       Wind       Temp      Month        Day 
+ 42.129310 185.931507   9.957516  77.882353   6.993464  15.803922 </code></pre>
+</div>
+</div>
+<p>Sin embargo, el paquete <code>dplyr</code> cuenta con las funciones <code>lapply</code>, <code>sapply</code> y <code>tapply</code> las cuales veremos en que se diferencian a la propuesta de <code>purrr</code> o a la función de base <code>apply</code> .</p>
+<ul>
+<li><p><strong><code>apply(X, MARGIN, FUN)</code></strong></p>
+<ul>
+<li><p>Se usa con <strong>matrices</strong> o <strong>arrays</strong>.</p></li>
+<li><p>Aplica una función sobre las filas (<code>MARGIN = 1</code>) o columnas (<code>MARGIN = 2</code>).</p></li>
+<li><p>Ejemplo: <code>apply(matriz, 1, mean)</code> → calcula la media por fila.</p></li>
+</ul></li>
+</ul>
+<!-- -->
+<ul>
+<li><p><strong><code>lapply(X, FUN)</code></strong></p>
+<ul>
+<li><p>Se usa con <strong>listas o vectores</strong>.</p></li>
+<li><p>Devuelve siempre una <strong>lista</strong> de la misma longitud que <code>X</code>.</p></li>
+<li><p>Funciona similar a <code>lapply()</code>.</p></li>
+<li><p>Ejemplo: <code>lapply(lista, mean)</code> → calcula la media de cada elemento de la lista.</p></li>
+</ul></li>
+</ul>
+<!-- -->
+<ul>
+<li><p><strong><code>sapply(X, FUN)</code></strong></p>
+<ul>
+<li><p>Versión más “amigable” de <code>lapply()</code>.</p></li>
+<li><p>Intenta simplificar el resultado a un <strong>vector</strong> o <strong>matriz</strong>, si es posible.</p></li>
+<li><p>Ejemplo: <code>sapply(lista, mean)</code> → devuelve un vector de medias.</p></li>
+</ul></li>
+</ul>
+<!-- -->
+<ul>
+<li><p><strong><code>tapply(X, INDEX, FUN)</code></strong></p>
+<ul>
+<li><p>Se usa con <strong>vectores categorizados</strong>.</p></li>
+<li><p>Aplica la función por <strong>grupos definidos</strong> en un factor.</p></li>
+<li><p>Ejemplo: <code>tapply(ingresos, genero, mean)</code> → media de ingresos por género.</p></li>
+</ul></li>
+</ul>
+</div>
+</section>
+</section>
+</section>
+</section>
+<section id="caso-de-estudio" class="level2">
+<h2 class="anchored" data-anchor-id="caso-de-estudio">🚀 Caso de Estudio</h2>
+<div style="text-align: justify;">
+<p>Para el desarrollo de los siguientes módulos, se ha pensado en trabajar un caso de estudio por medio del cual analizaremos el uso de pesticidas en cultivos en diferentes estados de EE.UU asociándolo a datos de salud y nutrición de adultos en este país por medio de los resultados de una encuesta nacional. Este caso de estudio permite realizar un análisis ambiental y epidemiológico teniendo como eje central permitirnos llevar a cabo la enseñanza y aplicación de los diferentes módulos de este curso de manera transversal. Garantizando así, la aplicación de las temáticas vistas en el curso a partir de datos reales.</p>
+<section id="base-1-estimated-annual-agricultural-pesticide-use-by-major-crop-or-crop-group-for-states-of-the-conterminous-united-states-1992-2019-including-preliminary-estimates-for-2018-19" class="level4">
+<h4 class="anchored" data-anchor-id="base-1-estimated-annual-agricultural-pesticide-use-by-major-crop-or-crop-group-for-states-of-the-conterminous-united-states-1992-2019-including-preliminary-estimates-for-2018-19">Base 1: Estimated annual agricultural pesticide use by major crop or crop group for states of the conterminous United States 1992-2019 (including preliminary estimates for 2018-19)</h4>
+<p>La primera base de datos utilizada en este caso de estudio contiene estimaciones anuales del uso agrícola de pesticidas en los estados contiguos de Estados Unidos, para el período 1992-2019 (incluyendo estimaciones preliminares para 2018 y 2019). Su objetivo es proporcionar información a nivel estatal sobre el uso de compuestos pesticidas según el cultivo o grupo de cultivos, con el fin de mejorar la comprensión sobre en qué cultivos se aplican estos compuestos.</p>
+<p>Los datos provienen de estimaciones previamente elaboradas a nivel de condado mediante metodologías descritas en estudios de referencia (Thelin y Stone, 2013; Baker y Stone, 2015; Wieben, 2019, 2021a, 2021b). Aunque las estimaciones detalladas por cultivo a nivel de condado no se publican debido a la alta incertidumbre, los cultivos de gran extensión (maíz, soya, trigo, algodón, arroz y alfalfa) se presentan de manera individual a nivel estatal, mientras que los cultivos de menor superficie se agrupan (hortalizas y frutas, huertos y uvas, pastos y heno, y otros cultivos).</p>
+<p>El conjunto de datos incluye dos tablas de estimaciones anuales estatales de uso agrícola de pesticidas por cultivo o grupo de cultivos: una con estimaciones bajas y otra con estimaciones altas, además de la información de metadatos asociada. Estos datos han servido para generar series de tiempo anuales por pesticida y cultivo, disponibles en el <em>Pesticide National Synthesis Project</em>.</p>
+<p>Link de acceso a la base: <a href="https://www.sciencebase.gov/catalog/item/6081ae7cd34e8564d6866222" class="uri">https://www.sciencebase.gov/catalog/item/6081ae7cd34e8564d6866222</a></p>
+<p><a href="HighEstimate_AgPestUsebyCropGroup92to19.txt">Descargar la base de datos</a></p>
+<p>Nombre de la base de datos a trabajar: HighEstimate_AgPestUsebyCropGroup92to19</p>
+<p>Formato: .txt</p>
+<p>Propietario de los datos: National Water Quality Program</p>
+<p>Responsable de la elaboración: Christine M. Wieben</p>
+<p>Editor: U.S. Geological Survey</p>
+<p>Distribuidor: U.S. Geological Survey – ScienceBase</p>
+<p>Referencia: Wieben, C.M., 2021, Estimated annual agricultural pesticide use by major crop or crop group for states of the conterminous United States, 1992-2019 (including preliminary estimates for 2018-19): U.S. Geological Survey, <a href="https://doi.org/10.5066/P900FZ6Y." class="uri">https://doi.org/10.5066/P900FZ6Y.</a></p>
+</section>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb143"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb143-1"><a href="#cb143-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb143-2"><a href="#cb143-2" aria-hidden="true" tabindex="-1"></a>pesticide_use <span class="ot">&lt;-</span> <span class="fu">read_table</span>(<span class="st">"HighEstimate_AgPestUsebyCropGroup92to19.txt"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="base-2-national-health-and-nutrition-examination-survey-2017-march-2020-pre-pandemic" class="level4">
+<h4 class="anchored" data-anchor-id="base-2-national-health-and-nutrition-examination-survey-2017-march-2020-pre-pandemic">Base 2: National Health and Nutrition Examination Survey 2017-March 2020 Pre-pandemic</h4>
+<div style="text-align: justify;">
+<p>La Encuesta Nacional de Examen de Salud y Nutrición (NHANES) es una encuesta única en EE. UU. que combina entrevistas presenciales con exámenes físicos estandarizados y pruebas de laboratorio. Desde 1999, se realiza de manera continua con datos representativos a nivel nacional publicados cada dos años. Sin embargo, en marzo de 2020, la pandemia de COVID-19 interrumpió la recolección de datos del ciclo 2019–2020, lo que impidió que esa muestra fuera representativa a nivel nacional.</p>
+<p>Como solución, los datos parciales de 2019–marzo de 2020 se combinaron con los datos completos del ciclo anterior (2017–2018), creando así un conjunto de datos llamado NHANES 2017–marzo de 2020 prepandemia, que sí permite generar estimaciones representativas para la población civil no institucionalizada de EE. UU.</p>
+<p>Alrededor de 5,000 personas son seleccionadas mediante un proceso científico aleatorio para asegurar que los resultados representen con precisión la salud y el estado nutricional de toda la diversa nación estadounidense.</p>
+<p>Para mayor información consultar la página oficial de <a href="https://www.cdc.gov/nchs/data/nhsr/nhsr158-508.pdf">National Health Statistics Reports No.&nbsp;158</a></p>
+<p>Link de acceso a la base: <a href="https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?Cycle=2017-2020" class="uri">https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?Cycle=2017-2020</a></p>
+<p>Program director: Dr.&nbsp;Alan Simon</p>
+<p>Content source: CDC/National Center for Health Statistics</p>
+<p>Las secciones a considerar de esta encuesta son:</p>
+<ul>
+<li><p>Demographics Data <a href="https://wwwn.cdc.gov/nchs/nhanes/search/datapage.aspx?Component=Demographics&amp;Cycle=2017-2020">Link</a></p></li>
+<li><p>Dietary Data <a href="https://wwwn.cdc.gov/nchs/nhanes/search/datapage.aspx?Component=Dietary&amp;Cycle=2017-2020">Link</a></p></li>
+<li><p>Examination Data <a href="https://wwwn.cdc.gov/nchs/nhanes/search/datapage.aspx?Component=Examination&amp;Cycle=2017-2020">Link</a></p></li>
+<li><p>Laboratory Data <a href="https://wwwn.cdc.gov/nchs/nhanes/search/datapage.aspx?Component=Laboratory&amp;Cycle=2017-2020">Link</a></p></li>
+<li><p>Questionnaire Data <a href="https://wwwn.cdc.gov/nchs/nhanes/search/datapage.aspx?Component=Questionnaire&amp;Cycle=2017-2020">Link</a></p></li>
+</ul>
+<p>Para cada base se seleccionarán exclusivamente variables que sean útiles para el caso de estudio, ya sea por creencia de relación entre estas o debido a los registros de la literatura.</p>
+<p><strong>Demographic Data</strong></p>
+<p>Demographic Variables and Sample Weights : P_DEMO.xpt</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb144"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb144-1"><a href="#cb144-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'haven' was built under R version 4.4.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb146"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb146-1"><a href="#cb146-1" aria-hidden="true" tabindex="-1"></a>demographic_variables <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">"P_DEMO.xpt"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Dietary Data</strong></p>
+<p>Dietary Interview - Total Nutrient Intakes, First Day : P_DR1TOT.xpt</p>
+<p>Dietary Interview - Total Nutrient Intakes, Second Day : P_DR2TOT.xpt</p>
+<p>Dietary Supplement Use 30-Day - Total Dietary Supplements : P_DSQTOT.xpt</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb147"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb147-1"><a href="#cb147-1" aria-hidden="true" tabindex="-1"></a>nutrient_intakes_d1 <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">"P_DR1TOT.xpt"</span>)</span>
+<span id="cb147-2"><a href="#cb147-2" aria-hidden="true" tabindex="-1"></a>nutrient_intakes_d2 <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">"P_DR2TOT.xpt"</span>)</span>
+<span id="cb147-3"><a href="#cb147-3" aria-hidden="true" tabindex="-1"></a>dietary_supplements <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">"P_DSQTOT.xpt"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Examination Data</strong></p>
+<p>Blood Pressure - Oscillometric Measurement : P_BPXO.xpt</p>
+<p>Body Measures : P_BMX.xpt</p>
+<p>Oral Health - Dentition : P_OHXDEN.xpt</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb148"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb148-1"><a href="#cb148-1" aria-hidden="true" tabindex="-1"></a>blood_pressure <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">"P_BPXO.xpt"</span>)</span>
+<span id="cb148-2"><a href="#cb148-2" aria-hidden="true" tabindex="-1"></a>body_measures  <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">"P_BMX.xpt"</span>)</span>
+<span id="cb148-3"><a href="#cb148-3" aria-hidden="true" tabindex="-1"></a>oral_health    <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">"P_OHXDEN.xpt"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Laboratory Data</strong></p>
+<p>Organophosphate Insecticides - Dialkyl Phosphate Metabolites - Urine : P_OPD.xpt</p>
+<p>Lead, Cadmium, Total Mercury, Selenium, &amp; Manganese - Blood : P_PBCD.xpt</p>
+<p>Glycohemoglobin : P_GHB.xpt</p>
+<p>High-Sensitivity C-Reactive Protein : P_HSCRP.xpt</p>
+<p>Plasma Fasting Glucose : P_GLU.xpt</p>
+<p>Complete Blood Count with 5-Part Differential in Whole Blood : P_CBC.xpt</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb149"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb149-1"><a href="#cb149-1" aria-hidden="true" tabindex="-1"></a>organophosphate_insecticides <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">"P_OPD.xpt"</span>)</span>
+<span id="cb149-2"><a href="#cb149-2" aria-hidden="true" tabindex="-1"></a>toxic_heavy_metals <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">"P_PBCD.xpt"</span>)</span>
+<span id="cb149-3"><a href="#cb149-3" aria-hidden="true" tabindex="-1"></a>HbA1c <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">"P_GHB.xpt"</span>)</span>
+<span id="cb149-4"><a href="#cb149-4" aria-hidden="true" tabindex="-1"></a>hs_CRP <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">"P_HSCRP.xpt"</span>)</span>
+<span id="cb149-5"><a href="#cb149-5" aria-hidden="true" tabindex="-1"></a>fasting_plasma_glucose <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">"P_GLU.xpt"</span>)</span>
+<span id="cb149-6"><a href="#cb149-6" aria-hidden="true" tabindex="-1"></a>complete_blood_count <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">"P_CBC.xpt"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Questionnaire Data</strong></p>
+<p>Pesticide Use : P_PUQMEC.xpt</p>
+<p>Occupation : P_OCQ.xpt</p>
+<p>Volatile Toxicant : P_VTQ.xpt</p>
+<p>Medical Conditions : P_MCQ.xpt</p>
+<p>Alcohol Use : P_ALQ.xpt</p>
+<p>Smoking - Cigarette Use : P_SMQ.xpt</p>
+<p>Smoking - Recent Tobacco Use : P_SMQRTU.xpt</p>
+<p>Physical Activity : P_PAQ.xpt</p>
+<p>Diet Behavior &amp; Nutrition : P_DBQ.xpt</p>
+<p>Dermatology : P_DEQ.xpt</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb150"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb150-1"><a href="#cb150-1" aria-hidden="true" tabindex="-1"></a>pesticide_use <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">"P_PUQMEC.xpt"</span>)         </span>
+<span id="cb150-2"><a href="#cb150-2" aria-hidden="true" tabindex="-1"></a>occupation <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">"P_OCQ.xpt"</span>)                </span>
+<span id="cb150-3"><a href="#cb150-3" aria-hidden="true" tabindex="-1"></a>volatile_toxicant <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">"P_VTQ.xpt"</span>)         </span>
+<span id="cb150-4"><a href="#cb150-4" aria-hidden="true" tabindex="-1"></a>medical_conditions <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">"P_MCQ.xpt"</span>)        </span>
+<span id="cb150-5"><a href="#cb150-5" aria-hidden="true" tabindex="-1"></a>alcohol_use <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">"P_ALQ.xpt"</span>)               </span>
+<span id="cb150-6"><a href="#cb150-6" aria-hidden="true" tabindex="-1"></a>smoking_cigarette <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">"P_SMQ.xpt"</span>)         </span>
+<span id="cb150-7"><a href="#cb150-7" aria-hidden="true" tabindex="-1"></a>smoking_recent_tobacco <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">"P_SMQRTU.xpt"</span>) </span>
+<span id="cb150-8"><a href="#cb150-8" aria-hidden="true" tabindex="-1"></a>physical_activity <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">"P_PAQ.xpt"</span>)         </span>
+<span id="cb150-9"><a href="#cb150-9" aria-hidden="true" tabindex="-1"></a>diet_behavior <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">"P_DBQ.xpt"</span>)             </span>
+<span id="cb150-10"><a href="#cb150-10" aria-hidden="true" tabindex="-1"></a>dermatology <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">"P_DEQ.xpt"</span>)              </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Basado en literatura sobre pesticidas, se considera priorizar las siguientes enfermedades:</p>
+<ol type="1">
+<li><p><strong>Trastornos neurológicos</strong>: Parkinson, neuropatías.</p></li>
+<li><p><strong>Diabetes/Obesidad</strong>: Disruptores endocrinos.</p></li>
+<li><p><strong>Cáncer</strong>: Linfoma, leucemia.</p></li>
+<li><p><strong>Problemas respiratorios</strong>: Asma.</p></li>
+</ol>
+</div>
+</section>
+</section>
+<section id="tarea-y-repaso" class="level2">
+<h2 class="anchored" data-anchor-id="tarea-y-repaso">🗂️ Tarea y Repaso</h2>
+<div style="text-align: justify;">
+<ul>
+<li><p><strong>Familiarizarse con paquetes y funciones necesarias</strong></p>
+<ul>
+<li>Descarga los paquetes mencionados en el modulo que te permitan cargar archivos de diferentes extensiones en el programa, algunos de estos programas necesarios serán: haven, readr, readxl, entre otros.</li>
+<li>Investiga cual es la diferencia entre las funciones de base y de algunos paquetes como por ejemplo: read.table() y read_table(), read.csv() y read_csv(), bind_cols() y cbind(). Concluye si algunas son mejores en algunos escenarios o cuál preferirías usar en un entorno de trabajo más óptimo.</li>
+<li>Crea una base de datos con información de fácil acceso en Excel y posteriormente abre esta base de datos desde el software de RStudio. Luego intenta hacer la misma base de datos directamente programándola con código R.</li>
+</ul></li>
+</ul>
+<p>En caso de obtener algún mensaje de error (warnings) en la consola, verifica a qué se pudo deber, investígalo y corrígelo hasta obtener una salida esperada. Recuerda que si no estas seguro de cómo implementar alguna función puedes utilizar el comando <code>?help</code> en la consola para acceder a la ayuda en la que encontrarás la documentación de paquetes y funciones implementadas en <code>R</code>.</p>
+</div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" style="text-align: justify;">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📚 <strong>Bibliografía</strong>
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li><p>Rojas-Jimenez, K. 2022. Ciencia de Datos para Ciencias Naturales.&nbsp;<a href="https://bookdown.org/keilor_rojas/CienciaDatos/" class="uri">https://bookdown.org/keilor_rojas/CienciaDatos/</a></p></li>
+<li><p>Lowndes, Julie &amp; Horst, Allison. 2020. R for Excel Users. <a href="https://jules32.github.io/r-for-excel-users/" class="uri">https://jules32.github.io/r-for-excel-users/</a></p></li>
+<li><p>R-Data Frames. 2025. <a href="https://www.geeksforgeeks.org/r-language/r-data-frames/" class="uri">https://www.geeksforgeeks.org/r-language/r-data-frames/</a></p></li>
+</ul>
+</div>
+</div>
+</div>
+<div style="text-align: center;">
+<p>Copyright © 2025 Jose Miguel Leon - Created with <a href="https://quarto.org">Quarto</a></p>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
