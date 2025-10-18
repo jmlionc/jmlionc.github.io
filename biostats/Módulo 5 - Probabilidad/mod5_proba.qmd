@@ -1,0 +1,778 @@
+---
+title: "Módulo 5: Probabilidad"
+subtitle: "Bioestadística Fundamental y Estadística Fundamental para las Ciencias de la Salud"
+author: 
+- name: "Jose Miguel Leon Puentes"
+  affiliation: "Departamento de Estadística"
+institute: "Universidad Nacional de Colombia"
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 4
+    toc-title: Tabla de Contenido
+    other-links:
+      - text: Contacto
+        icon: mailbox
+        href: mailto:joleonp@unal.edu.co
+    code-links:
+      - text: GitHub
+        icon: github
+        href: https://github.com/jmlionc/AppliedBiostats
+
+editor: visual
+---
+
+## 🔰 Introducción
+
+En este módulo exploraremos las funciones de masa de probabilidad para variables discretas y las funciones de densidad de probabilidad (pdf) para variables continuas. Comprenderemos cómo estas funciones nos permiten describir la probabilidad de que un evento ocurra en un conjunto de datos biológicos. También, profundizaremos en conceptos clave como el valor esperado y la varianza, que nos ayudan a caracterizar el centro y la dispersión de una distribución.
+
+Aprenderás a utilizar el poder de R para trabajar con diferentes distribuciones de probabilidad. Cada distribución en R tiene cuatro funciones clave, identificadas por un prefijo:
+
+-   `p`: para la función de distribución acumulada (cdf) en un valor particular.
+
+-   `q`: para los cuantiles (la función inversa de la cdf) correspondientes a una probabilidad particular.
+
+-   `d`: para la función de densidad (pdf) en un valor particular.
+
+-   `r`: para la generación de valores aleatorios de una distribución particular.
+
+## 🎯 Objetivos
+
+1.  Distinguir y aplicar las funciones de masa de probabilidad para variables discretas y las funciones de densidad para variables continuas.
+
+2.  Calcular el valor esperado y la varianza para caracterizar distribuciones de probabilidad.
+
+3.  Implementar en R los métodos de conteo como combinaciones, permutaciones y factoriales.
+
+4.  Dominar las cuatro funciones clave (`p`, `q`, `d`, `r`) para trabajar con las principales distribuciones de probabilidad en R.
+
+5.  Resolver problemas prácticos de probabilidad, utilizando R como alternativa a las tablas estadísticas para obtener valores de distribución.
+
+6.  Interpretar y generar datos pseudo-aleatorios a partir de distribuciones específicas en R, comprendiendo la importancia de la replicabilidad.
+
+## 📖 Desarrollo
+
+La probabilidad clásica se basa en el principio de resultados igualmente probables. Si un experimento tiene un espacio muestral finito $S$ con $n$ resultados igualmente probables, y $A$ es un evento de interés dentro de $S$, la probabilidad clásica se define como: $$P(A)=\dfrac{n({A})}{n(S)}$$ Donde:
+
+-   $P(A)$: probabilidad del evento
+
+-   $n(A)$: número de resultados favorables al evento
+
+-   $n(S)$: número total de resultados posibles en el espacio muestral $S$.
+
+En resumen, la probabilidad de un evento se obtiene dividiendo el número de resultados favorables entre el total de resultados igualmente probables.
+
+**Lanzar una Moneda**
+
+Calculemos la probabilidad de obtener Cara (Heads) al lanzar una moneda justa.
+
+```{r}
+outcomes <- c("Heads", "Tails")
+total_outcomes <- length(outcomes)
+favorable_outcomes <- length(outcomes[outcomes == "Heads"])
+
+classical_prob <- favorable_outcomes / total_outcomes
+classical_prob
+```
+
+Se define un experimento de lanzar una moneda:
+
+-   `outcomes <- c("Heads", "Tails")`: crea un vector con los dos posibles resultados: "Cara" y "Cruz".
+
+-   `total_outcomes <- length(outcomes)`: obtiene el número total de resultados posibles, en este caso 2.
+
+-   `favorable_outcomes <- length(outcomes[outcomes == "Heads"])`: cuenta los resultados favorables, es decir, cuántas veces aparece "Cara" en el vector (1 vez).
+
+-   `classical_prob <- favorable_outcomes / total_outcomes`: calcula la probabilidad clásica dividiendo los resultados favorables entre el total (1/2 = 0.5).
+
+-   `classical_prob`: muestra la probabilidad de obtener "Cara" al lanzar una moneda justa, que es 0.5.
+
+**Baraja de Cartas**
+
+Calcular la probabilidad de sacar una espada de una baraja estándar de 52 cartas.
+
+```{r}
+deck <- rep(c("Spades", "Hearts", "Diamonds", "Clubs"), each = 13)
+total_cards <- length(deck)
+spades <- length(deck[deck == "Spades"])
+
+classical_prob_spade <- spades / total_cards
+classical_prob_spade
+```
+
+Este código nos ayuda a calcular la probabilidad de sacar una pica de una baraja normal. Como hay 52 cartas en total y 13 de ellas son picas, la probabilidad de sacar una pica es de 13 sobre 52, lo que se puede simplificar a 1 sobre 4 o 25 %. Por lo tanto, al sacar una carta de una baraja normal, hay un 25 % de probabilidad de que sea pica.
+
+Como parte del material complementario del módulo se recomienda la lectura de la introducción a la probabilidad desde la parte histórica disponible a través del siguiente link [Chapter 9 Introduction to probability](https://learningstatisticswithr.com/book/probability.html) del libro Learning Statistics with R de Danielle Navarro.
+
+### Métodos de Conteo
+
+#### Factorial
+
+**Fórmula**
+
+$$
+n! = n \cdot (n-1) \cdot (n-2) \cdots 2 \cdot 1, \quad n \geq 0
+$$
+
+**Propiedad especial** $$0! = 1$$
+
+**Implementación en R**
+
+```{r}
+#| eval: false
+factorial(n)
+```
+
+#### Permutaciones sin repetición
+
+**Fórmula**
+
+Número de formas de ordenar $n$ elementos distintos:
+
+$$P(n) = n!$$
+
+Número de permutaciones de $n$ elementos tomados de $k$:
+
+$$P(n,k) = \frac{n!}{(n-k)!}, \quad 0 \leq k \leq n$$
+
+**Implementación en R**
+
+```{r}
+# Permutaciones de n elementos tomados de k
+permutations <- function(n, k) {
+  factorial(n) / factorial(n - k)
+}
+
+permutations(5, 3) # Ejemplo: permutaciones de 5 elementos tomados de 3
+```
+
+#### Permutaciones con repetición
+
+**Fórmula**
+
+Si hay $n$ elementos con grupos repetidos de tamaños $n_1, n_2, \dots, n_r$:
+
+$$P = \frac{n!}{n_1! \, n_2! \cdots n_r!}$$
+
+**Implementación en R**
+
+```{r}
+# Permutaciones con repetición
+permutations_with_repetition <- function(counts) {
+  factorial(sum(counts)) / prod(factorial(counts))
+}
+
+# Ejemplo: letras de la palabra "MAMA"
+permutations_with_repetition(c(2,1,1))
+```
+
+#### Combinaciones sin repetición
+
+**Fórmula**
+
+Número de formas de elegir $k$ elementos de un conjunto de $n$:
+
+$$C(n,k) = \binom{n}{k} = \frac{n!}{k!(n-k)!}, \quad 0 \leq k \leq n $$
+
+```{r}
+#| eval: false  
+choose(n, k)
+
+# Ejemplo: número de formas de elegir 3 items de 5 items
+choose(5, 3)
+```
+
+**Generar Combinaciones**
+
+Suponga que desea generar todas las combinaciones de $n$ elementos (items) tomando $k$ cada vez.
+
+```{r}
+items <- 2:5
+k <- 2
+combn(items, k)
+```
+
+Otro ejemplo sería generar todas las combinaciones de los números 1 al 5 tomando de a tres:
+
+```{r}
+combn(1:5, 3)
+```
+
+Esta función combn() no se restringe a números. Tambien podemos generar combinaciones de cadenas de caracteres:
+
+```{r}
+combn(c("T1", "T2", "T3", "T4"), 3)
+```
+
+#### Combinaciones con repetición (combinaciones con reemplazo)
+
+**Fórmula**
+
+Número de formas de elegir $k$ elementos de un conjunto de $n$ con repetición:
+
+$$
+C_r(n,k) = \binom{n+k-1}{k}
+$$
+
+**Implementación en R**
+
+```{r}
+combinations_with_repetition <- function(n, k) {
+  choose(n + k - 1, k)
+}
+
+combinations_with_repetition(3, 2) # Ejemplo: elegir 2 de 3 con repetición
+```
+
+#### Coeficiente Multinomial
+
+**Fórmula**
+
+Para particionar $n$ elementos en $k$ grupos de tamaños $n_1, n_2, \dots, n_k$:
+
+$$\binom{n}{n_1, n_2, \dots, n_k} = \frac{n!}{n_1! \, n_2! \cdots n_k!}, \quad \sum_{i=1}^k n_i = n$$
+
+```{r}
+multinomial_coefficient <- function(counts) {
+  factorial(sum(counts)) / prod(factorial(counts))
+}
+
+# Ejemplo: particionar 5 en grupos de tamaños 2,2,1
+multinomial_coefficient(c(2,2,1))
+```
+
+### Distribuciones Discretas
+
+#### Distribución Uniforme
+
+**Función de Masa de Probabilidad**
+
+$$P(X = x) = \frac{1}{b-a+1}, \quad x = a, a+1, \dots, b$$
+
+**Valor Esperado**
+
+$$ 
+E[X] = \frac{a+b}{2}
+$$
+
+**Varianza**
+
+$$
+Var(X) = \frac{(b-a+1)^2 - 1}{12}
+$$
+
+**Implementación en R**
+
+```{r}
+#| eval: false
+# Probabilidad
+dunif(x, min = a, max = b)
+
+# Función de distribución
+punif(q, min = a, max = b)
+
+# Cuantiles
+qunif(p, min = a, max = b)
+
+# Generación
+runif(n, min = a, max = b)
+```
+
+#### Distribución de Bernoulli
+
+**Función de Masa de Probabilidad** $$
+P(X = x) = p^x (1-p)^{1-x}, \quad x \in \{0,1\}
+$$ **Valor Esperado** $$
+E[X] = p
+$$ **Varianza** $$
+Var(X) = p(1-p)
+$$ **Implementación en R**
+
+```{r}
+#| eval: false
+# Probabilidad
+dbinom(x, size = 1, prob = p)
+
+# Función de distribución
+pbinom(q, size = 1, prob = p)
+
+# Cuantiles
+qbinom(p, size = 1, prob = p)
+
+# Generación
+rbinom(n, size = 1, prob = p)
+```
+
+#### Distribución de Binomial
+
+**Función de Masa de Probabilidad**
+
+$$
+P(X = x) = \binom{n}{x} p^x (1-p)^{n-x}, \quad x = 0,1,\dots,n
+$$
+
+**Valor Esperado**
+
+$$
+E[X] = np
+$$
+
+**Varianza**
+
+$$
+Var(X) = np(1-p)
+$$
+
+**Implementación en R**
+
+```{r}
+#| eval: false
+dbinom(x, size = n, prob = p)
+pbinom(q, size = n, prob = p)
+qbinom(p, size = n, prob = p)
+rbinom(n, size = n, prob = p)
+```
+
+#### Distribución Binomial Negativa
+
+**Función de Masa de Probabilidad**
+
+$$
+P(X = x) = \binom{x+r-1}{x} (1-p)^x p^r, \quad x = 0,1,2,\dots
+$$
+
+**Valor Esperado**
+
+$$
+E[X] = r \frac{1-p}{p}
+$$
+
+**Varianza**
+
+$$
+Var(X) = r \frac{1-p}{p^2}
+$$
+
+**Implementación en R**
+
+```{r}
+#| eval: false
+dnbinom(x, size = r, prob = p)
+pnbinom(q, size = r, prob = p)
+qnbinom(p, size = r, prob = p)
+rnbinom(n, size = r, prob = p)
+```
+
+#### Distribución Geométrica
+
+**Función de Masa de Probabilidad**
+
+$$
+P(X = x) = (1-p)^{x-1}p, \quad x = 1,2,3,\dots
+$$
+
+**Valor Esperado**
+
+$$
+E[X] = \frac{1}{p}
+$$
+
+**Varianza**
+
+$$
+Var(X) = \frac{1-p}{p^2}
+$$
+
+**Implementación en R**
+
+```{r}
+#| eval: false
+dgeom(x, prob = p)      # Nota: en R cuenta "fracasos antes del primer éxito"
+pgeom(q, prob = p)
+qgeom(p, prob = p)
+rgeom(n, prob = p)
+
+```
+
+#### Distribución Hipergeométrica
+
+**Función de Masa de Probabilidad**
+
+$$
+P(X = x) = \frac{\binom{K}{x} \binom{N-K}{n-x}}{\binom{N}{n}}, \quad x = 0,1,\dots,n
+$$
+
+**Valor Esperado**
+
+$$
+E[X] = n \frac{K}{N}
+$$
+
+**Varianza**
+
+$$
+Var(X) = n \frac{K}{N}\left(1-\frac{K}{N}\right)\frac{N-n}{N-1}
+$$
+
+**Implementación en R**
+
+```{r}
+#| eval: false
+dhyper(x, m = K, n = N-K, k = n)
+phyper(q, m = K, n = N-K, k = n)
+qhyper(p, m = K, n = N-K, k = n)
+rhyper(nn, m = K, n = N-K, k = n)
+```
+
+#### Distribución Poisson
+
+**Función de Masa de Probabilidad**
+
+$$
+P(X = x) = \frac{\lambda^x e^{-\lambda}}{x!}, \quad x = 0,1,2,\dots
+$$
+
+**Valor Esperado**
+
+$$
+E[X] = \lambda
+$$
+
+**Varianza**
+
+$$
+Var(X) = \lambda
+$$
+
+**Implementación en R**
+
+```{r}
+#| eval: false
+dpois(x, lambda = lmb)
+ppois(q, lambda = lmb)
+qpois(p, lambda = lmb)
+rpois(n, lambda = lmb)
+```
+
+::: callout-tip
+## Aproximaciones
+
+$Hg(N,M,n)\longrightarrow Bin(n,p)$
+
+Sea $0<p<1$. Si $N$, $M\longrightarrow\infty$ , de tal forma que $\frac{M}{N} \longrightarrow p$. El Tamaño de la población $N$ es "grande" en comparación con el tamaño de la muestra $n$, es decir, $\frac{n}{N}\longrightarrow 0$
+
+$Bin(n,p) \longrightarrow Poi(\lambda)$ si $0<p<1$ y $n\cdot p \longrightarrow \lambda$ cuando $n \longrightarrow \infty$ . Se tiene un $n$ muy "grande" comparado con un $p$ muy "pequeño"
+:::
+
+### Distribuciones Continuas
+
+#### Distribución Uniforme
+
+**Función de Densidad de Probabilidad**
+
+$$
+f(x) = \begin{cases} \frac{1}{b-a}, & a \leq x \leq b \\ 0, & \text{en otro caso} \end{cases}
+$$
+
+**Valor Esperado**
+
+$$
+E[X] = \frac{a+b}{2}
+$$
+
+**Varianza**
+
+$$
+Var(X) = \frac{(b-a)^2}{12}
+$$
+
+**Implementación en R**
+
+```{r}
+#| eval: false
+# Densidad
+dunif(x, min = a, max = b)
+
+# Función de distribución acumulada
+punif(q, min = a, max = b)
+
+# Cuantiles
+qunif(p, min = a, max = b)
+
+# Generación de valores
+runif(n, min = a, max = b)
+```
+
+#### Distribución Normal
+
+**Función de Densidad de Probabilidad**
+
+$$
+f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left( -\frac{(x-\mu)^2}{2\sigma^2} \right), \quad -\infty < x < \infty
+$$
+
+**Valor Esperado**
+
+$$
+E[X] = \mu
+$$
+
+**Varianza**
+
+$$
+Var(X) = \sigma^2
+$$
+
+**Implementación en R**
+
+```{r}
+#| eval: false
+dnorm(x, mean = mu, sd = sigma)
+pnorm(q, mean = mu, sd = sigma)
+qnorm(p, mean = mu, sd = sigma)
+rnorm(n, mean = mu, sd = sigma)
+```
+
+#### Distribución Gamma
+
+**Función de Densidad de Probabilidad**
+
+$$
+f(x) = \frac{\beta^\alpha}{\Gamma(\alpha)} x^{\alpha - 1} e^{-\beta x}, \quad x > 0
+$$
+
+**Valor Esperado**
+
+$$
+E[X] = \frac{\alpha}{\beta}
+$$
+
+**Varianza**
+
+$$
+Var(X) = \frac{\alpha}{\beta^2}
+$$
+
+**Implementación en R**
+
+```{r}
+#| eval: false
+dgamma(x, shape = alpha, rate = beta)   # también: scale = 1/beta
+pgamma(q, shape = alpha, rate = beta)
+qgamma(p, shape = alpha, rate = beta)
+rgamma(n, shape = alpha, rate = beta)
+```
+
+#### Distribución Exponencial
+
+**Función de Densidad de Probabilidad**
+
+$$
+f(x) = \lambda e^{-\lambda x}, \quad x \geq 0
+$$
+
+**Valor Esperado**
+
+$$
+E[X] = \frac{1}{\lambda}
+$$
+
+**Varianza**
+
+$$
+Var(X) = \frac{1}{\lambda^2}
+$$
+
+**Implementación en R**
+
+```{r}
+#| eval: false
+dexp(x, rate = lambda)
+pexp(q, rate = lambda)
+qexp(p, rate = lambda)
+rexp(n, rate = lambda)
+```
+
+#### Distribución Chi - Cuadrado
+
+**Función de Densidad de Probabilidad**
+
+$$
+f(x) = \frac{1}{2^{k/2}\Gamma(k/2)} x^{k/2 - 1} e^{-x/2}, \quad x \geq 0
+$$
+
+**Valor Esperado**
+
+$$
+E[X] = k
+$$
+
+**Varianza**
+
+$$
+Var(X) = 2k
+$$
+
+**Implementación en R**
+
+```{r}
+#| eval: false
+dchisq(x, df = k)
+pchisq(q, df = k)
+qchisq(p, df = k)
+rchisq(n, df = k)
+```
+
+#### Distribución Beta
+
+**Función de Densidad de Probabilidad**
+
+$$
+f(x) = \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)} x^{\alpha - 1} (1-x)^{\beta - 1}, \quad 0 < x < 1
+$$
+
+**Valor Esperado**
+
+$$
+E[X] = \frac{\alpha}{\alpha + \beta}
+$$
+
+**Varianza**
+
+$$
+Var(X) = \frac{\alpha \beta}{(\alpha + \beta)^2 (\alpha + \beta + 1)}
+$$
+
+**Implementación en R**
+
+```{r}
+#| eval: false
+dbeta(x, shape1 = alpha, shape2 = beta)
+pbeta(q, shape1 = alpha, shape2 = beta)
+qbeta(p, shape1 = alpha, shape2 = beta)
+rbeta(n, shape1 = alpha, shape2 = beta)
+```
+
+| Distribution | Functions (CDF `p*`, Quantile `q*`, Density `d*`, Random `r*`) |
+|----|----|
+| **Bernoulli** | `pbinom`, `qbinom`, `dbinom`, `rbinom` (con size = 1) |
+| **Binomial** | `pbinom`, `qbinom`, `dbinom`, `rbinom` |
+| **Negative Binomial** | `pnbinom`, `qnbinom`, `dnbinom`, `rnbinom` |
+| **Geometric** | `pgeom`, `qgeom`, `dgeom`, `rgeom` |
+| **Hypergeometric** | `phyper`, `qhyper`, `dhyper`, `rhyper` |
+| **Poisson** | `ppois`, `qpois`, `dpois`, `rpois` |
+| **Uniform (discrete)** | No función directa, usar `sample()` o `runif()` con redondeo |
+| **Uniform (continuous)** | `punif`, `qunif`, `dunif`, `runif` |
+| **Normal** | `pnorm`, `qnorm`, `dnorm`, `rnorm` |
+| **Log Normal** | `plnorm`, `qlnorm`, `dlnorm`, `rlnorm` |
+| **Cauchy** | `pcauchy`, `qcauchy`, `dcauchy`, `rcauchy` |
+| **Exponential** | `pexp`, `qexp`, `dexp`, `rexp` |
+| **Gamma** | `pgamma`, `qgamma`, `dgamma`, `rgamma` |
+| **Chi-Square** | `pchisq`, `qchisq`, `dchisq`, `rchisq` |
+| **Beta** | `pbeta`, `qbeta`, `dbeta`, `rbeta` |
+| **Weibull** | `pweibull`, `qweibull`, `dweibull`, `rweibull` |
+| **F** | `pf`, `qf`, `df`, `rf` |
+| **Student t** | `pt`, `qt`, `dt`, `rt` |
+| **Studentized Range** | `ptukey`, `qtukey`, `dtukey`, `rtukey` |
+| **Logistic** | `plogis`, `qlogis`, `dlogis`, `rlogis` |
+| **Wilcoxon Rank Sum Statistic** | `pwilcox`, `qwilcox`, `dwilcox`, `rwilcox` |
+| **Wilcoxon Signed Rank Statistic** | `psignrank`, `qsignrank`, `dsignrank`, `rsignrank` |
+
+### Uso de `R` como alternativa a las tablas de valores para las distribuciones.
+
+![Representación del área acumulada a la izquierda de la puntuación Z.](areatotheleft.png){fig-align="center" width="512"}
+
+La función `pnorm()` - Probabilidad Acumulada - Calcula la probabilidad acumulada hasta un valor `q` (*z*), por defecto corresponde al área a la izquierda de `q`.
+
+```{r}
+pnorm(q = 1.96, mean = 0, sd = 1)
+```
+
+Devuelve ≈ **0.975**, que corresponde a la probabilidad de que una variable normal estándar sea menor o igual que 1.96.\
+\
+A este resultado es al que llegaríamos buscando en la típica tabla de los anexos de los libros de probabilidad. Usted puede comprobar el resultado observando la primera columna de la primera tabla dirigiéndose hasta el valor **1.9** y luego desplazándose de manera horizontal hasta hacer una intersección con el valor **.06** de la primera fila.
+
+<head>
+
+```{=html}
+<style>
+    .pdf-style {
+      width: 100%; /* El 100% del ancho del contenedor */
+      height: 80vh; /* El 80% de la altura de la ventana (viewport) */
+      border: 1px solid #ddd;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+  </style>
+```
+
+</head>
+
+<body>
+
+<embed src="standardnormaltable.pdf" type="application/pdf" class="pdf-style" />
+
+</body>
+
+**Uso de `lower.tail`**
+
+-   `lower.tail = TRUE` (valor por defecto): área a la **izquierda** de `q`.
+
+<!-- -->
+
+-   `lower.tail = FALSE`: área a la **derecha** de `q`.
+
+```{r}
+pnorm(q = 1.96, lower.tail = FALSE)
+```
+
+Devuelve ≈ **0.025**, que es el área a la derecha de 1.96. Que también podemos ver como 1 - 0.975.
+
+**Valor crítico (cuantil) - `qnorm()`**
+
+Hace el proceso inverso: dado un **nivel de probabilidad acumulada `p`**, devuelve el valor de `q` correspondiente en la distribución.
+
+```{r}
+qnorm(p = 0.975, mean = 0, sd = 1)
+```
+
+Devuelve ≈ **1.96**, el valor crítico de la normal estándar para un nivel de confianza del 95%.
+
+**Ejemplo:**
+
+Supongamos que la estatura de los hombres en una población se distribuye \~ Normal(μ = 170, σ = 6).
+
+1.  ¿Cuál es la probabilidad de que un hombre mida menos de 175 cm?
+
+```{r}
+pnorm(q = 175, mean = 170, sd = 6)
+```
+
+Es decir, **79.8%**.
+
+2.  ¿Cuál es la probabilidad de que mida más de 175 cm?
+
+```{r}
+pnorm(q = 175, mean = 170, sd = 6, lower.tail = FALSE)
+```
+
+Es decir, **20.2%**.
+
+3.  ¿Qué estatura corresponde al percentil 90?
+
+```{r}
+qnorm(p = 0.90, mean = 170, sd = 6)
+```
+
+Un hombre debe medir al menos **177.7 cm** para estar en el 10% más alto de la población.
+
+::: callout-important
+## Anotaciones
+
+1.  Ten en cuenta que al hacer uso de las funciones para la generación de valores aleatorios de una distribución particular, realmente se producen valores pseudo-aleatorios. ¿¡Por qué, cuál es la diferencia!?
+2.  El uso de la semilla garantizará la replicabilidad de los resultados obtenidos al generar esos datos a través de estas funciones.
+:::
+
+::: {style="text-align: center;"}
+Copyright © 2025 Jose Miguel Leon - Created with [Quarto](https://quarto.org)
+:::

@@ -1,0 +1,37 @@
+---
+format: html
+toc: false
+---
+
+::::::: columns
+::::: {.column width="35%"}
+![](pics/GridArt_20250902_225740209.jpg){fig-align="center" width="220" style="border-radius: 50%; box-shadow: 0px 4px 6px rgba(0,0,0,0.2);"}
+
+:::: {style="text-align: center;"}
+### Jose Miguel Leon P.
+
+::: {.social-icons style="text-align: center;"}
+[{{< fa solid envelope >}} Email](mailto:joleonp@unal.edu.co){.btn-social}\
+[{{< fa brands github >}} GitHub](https://github.com/jmlionc/AppliedBiostats){.btn-social}\
+[{{< fa brands linkedin >}} LinkedIn](https://www.linkedin.com/in/jmlion/){.btn-social}\
+[<i class="ai ai-orcid"></i> ORCID](https://orcid.org/0000-0003-3131-0864){.btn-social}
+:::
+::::
+:::::
+
+::: {.column .border-start .ps-4 style="text-align: justify;" width="55%"}
+### About me
+
+I am a final-year Statistics student at the National University of Colombia. I am passionate about applying statistics to complex problems in interdisciplinary contexts, particularly in economics and social sciences, combining methodological rigor with an applied approach to generate reliable evidence that supports data-driven strategic decisions.
+
+I have participated in research projects leading quantitative analyses, managing databases, and preparing reports. I have solid experience in data processing using programming tools, which has allowed me to develop critical thinking, strong analytical skills, and meticulous attention to detail in the quality of results delivered.
+
+I have also distinguished myself through communication skills that enabled me to present at international conferences, hold student leadership positions, perform in theater thanks to my acting background, and support teaching processes over recent years. These experiences provided me with a comprehensive perspective, leadership abilities, and a strong commitment to teamwork. In addition, I am fluent in English, acquired through years of study in Colombia, professional experience supporting international clients, and an academic exchange in Canada that strengthened my global outlook and confidence in diverse environments.
+:::
+:::::::
+
+------------------------------------------------------------------------
+
+::: {style="text-align: center;"}
+Copyright © 2025 Jose Miguel Leon - Created with [Quarto](https://quarto.org)
+:::

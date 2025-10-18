@@ -1,0 +1,312 @@
+---
+title: "Módulo 7: Métodos de Regresión"
+subtitle: "Bioestadística Fundamental y Estadística Fundamental para las Ciencias de la Salud"
+author: 
+- name: "Jose Miguel Leon Puentes"
+  affiliation: "Departamento de Estadística"
+institute: "Universidad Nacional de Colombia"
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 4
+    toc-title: Tabla de Contenido
+    other-links:
+      - text: Contacto
+        icon: mailbox
+        href: mailto:joleonp@unal.edu.co
+    code-links:
+      - text: GitHub
+        icon: github
+        href: https://github.com/jmlionc/AppliedBiostats
+
+editor: visual
+---
+
+## 🔰 Introducción
+
+::: {style="text-align: justify;"}
+El análisis de regresión es una herramienta fundamental en bioestadística para estudiar la relación entre una variable respuesta y una o más variables explicativas. En este módulo nos enfocaremos en el modelo lineal simple o normal, uno de los métodos más utilizados para describir y predecir relaciones lineales entre variables cuantitativas.
+
+A lo largo del módulo, se abordará la formulación teórica del modelo, los supuestos que lo sustentan, y los métodos necesarios para su ajuste e interpretación en el entorno de programación `R`. Además, se explorarán herramientas diagnósticas que permiten evaluar la validez del modelo, identificar observaciones atípicas o influyentes, y proponer posibles transformaciones cuando los supuestos no se cumplen.
+
+El enfoque de este módulo estará orientado a darle las herramientas necesarias para que pueda realizar una implementación del modelo con datos reales, un análisis de la salida generada por R e interpretar adecuadamente los resultados en contextos aplicados de la bioestadística.
+:::
+
+## 🎯 Objetivos
+
+1.  Formular e interpretar el modelo lineal simple bajo el enfoque clásico y sus supuestos fundamentales.
+
+2.  Ajustar el modelo lineal simple utilizando funciones del entorno R.
+
+3.  Seleccionar variables explicativas relevantes para el modelo.
+
+4.  Analizar los residuos y coeficientes del modelo para evaluar su ajuste.
+
+5.  Interpretar los parámetros estimados y la calidad global del modelo.
+
+6.  Aplicar técnicas diagnósticas para detectar problemas como heterocedasticidad, colinealidad, influencia y puntos de apalancamiento, proponiendo soluciones mediante transformaciones cuando sea necesario.
+
+## 🧰 Contenido
+
+1.  Selección de variables
+
+2.  Ajuste del modelo
+
+3.  Información de los residuos
+
+4.  Información sobre los coeficientes
+
+5.  Información sobre el modelo
+
+6.  Interpretación de los resultados
+
+7.  Métodos diagnósticos\
+    7.1. Análisis residual\
+    7.2. Análisis de sensibilidad o influencia\
+    7.3. Puntos de apalancamiento\
+    7.4. Heterocedasticidad\
+    7.5. Colinealidad\
+    7.6 Transformaciones
+
+## 📖 Desarrollo
+
+### Modelo Lineal
+
+#### 1. Formulación y supuestos
+
+En un **modelo de regresión lineal simple** se estudia la relación entre una variable dependiente $Y$ y una sola variable explicativa $X$:
+
+$$Y_i=\beta_0+\beta_1X_i+\varepsilon_i \quad i=1,2,\dots, n$$
+
+donde:
+
+-   $Y_i:$ variable respuesta para la observación $i$.
+
+-   $X_i:$ variable explicativa para la observación $i$.
+
+-   $\beta_0:$ intercepto o término constante.
+
+-   $\beta_1:$ pendiente, mide el cambio esperado en $Y$ por un cambio unitario en $X$.
+
+-   $\varepsilon_i:$ término de error aleatorio.
+
+En un **modelo de regresión lineal múltiple** se estudia la relación entre una variable dependiente $Y$ y una varias variables explicativas $(X_1, X_2, \dots, X_p)$ :
+
+$$Y_i=\beta_0+\beta_1X_{i1}+\beta_2X_{i2}+\cdots+\beta_pX_{ip}+\varepsilon_i \quad i=1,2,\dots, n$$ Cuya forma matricial está dada por:
+
+$$\mathbf{Y} = \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon}$$ donde:
+
+-   $\mathbf{Y}$ es un vector $n\times1$ de la variable dependiente.
+
+-   $\mathbf{Y}$ es la matriz de diseño $(n\times(p+1))$, que incluye una columna de 1's para el intercepto.
+
+-   $\boldsymbol{\beta}$ es el vector de parámetros $(p+1)\times1$
+
+-   $\boldsymbol{\varepsilon}$ es el vector de errores aleatorios
+
+Algunos de los supuestos básicos de la regresión lineal son los siguientes:
+
+1.  Linealidad: la relación entre $X$ y $Y$ es lineal.
+
+2.  Independencia: los errores son independientes entre sí.
+
+3.  Homoscedasticidad: la varianza de los errores es constante.
+
+4.  No multicolinealidad (solo en modelos múltiples).
+
+5.  Normalidad de los errores (opcional, según el objetivo).
+
+Sobre este último supuesto, no es necesario para estimar los coeficientes $(\hat{\beta}_0,\hat{\beta}_1)$ ya que gracias al teorema de Gauss–Markov, bajo los tres primeros supuestos los estimadores son insesgados y de varianza mínima (BLUE). Sin embargo, sí es necesario para la inferencia estadística: pruebas de significancia y construcción de intervalos de confianza.
+
+Si nos limitamos a estimar los coeficientes, aún podremos:
+
+-   Predecir valores de $Y$ para nuevos $X$ aún sin saber si la pendiente es "significativamente distinta de cero".
+
+-   Describir la relación observada, el coeficiente pendiente indica cuánto cambia $Y$ en promedio cuando $X$ cambia una unidad, en la muestra observada, sin necesidad de inferir a la población.
+
+-   Revisar el ajuste global del modelo (R², residuos, etc.)
+
+Luego, si el propósito es predecir o describir, basta con estimar coeficientes, pero si se desea generalizar a la población o validar hipótesis, requerimos inferencia, por efecto, normalidad o tamaño de muestra "grande" para que de manera asintótica esta sea respaldada por el teorema central del límite.
+
+#### 2. Comentarios sobre la interpretación de las salidas de R
+
+-   Evaluar el efecto del termino interacción en el modelo, es esencialmente, examinar si el efecto de una variable en el resultado depende de los valores de otra variable.
+
+-   El resultado de un modelo de regresión en `R` al hacer uso de la rutina `summary(modelo)` consiste en 4 partes:
+
+    -   **Formula del modelo ajustado**
+
+    -   **Estadística descriptiva de los residuos\
+        **Este resumen estadístico de los residuos, representa las diferencias entre las predicciones del modelo y las observaciones reales. Los residuos muestran que tan bien no se ajusta el modelo. La media de los residuos siempre es cero. Si los residuos se distribuyen con distribución normal, la mediana se espera que sea cero o un valor muy cercano a este, el primer y tercer cuartil sean simétricos al igual que el mínimo y el máximo.
+
+    -   **Información sobre coeficientes\
+        **Esta sección muestra 4 apartados que se detallan a continuación:
+
+        -   Coeficientes estimados (*"`ESTIMATE`"*): contiene los valores de cada variable explicatoria que representan el efecto de esa variable sobre la variable dependiente.
+
+        -   Errores estándar ("`Std. Error`"): es el valor que mide que tan precisa es la estimación de cada coeficiente. Valores altos indican que la predicción es menos precisa.
+
+        -   Valores t ("`t-values`"): valor estadístico para probar que el coeficiente no es cero. Un valor positivo o negativo indica que el coeficiente no es cero. Entre más grande el valor, se indica que el coeficiente es mas fiable. $t=estimate/std. error$
+
+        -   Valores p ("`p-values`"): indican la probabilidad de obtener un resultado tan extremo como el observado (o más), suponiendo que la hipótesis nula es verdadera. En el caso de un coeficiente de regresión, la hipótesis nula plantea que dicho coeficiente es igual a cero (es decir, que la variable no tiene efecto).
+
+            Si el $valor-p < 0.05$, existe evidencia estadísticamente significativa al nivel del 5% para rechazar la hipótesis nula y concluir que el coeficiente es distinto de cero.
+
+    -   **Información sobre el modelo**
+
+-   La interpretación de los coeficientes se suele dar como sigue: Un incremento de una unidad en la variable distancia, causa un incremento de 4.96 unidades.
+
+-   El intercepto representa el valor predicho de la variable dependiente cuando las otras variables son cero.
+
+-   La linealidad del modelo está dada por los coeficientes (los $\beta$'s) mas no hay restricciones de la naturaleza de las covariables respecto a esta característica.
+
+-   El sistema de hipótesis para los coeficientes es el siguiente:
+
+    $$H_0:\beta_j=\beta_j° \quad \text{vs} \quad H_1:\beta_j\neq\beta_j°$$
+
+    la regla de decisión para el anterior sistema de hipótesis es:
+
+    Rechazar H_0 con un nivel de significancia de $100(\alpha)\%$ si $p-value < \alpha$
+
+    De aquí, el error tipo 1 consiste en rechazar $H_0$ cuando ella es verdadera y el error tipo 2 consiste en no rechazar $H_0$ cuando es falsa.
+
+-   Existen varias rutinas disponibles en `R` para seleccionar variables significativas. algunas de estas son:
+
+    **Best Subset Selection**
+
+    ```{r}
+    #| eval: false
+    library(leaps)
+    fit_a <- regsubsets(Y ~ ., data = datos, nvmax = 10)  # hasta 10 predictores
+    summary(fit_a)
+    ```
+
+    **Selección paso a paso (Stepwise Selection)**
+
+    ```{r}
+    #| eval: false
+    library(glmtoolbox)
+    data(Auto, package = "ISLR")
+    fit_b <- lm(mpg ~ horsepower + weight +origin, data = Auto)  
+    stepCriterion(fit_b, direction="forward", criterion="bic")
+    ```
+
+#### 3. Ejemplo 1: *races - glmtoolbox*
+
+Estos datos, disponibles en el objeto "races" de la biblioteca "glmtoolbox", consisten en el tiempo récord, la distancia y la subida acumulada de 35 carreras en cuesta en Escocia. El objetivo del análisis estadístico de estos datos es explicar las diferencias entre el tiempo récord de las carreras (rtime), en minutos, utilizando sus diferencias en distancia (distance), en millas, y subida acumulada (cclimb), en miles de pies.
+
+```{r warning=FALSE}
+library(glmtoolbox) 
+data(races)
+```
+
+1.  Ajuste a los datos un modelo lineal normal en el que el tiempo récord de las carreras sea la variable de respuesta, y la distancia y la subida acumulada sean las variables explicativas.
+
+```{r glmtoolbox}
+fit <- lm(rtime ~ distance + cclimb, data = races)
+```
+
+2.  Evalúe al nivel de signiﬁcancia del 5% si el efecto de la distancia sobre el tiempo récord esperado de la carrera depende de la escalada acumulada.
+
+```{r}
+fit2 <- lm(rtime ~ distance + cclimb + distance:cclimb, data = races)
+summary(fit2)
+anova(fit,fit2)
+```
+
+3.  Interprete las estimaciones de los parámetros, excepto el término de intercepción.
+
+Interpretación de la estimación de distacia: Por cada milla recorrida se incrementan 4.96 minutos en el tiempo record manteniendo constante la subida acumulada en la carrera. Altamente significante para un nivel del 5%.
+
+Interpretación de la estimacion de subida acumulada: Por cada mil pies que se suban hay un incremento de 3.71 minutos en el tiempo tiempo record manteniendo constante la distancia que se recorre en la carrera. Sin embargo el p-valor no es significante para un nivel del 5%.
+
+Interpretación de la estimacion de la interacción entre distancia y subida acumulada: Por cada unidad incrementada en la interacción entre distancia y subida acumulada, el cambio esperado en el tiempo record será aproximadamente de 0.66 unidades, manteniendo las otras variables constantes.
+
+4.  Estime el tiempo récord esperado, en minutos, de una carrera cuya distancia y ascenso acumulado son 7.5 millas y 1800 pies, respectivamente. Calcule esta estimación "manualmente" y utilizando la función predict()
+
+Manualmente:
+
+```{r}
+fit$coefficients
+
+distance <- 7.5
+cclimb <- 1.8
+
+rtime = -13.108551 + 6.350955*distance + 11.780133*cclimb
+rtime
+```
+
+Usando la función predict()
+
+```{r}
+new_distance <- 7.5
+new_cclimb <- 1.8
+
+y <- predict(fit, newdata = data.frame(distance=new_distance, cclimb=new_cclimb))
+
+y
+```
+
+#### 4. Ejemplo 2: *whiteside - MASS*
+
+Estos datos, disponibles en el objeto whiteside de la biblioteca MASS, se recopilaron para evaluar el efecto del aislamiento en el consumo de gas. El consumo semanal de gas (Gas), en miles de pies cúbicos, y la temperatura exterior media (Temp), en grados centígrados, se registraron durante 26 semanas antes (Insul="Antes") y durante 30 semanas después (Insul="Después") de que se instalara un aislamiento de la pared hueca de una casa.
+
+```{r}
+library(MASS)
+data("whiteside")
+```
+
+1.  Ajuste a los datos un modelo lineal normal en el que el consumo de gas sea la variable de respuesta, y la temperatura exterior media y la presencia/ausencia de aislamiento de la pared de la cavidad sean las variables explicativas.
+
+    ```{r}
+    fit3 <- lm(Gas ~ Temp + Insul, data = whiteside)
+    ```
+
+    $$
+    Gas = 6.55133 − 0.33670(Temp) − 1.56520
+    $$
+
+2.  Evalúe al nivel de signiﬁcancia del 5% si el efecto de la temperatura exterior media sobre el consumo de gas esperado depende de la presencia/ausencia de aislamiento en la pared.
+
+    ```{r}
+    fit4 <- lm(Gas ~ Temp*Insul, data = whiteside)
+    summary(fit4)
+    anova(fit4)
+    ```
+
+    Al nivel de significancia del 5%, existe evidencia estadísticamente significativa (0.00073 \< 0.05) de que el impacto de un incremento en la temperatura exterior media sobre el consumo de gas depende de la presencia/ausencia de aislamiento en la pared. El consumo de gas esperado disminuye tras la instalación del aislamiento, pero la velocidad a la que ocurre esta disminución se acentúa a medida que la temperatura aumenta.
+
+3.  Interprete las estimaciones de los parámetros excepto el término de intercepción.
+
+    Interpretación de la estimación de la temperatura: Por cada grado centrígrado que se incrementa la temperatura exterior, se disminuyen 0.39324 miles de pies cúbicos en el consumo semanal de gas. Altamente significante para un nivel del 5%.\
+
+    Interpretación de la estimacion de la instalación del aislamiento (después): Tras la instalacion del aislamiento de la pared hueca de la casa, se disminuyen 2.12998 miles de pies cúbico en el consumo de gas semanal esperado, controlando por temperatura. Altamente significante para un nivel del 5%.\
+
+    Interpretación de la interacción entre estimacion de la temperatura e instalación del aislamiento (después): La velocidad a la que disminuye el consumo de gas semanal es diferente con la ausencia o presencia de aislameinto en la pared de la casa. El cambio esperado en el consumo de gas semanal esperado sera de 0.1153 unidades posterior a la instalación del aislamiento e incrementando la temperatura una unidad.
+
+4.  Estime el consumo de gas esperado, en miles de pies cúbicos, en una semana en la que la temperatura exterior media sea de 5 grados centígrados y el aislamiento de la pared esté presente. Calcule esta estimación "manualmente" y utilizando la función predict(). \##### 2.1 Selección de variables
+
+    4.1 [Estimación manual]{.underline} :
+
+    ```{r}
+    fit3$coefficients
+    Temp <- 5
+    InsulAfter <- 1
+    Gas = 6.551329 + -0.336697*Temp - 1.565205*InsulAfter
+    Gas
+    ```
+
+    4.2 [Estimación con función `predict()`]{.underline} :
+
+    ```{r}
+    new_Temp <- 5
+    y <- predict(fit3, newdata = data.frame(Temp = new_Temp, Insul = "After"))
+    y
+    ```
+
+    En una semana, donde la temperatura promedio exterior es de 5°C y el aislamiento en la pared hueca de la casa ya se encuentra instalado, el consumo de gas estimado será de 3.3026 miles de pies cúbicos.
+
+::: {style="text-align: center;"}
+Copyright © 2025 Jose Miguel Leon - Created with [Quarto](https://quarto.org)
+:::

@@ -1,0 +1,1091 @@
+---
+title: "Módulo 3: Manipulación de Bases de Datos"
+subtitle: "Bioestadística Fundamental y Estadística Fundamental para las Ciencias de la Salud"
+author: 
+- name: "Jose Miguel Leon Puentes"
+  affiliation: "Departamento de Estadística"
+institute: "Universidad Nacional de Colombia"
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 3
+    toc-title: Tabla de Contenido
+    other-links:
+      - text: Contacto
+        icon: mailbox
+        href: mailto:joleonp@unal.edu.co
+    code-links:
+      - text: GitHub
+        icon: github
+        href: https://github.com/jmlionc/AppliedBiostats
+
+editor: visual
+---
+
+## 🔰 Introducción
+
+::: {style="text-align: justify;"}
+Veíamos en el módulo anterior algunas de las diferentes estructuras de datos disponibles en `R` para almacenar información, como lo son vectores, listas, matrices, data frames y tibbles. A continuación, se realiza una breve explicación de los diferentes métodos y herramientas indispensables a la hora de trabajar con bases de datos en cualquier formato. El propósito de las siguientes secciones es permitirle conocer diferentes formas de realizar consultas y de comunicarse con los datos, encontrar y resumir información que posteriormente le permitirá realizar análisis y procedimientos estadísticos más profundos. Este módulo es introductorio y junto al primer modulo constituyen la base de la autonomía en el lenguaje `R`.
+:::
+
+## 🎯 Objetivos
+
+-   Recordar las estructuras de datos disponibles en el software
+-   Entender como crear una base de datos dentro o fuera de la aplicación
+-   Descubrir las diferentes formas de acceder a bases de datos
+-   Ver las funciones requeridas para importar bases al programa
+-   Mostrar opciones para manipulación de bases de datos
+-   Proveer de elementos para la limpieza de bases de datos
+-   Introducción al concepto de imputación
+-   Garantizar la autonomía en el manejo de cualquier base de datos.
+
+## 📖 Desarrollo
+
+### 🏗️ Creación de Bases de Datos
+
+::: {style="text-align: justify;"}
+Debemos tener en cuenta que siempre que se desee almacenar información en formato arreglo, por lo general denotaremos las columnas como aquellos atributos o variables de interés, mientras que las filas en nuestro marco de datos serán los valores para los determinados individuos u objetos a analizar. Las celdas de este arreglo se conocen como las observaciones registradas.
+
+![Tomado de: R-Data Frames GeeksforGeeks](bases1.png)
+
+Una de las maneras mas sencillas para crear una tabla de este estilo en R es de la siguiente manera, creamos un data frame que iremos llenando por columnas o filas, para ello necesitaremos crear internamente o externamente listas, para este caso crearemos la base por columnas y las listas al interior del data frame:
+
+```{r}
+baseball_df <- data.frame(id = 0:6,
+           name = c("Avery Bradley", "John Holland", "Jonas Jerebko", "Jordan Mickey", 
+                    "Terry Rozier", "Jared Sullinger", "Evan Turner"),
+           team = rep("Boston Celtics", 7),
+           number = c(0, 30, 8, NA, 12, 7, 11),
+           position = c("PG", "SG", "PF", "PF", "PG", "C", "SG"),
+           age = c(25, 27, 29, 21, 22, NA, 27))
+baseball_df
+```
+
+Otra opción es crear la base de datos e ir llenando por filas, en esta ocasión haremos uso del paquete tibble y la función tribble que nos permite generar un data frame en formato tibble fila por fila.
+
+```{r}
+library(tibble)
+
+tribble(
+  ~id, ~name,            ~team,            ~number, ~position, ~age,
+  0,   "Avery Bradley",   "Boston Celtics", 0,      "PG",      25,
+  1,   "John Holland",    "Boston Celtics", 30,     "SG",      27,
+  2,   "Jonas Jerebko",   "Boston Celtics", 8,      "PF",      29,
+  3,   "Jordan Mickey",   "Boston Celtics", NA,     "PF",      21,
+  4,   "Terry Rozier",    "Boston Celtics", 12,     "PG",      22,
+  5,   "Jared Sullinger", "Boston Celtics", 7,      "C",       NA,
+  6,   "Evan Turner",     "Boston Celtics", 11,     "SG",      27
+)
+
+```
+
+La siguiente base simula un conjunto de 10 parcelas experimentales de quinoa en zonas altoandinas, para ilustrar cómo se integran datos de distintas fuentes (biología, clima, suelo y producción) en un contexto bioestadístico.
+
+```{r}
+#| label: tbl-microbioma
+#| tbl-cap: "Base de datos preliminar - Microbioma y rendimiento agrícola"
+#| echo: true
+#| message: false
+#| warning: false
+
+library(dplyr)
+
+set.seed(230125)
+
+parcelas <- paste0("P", 1:10)
+
+variedad_quinoa <- sample(
+  c("Blanca Real", "Negra Collana", "Roja Pasankalla"),
+  size = 10, replace = TRUE
+)
+
+microbioma_richness <- sample(120:250, size = 10, replace = TRUE)
+precipitacion_mm <- sample(50:200, size = 10, replace = TRUE)
+temp_media_c <- round(runif(10, min = 8, max = 18), 1)
+materia_organica_pct <- round(runif(10, min = 1.5, max = 5.0), 2)
+rendimiento_kg_ha <- round(runif(10, min = 1500, max = 3500), 1)
+
+df_microbioma <- data.frame(
+  Parcela = parcelas,
+  Variedad_Quinoa = variedad_quinoa,
+  Microbioma_Richness = microbioma_richness,
+  Precipitacion_mm = precipitacion_mm,
+  Temp_Media_C = temp_media_c,
+  Materia_Organica_pct = materia_organica_pct,
+  Rendimiento_kg_ha = rendimiento_kg_ha
+)
+
+df_microbioma
+```
+
+```{r}
+#| label: tbl-variables-microbioma
+#| tbl-cap: "Descripción de variables - Base Microbioma y Rendimiento Agrícola"
+#| echo: false
+#| message: false
+#| warning: false
+
+library(knitr)
+
+variables <- data.frame(
+  Variable = c(
+    "Parcela",
+    "Variedad_Quinoa",
+    "Microbioma_Richness",
+    "Precipitacion_mm",
+    "Temp_Media_C",
+    "Materia_Organica_pct",
+    "Rendimiento_kg_ha"
+  ),
+  Tipo_de_Dato = c(
+    "Categórica nominal",
+    "Categórica nominal",
+    "Numérica entera",
+    "Numérica entera",
+    "Numérica continua",
+    "Numérica continua",
+    "Numérica continua"
+  ),
+  Descripcion = c(
+    "Identificador único de la parcela experimental (P1 a P10).",
+    "Variedad cultivada: Blanca Real, Negra Collana o Roja Pasankalla.",
+    "Riqueza de especies microbianas en el suelo (OTUs) obtenidas por secuenciación de ADN.",
+    "Precipitación acumulada mensual en milímetros durante la etapa de crecimiento principal.",
+    "Temperatura media (°C) en la parcela durante la temporada de cultivo.",
+    "Porcentaje de materia orgánica del suelo determinado mediante análisis de laboratorio.",
+    "Producción estimada de quinoa en kilogramos por hectárea."
+  )
+)
+
+kable(variables, align = "l", col.names = c("Variable", "Tipo de dato", "Descripción"))
+```
+
+Sin embargo, más allá de crear una base de datos o un registro de información desde cero, se suele trabajar con bases de datos ya consolidadas. A continuación veremos como acceder a estos registros.
+:::
+
+### 🗝️ Acceso a Bases de Datos
+
+::: {style="text-align: justify;"}
+Existen muchas opciones de cargar un archivo en el que se encuentren los datos. Desde este programa tenemos la posibilidad de descargar directamente de internet, agregar una base de datos que se encuentre en nuestro computador, o incluso utilizar una de las bases de datos que trae incluidas R o acceder a alguna por medio de librerías.
+:::
+
+### 🗃️ Carga de Bases de Datos guardadas en el equipo
+
+La siguiente tabla muestra el tipo de archivo, la función por medio de la cual podemos acceder a su información:
+
+```{r}
+#| label: tbl-funciones-importacion
+#| tbl-cap: "Funciones para importar diferentes tipos de archivos en R"
+#| echo: false
+#| message: false
+#| warning: false
+
+library(knitr)
+
+importacion <- data.frame(
+  Archivo = c(
+    ".txt",
+    ".csv",
+    ".csv (punto y coma)",
+    ".xlsx / .xls",
+    ".dta",
+    ".sav",
+    ".xpt",
+    ".json",
+    ".rds",
+    ".RData"
+  ),
+  Funcion = c(
+    "read.table() o readr::read_table()",
+    "read.csv() o readr::read_csv()",
+    "read.csv2() o readr::read_csv2()", # este es bueno
+    "readxl::read_excel()",
+    "haven::read_dta()",
+    "haven::read_sav()",
+    "haven::read_xpt",
+    "jsonlite::fromJSON()",
+    "readRDS()",
+    "load()"
+  )
+)
+
+kable(importacion, align = "l", col.names = c("Tipo de archivo", "Función en R"))
+```
+
+::: callout-note
+Para usar correctamente estas funciones, se debe tener en cuenta la carpeta en la cual está el archivo que deseamos cargar en el programa.
+
+Una vez contemos con la dirección del directorio de este archivo, podremos incuirla al interior de los corchetes de la función.
+
+Como ejemplo suponga que la ubicación del archivo es `D:\Usuario\Descargas\HighEstimate_AgPestUsebyCropGroup92to19.txt`
+
+Luego para abrir este documento necesitaríamos usar la función de base `read.table()` del siguiente modo:
+
+```         
+library(readr)
+df_prueba <- read_table("D:/Usuario/Descargas/HighEstimate_AgPestUsebyCropGroup92to19.txt")
+```
+
+Note que es indispensable cambiar la disposición de los símbolos `\` por su dirección opuesta, es decir, `/` .
+:::
+
+::: {style="text-align: justify;"}
+Otra opción preferida por muchos usuarios para cargar algún archivo es mediante la fuente de editor (source editor). Podrá hacerlo para archivos cuyo tamaño no supero los 5 MB. Esta operación le permitirá tanto visualizar como importar el archivo de manera automática con opción de personalización. Luego, facilita el proceso, sobre todo en escenarios en los que se desconoce el formato en que se encuentran separados los datos ya sea, coma, punto y coma, o espacio.
+:::
+
+### ⛏️ Extraer Datos de Paquetes
+
+::: {style="text-align: justify;"}
+Los paquetes de R contiene datasets (base de datos) que se emplean normalmente para mostrar como funciona el paquete. Otros paquetes son bases de datos, como por ejemplo, el paquete *gapminder*. El paquete *gapminder* tiene datos para todos los países de población, pobreza y esperanza de vida entre otras variables.
+
+Un listado exhaustivo de paquetes que son exclusivamente bases de datos se puede encontrar en el siguiente enlace: [The R Datasets Package](https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/00Index.html). Otros paquetes nos brindan una interfaz para descargar datos de entidades como el Banco Mundial a través del paquete *WDI* (40 databases hosted by the World Bank, including the World Development Indicators ('WDI'), International Debt Statistics, Doing Business, Human Capital Index, and Sub-national Poverty indicators).
+
+El comando `data()` nos permite ver el listado de las bases de datos disponibles. Sin embargo podemos acceder a los datos de un solo paquete de la siguiente manera:
+
+```{r}
+library(gapminder)
+data(package = 'gapminder')
+```
+
+con lo cual obtendremos la siguiente salida:
+
+```{r}
+#| label: tbl-gapminder
+#| tbl-cap: "Objetos incluidos en el paquete Gapminder"
+#| echo: false
+#| message: false
+#| warning: false
+
+library(knitr)
+
+gapminder_objs <- data.frame(
+  Nombre = c(
+    "continent_colors",
+    "country_codes",
+    "country_colors",
+    "gapminder",
+    "gapminder_unfiltered"
+  ),
+  Descripcion = c(
+    "Gapminder color schemes",
+    "Country codes",
+    "Gapminder color schemes",
+    "Gapminder data",
+    "Gapminder data, unfiltered"
+  )
+)
+
+kable(gapminder_objs, align = "l", col.names = c("Nombre", "Descripción"))
+```
+
+Posteriormente podremos cargar la base de datos, por medio de la misma función:
+
+```{r}
+data("gapminder")
+force(gapminder)
+```
+:::
+
+### 🧭 Funciones y Operaciones
+
+::: {style="text-align: justify;"}
+En esta sección del modulo se le darán a conocer algunas de las funciones que resultan más útiles e indispensables a la hora de trabajar con bases de datos, desde el momento en que cargamos los datos en el programa y deseamos conocer el estado de dicha información. Veremos funciones para un primer acercamiento, una especie de *summary* o *glimpse.* Posteriormente, se desea proveer al estudiante del concepto de datos faltantes y su correspondiente manejo, introduciendo brevemente el concepto de imputación. Finalmente, se mostrarán situaciones que requieran del uso de funciones para determinados requerimientos en el procesamiento y/o manejo de la información.
+:::
+
+#### ¿Qué hacer cuando ya he cargado la base de datos?
+
+::: {style="text-align: justify;"}
+Lo primero que debemos hacer una vez hayamos cargado nuestra base de datos es asegurarnos que la información se encuentre correctamente subida y disponible para su tratamiento. Es por ello que, una de las primeras instrucciones sugeridas es visualizar en el programa la base de datos que se ha cargado. Hay dos formas muy fáciles de hacerlo, la primera es por medio de la función de base `View()` o haciendo click en la icono de cuadricula que aparece en la parte derecha del nombre del objeto en la sección Data del Panel Enviroment.
+
+```{r}
+View(df_microbioma)
+```
+
+También nos gustaría conocer información como los tipos de estructuras de datos que hemos cargado y las características de ellos. Esto lo podemos hacer mediante las siguientes funciones `str()` de base y `glimpse()` de la librería `dplyr`. Existe otra alternativa por medio del paquete `skimr` y de la función `skim()`.
+
+```{r}
+str(df_microbioma)
+glimpse(df_microbioma)
+```
+
+Ambas nos dan prácticamente la misma información, la especificación del número de filas u observaciones, número de columnas o variables, un listado de las variables, el tipo de datos de cada una de las variables y sus valores. Sin embargo, la función de base especifica un elemento adicional y es la clase del objeto. Tenga en cuenta que esta información también puede ser consultada de manera especifica de la siguiente manera:
+:::
+
+| Función | Descripción |
+|----|----|
+| `dim()` | Da la dimensión del objeto, número de filas y de columnas. |
+| `length()` o `ncol()` | Da el número de columnas del objeto. |
+| `nrow()` | Da el número de filas del objeto |
+| `names()` o `colnames()` | Da los nombres de las columnas |
+
+::: {style="text-align: justify;"}
+Además de conocer brevemente cómo está compuesta la base, otras características que podemos obtener de los datos con la función de base `summary()` es, para las variables que reciben entradas numéricas, se resumirá la información de los cuantiles por variable así como la media de los datos. Esto se explicará más a fondo en el siguiente módulo de estadística descriptiva exploratoria.
+
+En caso de querer cambiar los nombres que reciben nuestras variables, esto lo podemos hacer por medio de la misma función de base colnames() de la siguiente manera:
+
+```{r}
+colnames(df_microbioma)
+colnames(df_microbioma) <- c("ID", "Variedad", "Riqueza", "Precipitación", "Temperatura", "Materia_Orgánica", "Rendimiento")
+```
+
+El paquete `stringr` proporciona un conjunto coherente y consistente de funciones para trabajar y manipular cadenas (vectores de caracteres). Tiene como objetivo simplificar las operaciones comunes con cadenas, haciéndolas más intuitivas y fáciles de usar
+
+-   **Operaciones comunes con cadenas:**
+
+    Proporciona funciones para una amplia gama de tareas, entre las que se incluyen:
+
+    -   **Detección:** `str_detect()`, `str_starts()`, `str_ends()`
+
+    -   **Extracción:** `str_sub()`, `str_extract()`, `str_match()`
+
+    -   **Sustitución:** `str_replace()`, `str_replace_all()`
+
+    -   **Manipulación:** `str_to_lower()`, `str_to_upper()`, `str_trim()`, `str_pad()`, `str_squish()`
+
+    -   **División y unión:** `str_split()`, `str_c()`
+
+```{r}
+#| eval: false
+library(stringr)
+colnames(diccionario_limpio) <- str_trim(colnames(diccionario_limpio))
+colnames(diccionario_limpio) <- str_replace_all(colnames(diccionario_limpio), "\\s+", "_")
+colnames(diccionario_limpio) <- tolower(colnames(diccionario_limpio))
+diccionario_limpio <- diccionario_limpio %>%
+  mutate(variable = tolower(str_trim(variable)))
+```
+
+La función `rename()` se utiliza para cambiar de nombre a las columnas, por ejemplo:
+
+```{r}
+library(palmerpenguins)
+data(package = 'palmerpenguins')
+penguins <- penguins
+penguins %>% rename(isla = island)
+```
+
+Además de modificar el nombre de nuestras columnas, podremos agregarle atributos a nuestra base de datos para volverla más clara añadiéndole una breve descripción a cada variable que deseemos.
+:::
+
+```{r}
+attr(df_microbioma$ID, "label") <- "Identificador único de la parcela experimental"
+attr(df_microbioma$Variedad, "label") <- "Variedad cultivada: Blanca Real, Negra Collana o Roja Pasankalla"
+attr(df_microbioma$Riqueza, "label") <- "Riqueza de especies microbianas en el suelo (OTUs) obtenidas por secuenciación de ADN"
+attr(df_microbioma$Precipitación, "label") <- "Precipitación acumulada mensual en milímetros durante la etapa de crecimiento principal"
+attr(df_microbioma$Temperatura, "label") <- "Temperatura media (°C) en la parcela durante la temporada de cultivo"
+attr(df_microbioma$Materia_Orgánica, "label") <- "Porcentaje de materia orgánica del suelo determinado mediante análisis de laboratorio"
+attr(df_microbioma$Rendimiento, "label") <- "Producción estimada de quinoa en kilogramos por hectárea"
+```
+
+```{r}
+#| eval: false
+#| message: false
+#| warning: false
+#| error: false
+
+data2020$p6210 <- factor(data2020$p6210, levels = 1:12, ordered = TRUE)  # Educación (ordinal)
+
+data2020$p6100 <- factor(data2020$p6100, levels = 1:3, ordered = FALSE)  # Régimen de salud (nominal)
+```
+
+#### Verificación y manejo de datos faltantes (NA's)
+
+::: {style="text-align: justify;"}
+La función `summary` nos proporciona también la cantidad de NA´s por variable en caso de haberlas. Sin embargo existen otras alternativas para revisar datos faltantes en bases. Una opción es haciendo uso del comando `table(is.na(df))` el cual contabiliza el total de datos NA los cuales serán mostrados como TRUE y el total de valores con algún valor como entrada que se denominarán FALSE. Otra opción si se cuenta con una base de datos muy grande es revisar solo las variables de interés para ello especificamos en el comando `table(is.na(df$varible))`. Vea el siguiente ejemplo:\
+:::
+
+```{r}
+summary(baseball_df)
+table(is.na(baseball_df))
+table(is.na(baseball_df$number))
+table(is.na(baseball_df$age))
+```
+
+En caso de querer identificar variables con valores perdidos
+
+```{r}
+#| eval: false
+colnames(df)[colSums(is.na(df)) > 0] # ¿Qué variables tienen al menos un NA?
+colSums(is.na(df)) %>% .[. > 0] # Las que tienen NA's, ¿Cuántas tienen?
+```
+
+Una función que nos permite ver la proporción de datos faltantes en nuestra base de datos es:
+
+```{r}
+#| eval: false
+library(tidyr)
+proporcion_faltantes <- function(df) {
+  df %>%
+    summarise(across(everything(), ~ sum(is.na(.)) / n())) %>%
+    pivot_longer(everything(), names_to = "variable", values_to = "proporcion_faltantes") %>%
+    mutate(porcentaje_faltantes = proporcion_faltantes * 100) %>%
+    arrange(desc(porcentaje_faltantes))
+}
+
+print(proporcion_faltantes(database_ex))
+```
+
+| Función      | Descripción                                             |
+|--------------|---------------------------------------------------------|
+| drop_na()    | elimina filas con valores perdidos.                     |
+| replace_na() | reemplaza valores faltantes por un valor definido.      |
+| fill()       | propaga valores conocidos hacia adelante o hacia atrás. |
+
+Ejemplos de uso de las anteriores funciones:
+
+```{r}
+#| eval: false
+df_cleaned <- drop_na(df_microbioma)
+
+df_replaced <- df_microbioma %>% mutate(Riqueza = replace_na(Riqueza, 0))
+
+df_filled <- df_microbioma %>% fill(Variedad, .direction = "down")
+```
+
+Ahora suponga que dado un listado de variables que contienen NA's desea eliminar aquellos elementos.
+
+```{r}
+#| eval: false
+# Variables con NA's 
+variables_a_revisar <- c("estu_cod_depto_presentacion",   "punt_ingles",
+  "estu_cod_mcpio_presentacion",   "estu_cod_reside_depto",        
+  "estu_cod_reside_mcpio",         "estu_dedicacioninternet",      
+  "estu_dedicacionlecturadiaria",  "estu_depto_presentacion",      
+  "estu_depto_reside",             "estu_generacione",             
+  "estu_genero",                   "estu_horassemanatrabaja",      
+  "estu_inse_individual",          "estu_mcpio_presentacion",      
+  "estu_mcpio_reside",             "estu_nse_establecimiento",     
+  "estu_nse_individual",           "estu_repite",                  
+  "estu_tieneetnia",               "estu_tiporemuneracion")
+
+# Filtrar quitando NA en esas columnas
+datos_saber11 <- datos_saber11 %>%
+  filter(if_all(all_of(variables_a_revisar), ~ !is.na(.)))
+```
+
+```{r}
+#| eval: false
+# Eliminar filas con valores perdidos en variables clave
+df <- df %>%
+  filter(!is.na(variable1), !is.na(variable2))
+
+# Reemplazar NA en ciertas columnas por 0 (si aplica)
+df <- df %>%
+  mutate(across(starts_with("tiempo_"), ~replace_na(.x, 0)))
+```
+
+#### Limpieza de la base de datos
+
+::: {style="text-align: justify;"}
+El paquete `janitor` es útil para es estandarizar nombres de variables:
+
+```{r}
+library(janitor)
+colnames(df_microbioma)
+df_microbioma <- clean_names(df_microbioma)
+colnames(df_microbioma)
+```
+
+En caso de trabajar con datos en formato de fechas y/o horas, un paquete que facilita este manejo, simplificando el análisis y las operaciones es `lubridate`
+:::
+
+```{r}
+library("lubridate")
+date()
+now()
+ymd("20190317")
+mdy("03-17-2019")
+dmy("17/03/2019")
+ymd("20190317") + years(1:3)
+ymd("20190317") + months(0:6)
+```
+
+#### Operaciones entre bases de datos
+
+::: {style="text-align: justify;"}
+Algunas funciones útiles que son comunes para combinar distintas fuentes de información, son:
+:::
+
+##### **Unir bases**
+
+::: {style="text-align: justify;"}
+Cuando tenemos dos bases de datos con una columna en común (llamada **clave** o *key*), podemos combinarlas de distintas formas según la información que deseemos conservar.
+:::
+
+![Tomada de: Ciencia de Datos para Ciencias Naturales](join.png){fig-align="center"}
+
+| Función | Descripción | Esquema de conservación |
+|----|----|----|
+| **`left_join()`** | Mantiene **todas las filas** de la base de la izquierda. Si no hay coincidencia en la derecha, completa con `NA`. | “Conservo todo lo de la izquierda, complemento con lo de la derecha si existe.” |
+| **`right_join()`** | Mantiene **todas las filas** de la base de la derecha. Si no hay coincidencia en la izquierda, completa con `NA`. | “Conservo todo lo de la derecha, complemento con lo de la izquierda si existe.” |
+| **`inner_join()`** | Mantiene **solo las filas coincidentes** en ambas bases (la intersección). | “Me quedo únicamente con lo que coincide en ambas bases.” |
+| **`full_join()`** | Mantiene **todas las filas de ambas bases**. Si alguna no tiene coincidencia, completa con `NA`. | “Me quedo con todo, tanto de la izquierda como de la derecha.” |
+
+```{r}
+# Dos bases pequeñas de ejemplo
+df1 <- data.frame(ID = c(1,2,3), Var1 = c("A","B","C"))
+df2 <- data.frame(ID = c(2,3,4), Var2 = c("X","Y","Z"))
+df3 <- data.frame(ID = c(5,6,7), Var1 = c("B","A","A"))
+
+left_join(df1, df2, by = "ID")   # conserva todos los ID de df1
+right_join(df1, df2, by = "ID")  # conserva todos los ID de df2
+inner_join(df1, df2, by = "ID")  # conserva solo los ID que coinciden (2 y 3)
+full_join(df1, df2, by = "ID")   # conserva todos los ID de ambos (1,2,3,4)
+```
+
+```{r}
+bind_rows(df1, df3)   # Apilar filas
+rbind(df1, df3)
+
+bind_cols(df1, df2)   # Combinar columnas
+cbind(df1,df2)
+```
+
+#### Manipulación de Data Frames
+
+##### **Ordenar**
+
+```{r}
+#| eval: false
+df <- arrange(df, Variedad)                 # Orden ascendente
+df <- arrange(df, desc(Rendimiento))        # Orden descendente
+```
+
+Para escoger los individuos que presentaron los cinco valores más altos de una variables se podría hacer los siguiente:
+
+```{r}
+penguins %>%  
+  arrange(desc(bill_length_mm)) %>% 
+  top_n(n=5, wt=bill_length_mm)
+```
+
+Se puede cambiar la localización de las columnas con la función `relocate()` y los parámetros *`.before`* y *`.after`*
+
+```{r}
+penguins %>%  relocate(year, .after = species)
+```
+
+::: {style="text-align: justify;"}
+Los datos a lo ancho tienen una columna para cada variable y una fila para cada observación. Los datos a menudo se ingresan y almacenan de esta manera. Los datos ordenados a lo largo, por otro lado, tienen una columna que indica el tipo de variable contenida en esa fila y luego, en una columna separada, el valor de esa variable.
+:::
+
+![Tomada de: R for Excel Users Julie Lowndes & Allison Horst](pivot_longer.png)
+
+```{r}
+library(tidyr)
+data("airquality")
+head(airquality)
+
+largo <- airquality %>%
+  pivot_longer(c(Ozone, Solar.R, Wind, Temp), 
+                 names_to = "variable", values_to = "value")
+largo
+
+ancho <- largo %>%
+  pivot_wider(names_from = "variable", 
+              values_from = "value")
+ancho
+```
+
+##### **Transformar**
+
+```{r}
+#| eval: false
+
+transform(airquality, Ozone = -Ozone)
+transform(airquality, new = -Ozone, Temp = (Temp-32)/1.8)
+
+```
+
+##### **Selección de variables y creación de subconjuntos**
+
+```{r}
+#| eval: false
+
+subset(airquality, Temp > 80, select = c(Ozone, Temp))
+subset(airquality, Day == 1, select = -Temp)
+subset(airquality, select = Ozone:Wind)
+
+with(airquality, subset(Ozone, Temp > 80))
+```
+
+```{r}
+x <- 1:12
+m <- matrix(1:6, nrow = 2, dimnames = list(c("a", "b"), LETTERS[1:3]))
+li <- list(pi = pi, e = exp(1))
+x[10]                 # the tenth element of x
+x <- x[-1]            # delete the 1st element of x
+m[1,]                 # the first row of matrix m
+m[1, , drop = FALSE]  # is a 1-row matrix
+m[,1]                 # the fisrt column of matrix m
+m[,c(TRUE,FALSE,TRUE)]# logical indexing
+m[cbind(c(1,2,1),3:1)]# matrix numeric index
+ci <- cbind(c("a", "b", "a"), c("A", "C", "B"))
+m[ci]                 # matrix character index
+m <- m[,-1]           # delete the first column of m
+li[[1]]               # the first element of list li
+y <- list(1, 2, a = 4, 5)
+y[c(3, 4)]            # a list containing elements 3 and 4 of y
+y$a                   # the element of y named a
+mitad1 <- penguins[1:172, ] # partición de la primera mitad
+mitad2 <- penguins[173:344, ] # partición de la segunda mitad
+```
+
+Una alternativa a la función de base es con las rutinas de `dplyr` de las siguiente manera:
+
+```{r}
+#| eval: false
+df_sub <- select(df, ID, Variedad, Rendimiento)
+df_filtrado <- filter(df, Rendimiento > 2000, Variedad == "Blanca Real")
+df <- filter(df, !is.na(variable))
+df <- filter(df, variable != "valor")
+penguins %>% filter(bill_length_mm >= 50)
+penguins %>% filter(bill_length_mm >= 50 & island == "Dream")
+penguins %>% filter(island %in% c("Torgersen","Dream")) # permite seleccionar diferentes items dentro de una columna 
+penguins %>% filter(near(x = body_mass_g, y = 3500, tol = 500)) # permite escoger dentro de un rango de valores numéricos cercanos, estableciendo un valor de tolerancia
+penguins %>% filter(between(bill_length_mm, left = 43, right = 46)) # permite escoger un rango de valores numéricos dentro de un límite específico
+
+slice(df, 10:15) # selecciona filas por posición
+
+```
+
+##### **Operaciones entre columnas (Mutate)**
+
+Permite crear nuevas variables y realizar operaciones matemáticas entre ellas
+
+```{r}
+#| eval: false
+penguins %>% mutate(mass_kg = body_mass_g / 1000, .before=bill_length_mm)
+df <- df %>% mutate(Rendimiento_ajustado = Rendimiento / Precipitación)
+df$suma <- rowSums(df[, c("Riqueza", "Materia_Orgánica")], na.rm = TRUE)
+```
+
+::: {style="text-align: justify;"}
+Se utiliza la función `transmute()` cuando se quiere generar y mostrar solamente la columna resultante de una operación matemática entre variables
+
+```{r}
+#| eval: false
+penguins %>% 
+  transmute(bill_ratio = bill_length_mm/bill_depth_mm)
+```
+
+Además, con la inclusión del parámetro `if_else` se pueden definir categorías arbitrarias de clasificación dentro de variables numéricas. Esta función literalmente se leería como “si cumple con la siguiente característica lo clasifica como tal cosa, sino, como tal otra cosa”.
+
+```{r}
+#| eval: false
+penguins %>% 
+  drop_na() %>% 
+  mutate(size = if_else(body_mass_g>4000,"BIG","SMALL")) %>% 
+  count(size)
+```
+
+La función `case_when` permite crear nuevas variables a partir de condiciones múltiples, similar a una sentencia `if_else` anidada o a la instrucción `CASE WHEN` en SQL.
+:::
+
+```{r}
+pacientes <- data.frame(ID = 1:5, IMC = c(18, 22, 27, 31, 35))
+
+pacientes <- pacientes %>%
+  mutate(clasificacion = case_when(
+    IMC < 18.5 ~ "Bajo peso",
+    IMC >= 18.5 & IMC < 25 ~ "Normal",
+    IMC >= 25 & IMC < 30 ~ "Sobrepeso",
+    IMC >= 30 ~ "Obesidad"
+  ))
+
+```
+
+##### **Agrupamiento**
+
+::: {style="text-align: justify;"}
+Permite agrupar diferentes variables categóricas, a partir de las cuales se pueden realizar diferentes operaciones de cálculo:
+
+```{r}
+#| eval: false
+df %>% group_by(Variedad) %>%
+       summarise(media_rend = mean(Rendimiento, na.rm = TRUE),
+                 sd_rend = sd(Rendimiento, na.rm = TRUE)) %>%
+       arrange(desc(media_rend))
+```
+
+Se pueden realizar agrupaciones y cálculos para diferentes variables:
+
+```{r}
+penguins %>% 
+  group_by(species) %>% 
+  summarise(
+    across(
+      .cols = c(where(is.numeric),-year),
+      .fns = ~mean(., na.rm = TRUE)))
+```
+
+Se pueden realizar agrupaciones con dos o más variables categóricas:
+
+```{r}
+penguins %>% 
+  group_by(species,island) %>% 
+  summarise(avg_flipper = mean(flipper_length_mm,na.rm=TRUE)) %>% 
+  arrange(desc(avg_flipper))
+```
+:::
+
+##### **Contar frecuencias**
+
+::: {style="text-align: justify;"}
+Una forma rápida de realizar conteos para una sola variable es:
+
+```{r}
+#| eval: false
+count(penguins, year)
+```
+
+Para contar elementos dentro de las variables agrupadas:
+
+```{r}
+penguins %>% 
+  group_by(species,island) %>% 
+  summarise(n())
+```
+
+La función `distinct()` se utiliza para ver los factores dentro de una columna
+
+```{r}
+#| eval: false
+penguins %>% distinct(year)
+```
+
+La función `n_distinct()` se utiliza para contar el número de factores diferentes dentro de una columna. La función `pull()` para escoger la columna a analizar.
+:::
+
+```{r}
+#| eval: false
+penguins %>% pull(year) %>% n_distinct()
+```
+
+##### **Eliminar columnas o filas**
+
+```{r}
+#| eval: false
+df <- select(df, -Temperatura)   # Eliminar columna
+df <- filter(df, Rendimiento > 0) # Mantener filas con rendimiento positivo
+df <- df %>% slice(-1087, -1088) # Se eliminan las filas #1087 y #1088 
+penguins %>% select(contains("bill")) # selecciona columnas que contienen "bill"
+penguins %>% select(starts_with("kg"))  # selecciona columnas que empiezan con "kg"
+penguins %>% select(ends_with("mm"))  # selecciona columnas que terminan con "mm"
+penguins %>% select(year,species,body_mass_g,species) # Selección y asignación de nuevo orden
+penguins %>% select(where(is.factor), body_mass_g) # Distinguiendo por atributos de columnas
+```
+
+::: {style="text-align: justify;"}
+Si no existe una función apropiada, se puede utilizar la función `do()`, en el siguiente ejemplo se desarrolla la construcción de modelos lineales:
+:::
+
+```{r}
+#| eval: false
+penguins %>% 
+  group_by(species) %>% 
+  do(mod = lm(body_mass_g ~ bill_length_mm, data = .)) %>% 
+       summarise(rsq = summary(mod)$r.squared)
+```
+
+##### **Operador pipe**
+
+::: {style="text-align: justify;"}
+El operador "tubería" **(`%>%`)** facilita encadenar operaciones de forma legible, una versión más actualizada de este operador es **`|>`**.
+
+```{r}
+#| eval: false
+df %>% 
+  filter(Rendimiento > 1000) %>%
+  group_by(Variedad) %>%
+  summarise(n = n())
+```
+
+En palabras, el anterior código lo que nos permite es: a partir de una base de datos, se filtran los individuos que tengan un rendimiento mayor a 1000, para luego agruparlas por el tipo de variedad y contar cuantas parcelas de cada variedad hay cuyo rendimiento sea mayor a 1000. Esta serie de pasos en la solicitud que se realiza se facilita con el operador pipe el cual nos va conectando las solicitudes a partir de otras de manera sucesiva.
+:::
+
+##### **Conjunto de herramientas de la rutina `purrr`**
+
+::: {style="text-align: justify;"}
+En el contexto de la programación funcional de R, la familia de funciones `map()` permiten reemplazar muchos “for loops” con código que es más breve y más fácil de leer.
+
+Otras funciones más específicas de la familia `map()` son las siguientes:
+
+-   `map()` - genera una lista
+
+-   `map_lgl()` - genera vector lógico
+
+-   `map_int()` - genera vector de enteros
+
+-   `map_dbl()` - genera vector de doubles
+
+-   `map_chr()` - genera vector de caracteres
+
+-   `map_dfr()` - genera un data frame
+
+-   `map2()` - iteración sobre dos conjuntos de datos
+
+-   `pmap()` - itera sobre una lista de argumentos
+
+El uso genérico de la familia de funciones `map()`es el siguiente:
+
+```{r}
+#| eval: false
+map(.x, .f, ...)
+map(INPUT, FUNCTION_TO_APPLY, OPTIONAL_OTHER_STUFF)
+```
+
+Por ejemplo, suponga que desea calcular la mediana de cada columna de manera iterativa. Con esta libraría se omite la necesidad de requerir loops de funciones. Así,
+
+```{r}
+library(purrr)
+data(iris)
+iris2= select(iris,1:4)
+map_dbl(iris2, median)
+data("airquality")
+map_dbl(airquality, mean, na.rm = TRUE) # devuelve directamente un vector numérico.
+```
+
+Sin embargo, el paquete `dplyr` cuenta con las funciones `lapply`, `sapply` y `tapply` las cuales veremos en que se diferencian a la propuesta de `purrr` o a la función de base `apply` .
+
+-   **`apply(X, MARGIN, FUN)`**
+
+    -   Se usa con **matrices** o **arrays**.
+
+    -   Aplica una función sobre las filas (`MARGIN = 1`) o columnas (`MARGIN = 2`).
+
+    -   Ejemplo: `apply(matriz, 1, mean)` → calcula la media por fila.
+
+<!-- -->
+
+-   **`lapply(X, FUN)`**
+
+    -   Se usa con **listas o vectores**.
+
+    -   Devuelve siempre una **lista** de la misma longitud que `X`.
+
+    -   Funciona similar a `lapply()`.
+
+    -   Ejemplo: `lapply(lista, mean)` → calcula la media de cada elemento de la lista.
+
+<!-- -->
+
+-   **`sapply(X, FUN)`**
+
+    -   Versión más "amigable" de `lapply()`.
+
+    -   Intenta simplificar el resultado a un **vector** o **matriz**, si es posible.
+
+    -   Ejemplo: `sapply(lista, mean)` → devuelve un vector de medias.
+
+<!-- -->
+
+-   **`tapply(X, INDEX, FUN)`**
+
+    -   Se usa con **vectores categorizados**.
+
+    -   Aplica la función por **grupos definidos** en un factor.
+
+    -   Ejemplo: `tapply(ingresos, genero, mean)` → media de ingresos por género.
+:::
+
+## 🚀 Caso de Estudio
+
+::: {style="text-align: justify;"}
+Para el desarrollo de los siguientes módulos, se ha pensado en trabajar un caso de estudio por medio del cual analizaremos el uso de pesticidas en cultivos en diferentes estados de EE.UU asociándolo a datos de salud y nutrición de adultos en este país por medio de los resultados de una encuesta nacional. Este caso de estudio permite realizar un análisis ambiental y epidemiológico teniendo como eje central permitirnos llevar a cabo la enseñanza y aplicación de los diferentes módulos de este curso de manera transversal. Garantizando así, la aplicación de las temáticas vistas en el curso a partir de datos reales.
+
+#### Base 1: Estimated annual agricultural pesticide use by major crop or crop group for states of the conterminous United States 1992-2019 (including preliminary estimates for 2018-19)
+
+La primera base de datos utilizada en este caso de estudio contiene estimaciones anuales del uso agrícola de pesticidas en los estados contiguos de Estados Unidos, para el período 1992-2019 (incluyendo estimaciones preliminares para 2018 y 2019). Su objetivo es proporcionar información a nivel estatal sobre el uso de compuestos pesticidas según el cultivo o grupo de cultivos, con el fin de mejorar la comprensión sobre en qué cultivos se aplican estos compuestos.
+
+Los datos provienen de estimaciones previamente elaboradas a nivel de condado mediante metodologías descritas en estudios de referencia (Thelin y Stone, 2013; Baker y Stone, 2015; Wieben, 2019, 2021a, 2021b). Aunque las estimaciones detalladas por cultivo a nivel de condado no se publican debido a la alta incertidumbre, los cultivos de gran extensión (maíz, soya, trigo, algodón, arroz y alfalfa) se presentan de manera individual a nivel estatal, mientras que los cultivos de menor superficie se agrupan (hortalizas y frutas, huertos y uvas, pastos y heno, y otros cultivos).
+
+El conjunto de datos incluye dos tablas de estimaciones anuales estatales de uso agrícola de pesticidas por cultivo o grupo de cultivos: una con estimaciones bajas y otra con estimaciones altas, además de la información de metadatos asociada. Estos datos han servido para generar series de tiempo anuales por pesticida y cultivo, disponibles en el *Pesticide National Synthesis Project*.
+
+Link de acceso a la base: <https://www.sciencebase.gov/catalog/item/6081ae7cd34e8564d6866222>
+
+[Descargar la base de datos](HighEstimate_AgPestUsebyCropGroup92to19.txt)
+
+Nombre de la base de datos a trabajar: HighEstimate_AgPestUsebyCropGroup92to19
+
+Formato: .txt
+
+Propietario de los datos: National Water Quality Program
+
+Responsable de la elaboración: Christine M. Wieben
+
+Editor: U.S. Geological Survey
+
+Distribuidor: U.S. Geological Survey – ScienceBase
+
+Referencia: Wieben, C.M., 2021, Estimated annual agricultural pesticide use by major crop or crop group for states of the conterminous United States, 1992-2019 (including preliminary estimates for 2018-19): U.S. Geological Survey, <https://doi.org/10.5066/P900FZ6Y.>
+:::
+
+```{r}
+#| warning: false
+library(readr)
+pesticide_use <- read_table("HighEstimate_AgPestUsebyCropGroup92to19.txt")
+```
+
+#### Base 2: National Health and Nutrition Examination Survey 2017-March 2020 Pre-pandemic
+
+::: {style="text-align: justify;"}
+La Encuesta Nacional de Examen de Salud y Nutrición (NHANES) es una encuesta única en EE. UU. que combina entrevistas presenciales con exámenes físicos estandarizados y pruebas de laboratorio. Desde 1999, se realiza de manera continua con datos representativos a nivel nacional publicados cada dos años. Sin embargo, en marzo de 2020, la pandemia de COVID-19 interrumpió la recolección de datos del ciclo 2019–2020, lo que impidió que esa muestra fuera representativa a nivel nacional.
+
+Como solución, los datos parciales de 2019–marzo de 2020 se combinaron con los datos completos del ciclo anterior (2017–2018), creando así un conjunto de datos llamado NHANES 2017–marzo de 2020 prepandemia, que sí permite generar estimaciones representativas para la población civil no institucionalizada de EE. UU.
+
+Alrededor de 5,000 personas son seleccionadas mediante un proceso científico aleatorio para asegurar que los resultados representen con precisión la salud y el estado nutricional de toda la diversa nación estadounidense.
+
+Para mayor información consultar la página oficial de [National Health Statistics Reports No. 158](https://www.cdc.gov/nchs/data/nhsr/nhsr158-508.pdf)
+
+Link de acceso a la base: <https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?Cycle=2017-2020>
+
+Program director: Dr. Alan Simon
+
+Content source: CDC/National Center for Health Statistics
+
+Las secciones a considerar de esta encuesta son:
+
+-   Demographics Data [Link](https://wwwn.cdc.gov/nchs/nhanes/search/datapage.aspx?Component=Demographics&Cycle=2017-2020)
+
+-   Dietary Data [Link](https://wwwn.cdc.gov/nchs/nhanes/search/datapage.aspx?Component=Dietary&Cycle=2017-2020)
+
+-   Examination Data [Link](https://wwwn.cdc.gov/nchs/nhanes/search/datapage.aspx?Component=Examination&Cycle=2017-2020)
+
+-   Laboratory Data [Link](https://wwwn.cdc.gov/nchs/nhanes/search/datapage.aspx?Component=Laboratory&Cycle=2017-2020)
+
+-   Questionnaire Data [Link](https://wwwn.cdc.gov/nchs/nhanes/search/datapage.aspx?Component=Questionnaire&Cycle=2017-2020)
+
+Para cada base se seleccionarán exclusivamente variables que sean útiles para el caso de estudio, ya sea por creencia de relación entre estas o debido a los registros de la literatura.
+
+**Demographic Data**
+
+Demographic Variables and Sample Weights : P_DEMO.xpt
+
+```{r}
+library(haven)
+demographic_variables <- read_xpt("P_DEMO.xpt")
+```
+
+**Dietary Data**
+
+Dietary Interview - Total Nutrient Intakes, First Day : P_DR1TOT.xpt
+
+Dietary Interview - Total Nutrient Intakes, Second Day : P_DR2TOT.xpt
+
+Dietary Supplement Use 30-Day - Total Dietary Supplements : P_DSQTOT.xpt
+
+```{r}
+nutrient_intakes_d1 <- read_xpt("P_DR1TOT.xpt")
+nutrient_intakes_d2 <- read_xpt("P_DR2TOT.xpt")
+dietary_supplements <- read_xpt("P_DSQTOT.xpt")
+```
+
+**Examination Data**
+
+Blood Pressure - Oscillometric Measurement : P_BPXO.xpt
+
+Body Measures : P_BMX.xpt
+
+Oral Health - Dentition : P_OHXDEN.xpt
+
+```{r}
+blood_pressure <- read_xpt("P_BPXO.xpt")
+body_measures  <- read_xpt("P_BMX.xpt")
+oral_health    <- read_xpt("P_OHXDEN.xpt")
+```
+
+**Laboratory Data**
+
+Organophosphate Insecticides - Dialkyl Phosphate Metabolites - Urine : P_OPD.xpt
+
+Lead, Cadmium, Total Mercury, Selenium, & Manganese - Blood : P_PBCD.xpt
+
+Glycohemoglobin : P_GHB.xpt
+
+High-Sensitivity C-Reactive Protein : P_HSCRP.xpt
+
+Plasma Fasting Glucose : P_GLU.xpt
+
+Complete Blood Count with 5-Part Differential in Whole Blood : P_CBC.xpt
+
+```{r}
+organophosphate_insecticides <- read_xpt("P_OPD.xpt")
+toxic_heavy_metals <- read_xpt("P_PBCD.xpt")
+HbA1c <- read_xpt("P_GHB.xpt")
+hs_CRP <- read_xpt("P_HSCRP.xpt")
+fasting_plasma_glucose <- read_xpt("P_GLU.xpt")
+complete_blood_count <- read_xpt("P_CBC.xpt")
+```
+
+**Questionnaire Data**
+
+Pesticide Use : P_PUQMEC.xpt
+
+Occupation : P_OCQ.xpt
+
+Volatile Toxicant : P_VTQ.xpt
+
+Medical Conditions : P_MCQ.xpt
+
+Alcohol Use : P_ALQ.xpt
+
+Smoking - Cigarette Use : P_SMQ.xpt
+
+Smoking - Recent Tobacco Use : P_SMQRTU.xpt
+
+Physical Activity : P_PAQ.xpt
+
+Diet Behavior & Nutrition : P_DBQ.xpt
+
+Dermatology : P_DEQ.xpt
+
+```{r}
+pesticide_use <- read_xpt("P_PUQMEC.xpt")         
+occupation <- read_xpt("P_OCQ.xpt")                
+volatile_toxicant <- read_xpt("P_VTQ.xpt")         
+medical_conditions <- read_xpt("P_MCQ.xpt")        
+alcohol_use <- read_xpt("P_ALQ.xpt")               
+smoking_cigarette <- read_xpt("P_SMQ.xpt")         
+smoking_recent_tobacco <- read_xpt("P_SMQRTU.xpt") 
+physical_activity <- read_xpt("P_PAQ.xpt")         
+diet_behavior <- read_xpt("P_DBQ.xpt")             
+dermatology <- read_xpt("P_DEQ.xpt")              
+```
+
+Basado en literatura sobre pesticidas, se considera priorizar las siguientes enfermedades:
+
+1.  **Trastornos neurológicos**: Parkinson, neuropatías.
+
+2.  **Diabetes/Obesidad**: Disruptores endocrinos.
+
+3.  **Cáncer**: Linfoma, leucemia.
+
+4.  **Problemas respiratorios**: Asma.
+:::
+
+## 🗂️ Tarea y Repaso
+
+::: {style="text-align: justify;"}
+-   **Familiarizarse con paquetes y funciones necesarias**
+
+    -   Descarga los paquetes mencionados en el modulo que te permitan cargar archivos de diferentes extensiones en el programa, algunos de estos programas necesarios serán: haven, readr, readxl, entre otros.
+    -   Investiga cual es la diferencia entre las funciones de base y de algunos paquetes como por ejemplo: read.table() y read_table(), read.csv() y read_csv(), bind_cols() y cbind(). Concluye si algunas son mejores en algunos escenarios o cuál preferirías usar en un entorno de trabajo más óptimo.
+    -   Crea una base de datos con información de fácil acceso en Excel y posteriormente abre esta base de datos desde el software de RStudio. Luego intenta hacer la misma base de datos directamente programándola con código R.
+
+En caso de obtener algún mensaje de error (warnings) en la consola, verifica a qué se pudo deber, investígalo y corrígelo hasta obtener una salida esperada. Recuerda que si no estas seguro de cómo implementar alguna función puedes utilizar el comando `?help` en la consola para acceder a la ayuda en la que encontrarás la documentación de paquetes y funciones implementadas en `R`.
+:::
+
+::: {.callout-warning collapse="true" style="text-align: justify;" icon="false"}
+## 📚 **Bibliografía**
+
+-   Rojas-Jimenez, K. 2022. Ciencia de Datos para Ciencias Naturales. <https://bookdown.org/keilor_rojas/CienciaDatos/>
+
+-   Lowndes, Julie & Horst, Allison. 2020. R for Excel Users. <https://jules32.github.io/r-for-excel-users/>
+
+-   R-Data Frames. 2025. <https://www.geeksforgeeks.org/r-language/r-data-frames/>
+:::
+
+::: {style="text-align: center;"}
+Copyright © 2025 Jose Miguel Leon - Created with [Quarto](https://quarto.org)
+:::

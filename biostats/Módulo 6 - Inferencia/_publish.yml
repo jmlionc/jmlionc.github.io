@@ -1,0 +1,4 @@
+- source: mod2_intro_r.qmd
+  quarto-pub:
+    - id: 134caf85-80db-493b-a65b-6bde7fc153cd
+      url: https://jmlionc.quarto.pub/introduction-to-rstudio

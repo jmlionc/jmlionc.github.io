@@ -1,0 +1,126 @@
+---
+title: "Curriculum Vitae"
+format:
+  html:
+    toc: false
+    page-layout: full
+---
+
+::: {.cv-header style="text-align: center;"}
+# Jose Miguel Leon Puentes
+
+### Statistics Intern
+
+*Last updated September 2025*
+:::
+
+------------------------------------------------------------------------
+
+## Personal Information
+
+::::: columns
+::: {.column width="50%"}
+-   **Phone:** +57 3208716294\
+-   **Email:** [jmlion\@proton.me](mailto:jmlion@proton.me)
+:::
+
+::: {.column width="50%"}
+-   **LinkedIn:** [linkedin.com/in/jmlion](https://www.linkedin.com/in/jmlion)\
+-   **Location:** Bogotá, D. C., Colombia
+:::
+:::::
+
+------------------------------------------------------------------------
+
+## Professional Profile
+
+::: {style="text-align: justify;"}
+Final-year Statistics student with a focus on sampling, spatio-temporal data analysis, and econometrics. I am passionate about applying statistics as a tool to address complex problems in interdisciplinary contexts, particularly in economic, biological, and social domains. I stand out for my analytical skills, commitment, and intellectual curiosity—qualities that allow me to combine methodological rigor with an applied perspective, building bridges between statistics and other disciplines, and generating reliable evidence to support strategic decisions grounded in data and context.
+:::
+
+------------------------------------------------------------------------
+
+## Skills
+
+::::: columns
+::: {.column width="50%"}
+-   Statistical data analysis and modeling\
+
+-   Time series and spatial data analysis\
+
+-   Applied machine learning and Bayesian methods\
+
+-   Multivariate analysis and dimensionality reduction\
+
+-   Experimental design and survey methodology\
+
+-   Programming in R, SAS, Python, and SQL\
+
+-   Data wrangling, integration, and cleaning\
+
+-   Reproducible reporting with LaTeX, Quarto, and Markdown\
+:::
+
+::: {.column width="50%"}
+-   Data visualization and storytelling with Power BI, Shiny, and Tableau\
+
+-   Version control and collaborative work with Git/GitHub\
+
+-   Advanced use of Microsoft 365 tools\
+
+-   Effective communication and results presentation\
+
+-   Teamwork and collaborative leadership\
+
+-   Data ethics and privacy in statistical analysis\
+
+-   **Languages**\
+
+    -   Spanish: Native\
+    -   English: Advanced\
+    -   French: Beginner
+:::
+:::::
+
+------------------------------------------------------------------------
+
+## Work Experience
+
+::: timeline
+-   **Teaching Assistant** – *National University of Colombia*\
+    *Apr 2025 – Aug 2025*\
+    Supported teaching in undergraduate courses on Biostatistics, Probability and Fundamental Statistics, assisting students from various disciplines. Developed guide materials to apply course concepts through R programming, reinforcing statistical learning and practice.
+
+-   **Research Assistant** – *National University of Colombia – Ministry of Education*\
+    *Oct 2024 – Apr 2025*\
+    Led quantitative analysis in a research project funded by the Ministry of Education on student retention, identifying key socioeconomic, academic, and personal factors. Conducted multivariate analyses and survey processing using sampling and inference methods. Prepared reports and presentations to support strategies for improving retention and educational outcomes.
+
+-   **Bilingual Customer Service Representative** – *SharkNinja, Inc.*\
+    *Nov 2020 – Apr 2021*\
+    Provided customer support for international clients, managing service inquiries, troubleshooting technical issues, and offering product guidance. Delivered personalized assistance and supported sales efforts to ensure customer satisfaction and build strong client relationships.
+:::
+
+------------------------------------------------------------------------
+
+## Academic Events
+
+-   **Speaker (Oral Presentation)** – *34th International Symposium on Statistics*\
+    *Jul 29 – Aug 1, 2025, Pasto, Colombia*\
+    *Latent structures of the care economy in Colombia: an approach using mixture models and statistical learning.*
+
+-   **Speaker (Workshop)** – *38th Latin American Meeting on Mathematics Education*\
+    *Jul 20 – 26, 2025, Bogotá, Colombia*\
+    *Mathematical modeling through allometry: strategies for classroom teaching.*
+
+------------------------------------------------------------------------
+
+## Educational Background
+
+-   **National University of Colombia** – Bogotá, Colombia\
+    *B.Sc. in Statistics (Ongoing)*
+
+-   **International Language Academy of Canada** – Toronto, Canada\
+    *Cambridge English Program, 2020*
+
+-   **Colegio Colsubsidio Ciudadela** – Bogotá, Colombia\
+    *High School Diploma, Physics & Mathematics emphasis, 2019*

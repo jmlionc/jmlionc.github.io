@@ -1,0 +1,38 @@
+/* Container */
+.social-icons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* Button style */
+.btn-social {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border: 2px solid #555;
+  border-radius: 8px;
+  color: #444;
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  background: transparent;
+}
+
+/* Icons inside */
+.btn-social i,
+.btn-social svg {
+  font-size: 18px;
+}
+
+/* Hover effect */
+.btn-social:hover {
+  background: #f3f3f3;
+  border-color: #000;
+  color: #000;
+  transform: scale(1.03);
+}

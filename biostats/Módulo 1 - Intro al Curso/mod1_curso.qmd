@@ -1,0 +1,108 @@
+---
+title: "Módulo 1: Bioestadística Fundamental Aplicada en R"
+subtitle: "Bioestadística Fundamental y Estadística Fundamental para las Ciencias de la Salud"
+author: 
+- name: "Jose Miguel Leon Puentes"
+  affiliation: "Departamento de Estadística"
+institute: "Universidad Nacional de Colombia"
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 4
+    toc-title: Tabla de Contenido
+    other-links:
+      - text: Contacto
+        icon: mailbox
+        href: mailto:joleonp@unal.edu.co
+    code-links:
+      - text: GitHub
+        icon: github
+        href: https://github.com/jmlionc/AppliedBiostats
+
+editor: visual
+---
+
+## 🌱 Introducción
+
+::: {style="text-align: justify;"}
+Este programa está dirigido a estudiantes de diversas áreas del conocimiento que estén interesados en la aplicación de conceptos estadísticos a través del software RStudio, una de las herramientas más utilizadas a nivel mundial en investigación, docencia y análisis de datos. El curso se enfoca en la enseñanza práctica de la Estadística Fundamental, asignatura que conforman la oferta académica del *Departamento de Estadística* en el nivel de pregrado de la *Facultad de Ciencias* de la *Universidad Nacional de Colombia* Sede Bogotá.
+
+La propuesta de este curso es brindar al estudiante una guía práctica que complemente el aprendizaje teórico recibido en clase. A lo largo de los módulos se presentarán ejemplos, bases de datos y ejercicios que permitirán afianzar la comprensión de los temas y, sobre todo, adquirir destrezas en el uso de R para el análisis estadístico.
+
+Es importante destacar que este curso tiene un carácter académico complementario y en ningún momento reemplaza ni sustituye las clases programadas por el docente de la asignatura. Ante dudas conceptuales, será indispensable consultar con el profesor encargado, dado que la claridad en los fundamentos teóricos es esencial para llevar a cabo la correcta implementación de los procedimientos estadísticos en R.
+
+Se recomienda avanzar en paralelo con los contenidos de la asignatura, replicando los ejemplos y ejercicios de cada módulo conforme se desarrollen los temas en clase. De esta manera, al finalizar el curso el estudiante no solo comprenderá los conceptos fundamentales de la estadística, sino que también adquirirá habilidades prácticas para aplicar estos conocimientos en diferentes contextos académicos y profesionales, desde proyectos de investigación hasta análisis de datos en entornos laborales.
+:::
+
+## 🏁 Objetivos
+
+### 🏆 Objetivo General
+
+::: {style="text-align: justify;"}
+Fortalecer la comprensión y aplicación de los conceptos fundamentales de la estadística mediante el uso del software RStudio, promoviendo un aprendizaje práctico y autónomo que complemente la formación teórica de los estudiantes universitarios.
+:::
+
+### 🎯 Objetivos Especificos
+
+::: {style="text-align: justify;"}
+1.  Familiarizar al estudiante con el entorno de R y RStudio como herramienta de análisis estadístico.
+
+2.  Desarrollar competencias en la importación, manipulación y organización de bases de datos.
+
+3.  Aplicar métodos de análisis descriptivo y exploratorio para la caracterización de datos.
+
+4.  Introducir los fundamentos de la probabilidad y su aplicación en el análisis estadístico.
+
+5.  Comprender e implementar técnicas básicas de inferencia estadística en R.
+
+6.  Explorar modelos de regresión como herramientas de análisis y predicción.
+
+7.  Motivar la aplicación de los métodos estadísticos en problemas de diversas disciplinas académicas y profesionales.
+:::
+
+## 🧱 Estructura de los módulos
+
+::: {style="text-align: justify;"}
+Cada uno de los módulos está diseñado bajo una estructura clara y progresiva que busca facilitar la comprensión y aplicación de los contenidos. La organización incluye:
+
+-   **Introducción a la Temática:** contextualización del tema, su importancia dentro de la bioestadística y la justificación de su aplicación en R.
+
+-   **Objetivos del Módulo:** enunciado de las metas de aprendizaje que el estudiante debe alcanzar al finalizar el trabajo con el módulo.
+
+-   **Desarrollo del Contenido[:]{.smallcaps}** explicaciones detalladas acompañadas de ejemplos prácticos en R, anotaciones teóricas de apoyo, consejos técnicos y recomendaciones para el uso eficiente del software.
+
+-   **Actividades de Aplicación:** ejercicios guiados y autónomos orientados a la práctica, que permiten al estudiante comprobar su comprensión y afianzar el aprendizaje.
+
+-   **Tareas y Repaso:** conjunto de actividades de evaluación y autoevaluación que refuerzan lo aprendido y preparan al estudiante para avanzar al siguiente módulo.
+:::
+
+## 📚 Módulos
+
+::: {style="text-align: justify;"}
+A continuación se presentan los módulos que conforman el curso *Bioestadística Fundamental Aplicada en R*.
+
+-   **🧠 Módulo 1:** Introducción al Programa
+
+-   **🖥️ Módulo 2:** Introducción al Software RStudio
+
+-   **🧮 Módulo 3:** Manipulación de Bases de Datos
+
+-   **📊 Módulo 4:** Análisis Descriptivo y Exploratorio
+
+-   **🎲 Módulo 5:** Probabilidad
+
+-   **💭 Módulo 6:** Inferencia Estadística
+
+-   **🔮 Módulo 7:** Métodos de Regresión
+:::
+
+::: {.callout-warning collapse="true" style="text-align: justify;" icon="false"}
+## **🚧 Acerca de**
+
+Este proyecto ha sido elaborado por **José Miguel León Puentes** (*Teaching Assistant*) durante el primer semestre académico del año 2025 y se encontrará en continua construcción y supervisión junto a la Profesora *PhD.* Lina Angélica Buitrago Reyes.
+:::
+
+::: {style="text-align: center;"}
+Copyright © 2025 Jose Miguel Leon - Created with [Quarto](https://quarto.org)
+:::

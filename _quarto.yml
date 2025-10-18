@@ -1,0 +1,39 @@
+project:
+  type: website
+
+website:
+  title: "Jose Miguel Leon P."
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: biography.qmd
+        text: Biography
+      - href: teaching.qmd
+        text: Teaching
+      - href: research.qmd
+        text: Research
+      - href: projects.qmd
+        text: Projects  
+      - href: media.qmd
+        text: Media
+      - about.qmd
+
+page-footer:
+    left: "© 2025 Jose Leon"
+    right: "Hecho con [Quarto](https://quarto.org)"
+    background: light
+
+format:
+  html:
+    theme:
+      - cosmo
+      - brand
+    css: styles.css
+    toc: true
+    include-in-header:
+      - text: |
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons/css/academicons.min.css"/>
+editor: visual
+
