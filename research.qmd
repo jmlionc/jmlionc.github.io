@@ -28,9 +28,7 @@ format: html
 
 [Published version on Memories of the 34th International Symposium on Statistics](files/doc_memorias.pdf)
 
-### Mathematical modeling through allometry:
-
-strategies for classroom teaching
+### Mathematical modeling through allometry: strategies for classroom teaching
 
 <body>
 
