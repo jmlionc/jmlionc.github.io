@@ -87,19 +87,19 @@ Cada uno de los módulos está diseñado bajo una estructura clara y progresiva 
 ::: {style="text-align: justify;"}
 A continuación se presentan los módulos que conforman el curso *Bioestadística Fundamental Aplicada en R*.
 
--   **🧠 Módulo 1:** [Introducción al programa](biostats/Módulo 1 - Intro al Curso/mod1_curso.qmd)
+-   **🧠 Módulo 1:** [Introducción al programa](biostats/Módulo%201%20-%20Intro%20al%20Curso/mod1_curso.qmd)
 
--   **🖥️ Módulo 2:**[Introducción al Software RStudio](biostats/Módulo 2 - Intro R Studio/mod2_intro_r.qmd)
+-   **🖥️ Módulo 2:**[Introducción al Software RStudio](biostats/Módulo%202%20-%20Intro%20R%20Studio/mod2_intro_r.qmd)
 
--   **🧮 Módulo 3:** [Manipulación de Bases de Datos](biostats/Módulo 3 - Manejo Bases/mod3_bases.qmd)
+-   **🧮 Módulo 3:** [Manipulación de Bases de Datos](biostats/Módulo%203%20-%20Manejo%20Bases/mod3_bases.qmd)
 
--   **📊 Módulo 4:** [Análisis Descriptivo y Exploratorio](biostats/Módulo 4 - Estadística Descriptiva Exploratoria/mod4_eda.qmd)
+-   **📊 Módulo 4:** [Análisis Descriptivo y Exploratorio](biostats/Módulo%204%20-%20Estadística%20Descriptiva%20Exploratoria/mod4_eda.qmd)
 
--   **🎲 Módulo 5:** [Probabilidad](biostats/Módulo 5 - Probabilidad/mod4_eda.qmd)
+-   **🎲 Módulo 5:** [Probabilidad](biostats/Módulo%205%20-%20Probabilidad/mod5_proba.qmd)
 
--   **💭 Módulo 6:** [Inferencia Estadística](biostats/Módulo 6 - Inferencia/mod6_inferen.qmd)
+-   **💭 Módulo 6:** [Inferencia Estadística](biostats/Módulo%206%20-%20Inferencia/mod6_inferen.qmd)
 
--   **🔮 Módulo 7:** [Métodos de Regresión](biostats/Módulo 7 - Regresión/mod7_regre.qmd)
+-   **🔮 Módulo 7:** [Métodos de Regresión](biostats/Módulo%207%20-%20Regresión/mod7_regre.qmd)
 :::
 
 ::: {.callout-warning collapse="true" style="text-align: justify;" icon="false"}

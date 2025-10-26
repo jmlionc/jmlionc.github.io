@@ -2,3 +2,44 @@
 title: "Proyectos de Investigación"
 format: html
 ---
+
+### LATENT STRUCTURES OF THE CARE ECONOMY IN COLOMBIA: AN APPROACH WITH MIXTURE MODELS, ECONOMETRIC MODELS AND STATISTICAL LEARNING
+
+<head>
+
+```{=html}
+<style>
+    .pdf-style {
+      width: 100%; /* El 100% del ancho del contenedor */
+      height: 80vh; /* El 80% de la altura de la ventana (viewport) */
+      border: 1px solid #ddd;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+  </style>
+```
+
+</head>
+
+<body>
+
+<embed src="files/Slides___Simposio.pdf" type="application/pdf" class="pdf-style" />
+
+</body>
+
+[Published version on Memories of the 34th International Symposium on Statistics](files/doc_memorias.pdf)
+
+### Mathematical modeling through allometry:
+
+strategies for classroom teaching
+
+<body>
+
+<embed src="files/Presentación Modelación Alometría  Sesión 1.pdf" type="application/pdf" class="pdf-style" />
+
+</body>
+
+<body>
+
+<embed src="files/Presentación Modelación Alometría Sesión 2.pdf" type="application/pdf" class="pdf-style" />
+
+</body>
