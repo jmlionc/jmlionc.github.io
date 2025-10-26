@@ -1,9 +1,9 @@
 ---
-title: "Proyectos de Investigación"
+title: "Publications and Manuscripts"
 format: html
 ---
 
-### LATENT STRUCTURES OF THE CARE ECONOMY IN COLOMBIA: AN APPROACH WITH MIXTURE MODELS, ECONOMETRIC MODELS AND STATISTICAL LEARNING
+### Latent structures of the care economy in Colombia:An approach with mixture models, econometric models and statistical learning
 
 <head>
 
@@ -26,7 +26,9 @@ format: html
 
 </body>
 
+::: {style="text-align: center;"}
 [Published version on Memories of the 34th International Symposium on Statistics](files/doc_memorias.pdf)
+:::
 
 ### Mathematical modeling through allometry: strategies for classroom teaching
 

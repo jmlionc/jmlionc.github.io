@@ -1,5 +1,4 @@
 ---
-title: "media"
+title: "Gallery"
 format: html
 ---
-

@@ -3,3 +3,10 @@ title: "projects"
 format: html
 ---
 
+## Consulting
+
+### Evaluación del efecto citotóxico del extracto etanólico y fracciones obtenidas de hojas de Erythroxylum novogranatense var. novogranatense en líneas celulares de glioblastoma
+
+## Academic
+
+### Modelado jerárquico Bayesiano del puntaje global Saber 11 en Colombia: desigualdad territorial, factores estructurales y efectos del conflicto armado
