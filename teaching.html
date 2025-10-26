@@ -239,7 +239,7 @@ ul.task-list li input[type="checkbox"] {
 <li><p><strong>🖥️ Módulo 2:</strong><a href="./biostats/Módulo 2 - Intro R Studio/mod2_intro_r.html">Introducción al Software RStudio</a></p></li>
 <li><p><strong>🧮 Módulo 3:</strong> <a href="./biostats/Módulo 3 - Manejo Bases/mod3_bases.html">Manipulación de Bases de Datos</a></p></li>
 <li><p><strong>📊 Módulo 4:</strong> <a href="./biostats/Módulo 4 - Estadística Descriptiva Exploratoria/mod4_eda.html">Análisis Descriptivo y Exploratorio</a></p></li>
-<li><p><strong>🎲 Módulo 5:</strong> <a href="biostats/Módulo 5 - Probabilidad/mod4_eda.qmd">Probabilidad</a></p></li>
+<li><p><strong>🎲 Módulo 5:</strong> <a href="./biostats/Módulo 5 - Probabilidad/mod5_proba.html">Probabilidad</a></p></li>
 <li><p><strong>💭 Módulo 6:</strong> <a href="./biostats/Módulo 6 - Inferencia/mod6_inferen.html">Inferencia Estadística</a></p></li>
 <li><p><strong>🔮 Módulo 7:</strong> <a href="./biostats/Módulo 7 - Regresión/mod7_regre.html">Métodos de Regresión</a></p></li>
 </ul>
@@ -340,7 +340,7 @@ ul.task-list li input[type="checkbox"] {
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
+        var filterRegex = new RegExp("https:\/\/jmlionc\.github\.io\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
